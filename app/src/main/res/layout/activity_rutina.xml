@@ -34,7 +34,7 @@
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
         android:contentDescription="Crear nueva rutina"
-        app:srcCompat="@android:drawable/ic_input_add" />
+        app:srcCompat="@android:drawable/ic_input_add" />s
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
