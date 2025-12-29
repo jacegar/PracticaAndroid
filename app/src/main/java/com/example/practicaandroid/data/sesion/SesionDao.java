@@ -1,0 +1,36 @@
+package com.example.practicaandroid.data.sesion;
+
+import androidx.room.Dao;
+import androidx.room.Delete;
+import androidx.room.Insert;
+import androidx.room.Query;
+import androidx.room.Update;
+
+import java.util.List;
+
+@Dao
+public interface SesionDao {
+    @Insert
+    long insert(Sesion sesion);
+
+    @Update
+    void update(Sesion sesion);
+
+    @Delete
+    void delete(Sesion sesion);
+
+    @Query("SELECT * FROM sesiones WHERE rutinaId = :rutinaId")
+    List<Sesion> getSesionByRutina(long rutinaId);
+
+    //sesiones planificadas en un rango de fechas
+    @Query("SELECT * FROM sesiones WHERE diaPlanificado BETWEEN :inicio AND :fin")
+    List<Sesion> getSesionesEnRango(long inicio, long fin);
+
+    //Sesiones completadas
+    @Query("SELECT * FROM sesiones WHERE fechaRealizada != 0 ORDER BY fechaRealizada DESC")
+    List<Sesion> getSesionesCompletadas();
+
+    //sesiones completadas en un rango de fechas (Para estadísticas)
+    @Query("SELECT * FROM sesiones WHERE fechaRealizada BETWEEN :inicio AND :fin ORDER BY fechaRealizada DESC")
+    List<Sesion> getSesionesCompletadasEnRango(long inicio, long fin);
+}
