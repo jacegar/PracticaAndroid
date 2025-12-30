@@ -1,14 +1,14 @@
 package com.example.practicaandroid;
 
-import android.content.Intent;
 import android.os.Bundle;
-import android.widget.Button;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.core.view.ViewCompat;
+import androidx.fragment.app.Fragment;
 
 import com.example.practicaandroid.data.AppDatabase;
+import com.google.android.material.bottomnavigation.BottomNavigationView;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -22,11 +22,43 @@ public class MainActivity extends AppCompatActivity {
         // Inicializar base de datos
         AppDatabase.getInstance(this);
 
-        // Botón para ir a gestionar rutinas
-        Button btnRutinas = findViewById(R.id.btnRutinas);
-        btnRutinas.setOnClickListener(v ->
-            startActivity(new Intent(this, RutinaActivity.class))
-        );
+        //Navegacion con la barra inferior
+        BottomNavigationView bottomNavigationView = findViewById(R.id.bottomNavigationView);
+
+        Fragment workoutFragment = new WorkoutFragment();
+        Fragment exerciseFragment = new ExerciseFragment();
+        Fragment progressFragment = new ProgressFragment();
+        Fragment settingsFragment = new SettingsFragment();
+
+        setCurrentFragment(workoutFragment);
+
+        bottomNavigationView.setOnItemSelectedListener(item -> {
+            Fragment selectedFragment = null;
+
+            int itemId = item.getItemId();
+            if(itemId == R.id.workout){
+                selectedFragment = workoutFragment;
+            }else if (itemId == R.id.exercises) {
+                selectedFragment = exerciseFragment;
+            }else if (itemId == R.id.progress) {
+                selectedFragment = progressFragment;
+            }else if (itemId == R.id.settings) {
+                selectedFragment = settingsFragment;
+            }
+
+            if(selectedFragment != null){
+                setCurrentFragment(selectedFragment);
+            }
+
+            return true;
+        });
+    }
+
+    private void setCurrentFragment(Fragment fragment) {
+        getSupportFragmentManager()
+                .beginTransaction()
+                .replace(R.id.flFragment, fragment)
+                .commit();
     }
 }
 
