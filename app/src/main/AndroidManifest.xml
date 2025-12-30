@@ -24,6 +24,10 @@
             android:name=".RutinaActivity"
             android:exported="false"
             android:label="Gestión de Rutinas" />
+        <activity
+            android:name=".SesionActivity"
+            android:exported="false"
+            android:label="Gestión de Sesiones" />
     </application>
 
 </manifest>

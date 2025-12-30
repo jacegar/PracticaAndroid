@@ -26,6 +26,7 @@ public class RutinaAdapter extends RecyclerView.Adapter<RutinaAdapter.RutinaView
     public interface OnRutinaClickListener {
         void onEditarClick(Rutina rutina);
         void onEliminarClick(Rutina rutina);
+        void onVerSesionesClick(Rutina rutina);
     }
 
     public RutinaAdapter(OnRutinaClickListener listener) {
@@ -77,6 +78,9 @@ public class RutinaAdapter extends RecyclerView.Adapter<RutinaAdapter.RutinaView
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
             String fecha = sdf.format(new Date(rutina.fechaCreacion));
             tvFecha.setText("Creada: " + fecha);
+
+            // Click en la tarjeta completa abre las sesiones
+            itemView.setOnClickListener(v -> listener.onVerSesionesClick(rutina));
 
             btnEditar.setOnClickListener(v -> listener.onEditarClick(rutina));
             btnEliminar.setOnClickListener(v -> listener.onEliminarClick(rutina));

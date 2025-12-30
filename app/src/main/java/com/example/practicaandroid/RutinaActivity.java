@@ -1,5 +1,6 @@
 package com.example.practicaandroid;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -149,6 +150,14 @@ public class RutinaActivity extends AppCompatActivity implements RutinaAdapter.O
                 cargarRutinas();
             });
         });
+    }
+
+    @Override
+    public void onVerSesionesClick(Rutina rutina) {
+        Intent intent = new Intent(this, SesionActivity.class);
+        intent.putExtra("rutinaId", rutina.id);
+        intent.putExtra("rutinaNombre", rutina.nombre);
+        startActivity(intent);
     }
 }
 
