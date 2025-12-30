@@ -4,14 +4,14 @@ plugins {
 
 android {
     namespace = "com.example.practicaandroid"
-    compileSdk = 36
+    compileSdk = 34
 
     defaultConfig {
         applicationId = "com.example.practicaandroid"
         minSdk = 26
 
         //Error informativo, no pasa na
-        targetSdk = 36
+        targetSdk = 34
         versionCode = 1
         versionName = "1.0"
 
