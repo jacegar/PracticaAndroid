@@ -2,9 +2,12 @@ package com.example.practicaandroid.data;
 
 import android.content.Context;
 
+import androidx.annotation.NonNull;
 import androidx.room.Database;
 import androidx.room.Room;
 import androidx.room.RoomDatabase;
+import androidx.room.migration.Migration;
+import androidx.sqlite.db.SupportSQLiteDatabase;
 
 // Entidades principales
 import com.example.practicaandroid.data.rutina.Rutina;
@@ -49,7 +52,7 @@ import com.example.practicaandroid.data.relaciones.EjercicioMaterialDao;
         EjercicioMusculo.class,
         EjercicioMaterial.class
     },
-    version = 1,
+    version = 2,
     exportSchema = false
 )
 public abstract class AppDatabase extends RoomDatabase {
@@ -83,10 +86,18 @@ public abstract class AppDatabase extends RoomDatabase {
                             context.getApplicationContext(),
                             AppDatabase.class,
                             DATABASE_NAME
-                    ).build();
+                    ).addMigrations(MIGRATION_1_2).build();
                 }
             }
         }
         return INSTANCE;
     }
+
+    static final Migration MIGRATION_1_2 = new Migration(1, 2) {
+        @Override
+        public void migrate(@NonNull SupportSQLiteDatabase database) {
+            database.execSQL("ALTER TABLE rutinas ADD COLUMN rutinaActiva INTEGER NOT NULL DEFAULT 0");
+        }
+    };
+
 }
