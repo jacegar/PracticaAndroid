@@ -28,6 +28,10 @@
             android:name=".SesionActivity"
             android:exported="false"
             android:label="Gestión de Sesiones" />
+        <activity
+            android:name=".EjercicioActivity"
+            android:exported="false"
+            android:label="Gestión de Ejercicios" />
     </application>
 
 </manifest>
