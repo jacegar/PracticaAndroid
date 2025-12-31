@@ -4,6 +4,8 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -27,6 +29,7 @@ public class RutinaAdapter extends RecyclerView.Adapter<RutinaAdapter.RutinaView
         void onEditarClick(Rutina rutina);
         void onEliminarClick(Rutina rutina);
         void onVerSesionesClick(Rutina rutina);
+        void onActivarClick(Rutina rutina);
     }
 
     public RutinaAdapter(OnRutinaClickListener listener) {
@@ -58,8 +61,10 @@ public class RutinaAdapter extends RecyclerView.Adapter<RutinaAdapter.RutinaView
     }
 
     static class RutinaViewHolder extends RecyclerView.ViewHolder {
-        TextView tvNombre, tvDescripcion, tvFecha;
+        TextView tvNombre, tvDescripcion, tvFecha, tvActivar;
         Button btnEditar, btnEliminar;
+        LinearLayout layoutActivar;
+        ImageView ivActivar;
 
         RutinaViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -68,6 +73,11 @@ public class RutinaAdapter extends RecyclerView.Adapter<RutinaAdapter.RutinaView
             tvFecha = itemView.findViewById(R.id.tvFecha);
             btnEditar = itemView.findViewById(R.id.btnEditar);
             btnEliminar = itemView.findViewById(R.id.btnEliminar);
+
+            //Activar/Desactivar rutina
+            tvActivar = itemView.findViewById(R.id.tvActivar);
+            layoutActivar = itemView.findViewById(R.id.layoutActivar);
+            ivActivar = itemView.findViewById(R.id.ivActivar);
         }
 
         void bind(Rutina rutina, OnRutinaClickListener listener) {
@@ -84,6 +94,18 @@ public class RutinaAdapter extends RecyclerView.Adapter<RutinaAdapter.RutinaView
 
             btnEditar.setOnClickListener(v -> listener.onEditarClick(rutina));
             btnEliminar.setOnClickListener(v -> listener.onEliminarClick(rutina));
+
+            layoutActivar.setOnClickListener(v ->{
+                listener.onActivarClick(rutina);
+            });
+
+            if(rutina.rutinaActiva){
+                ivActivar.setImageResource(R.drawable.ic_active);
+                tvActivar.setText(R.string.deactivate);
+            }else{
+                ivActivar.setImageResource(R.drawable.ic_inactive);
+                tvActivar.setText(R.string.activate);
+            }
         }
     }
 }

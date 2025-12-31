@@ -159,5 +159,19 @@ public class RutinaActivity extends AppCompatActivity implements RutinaAdapter.O
         intent.putExtra("rutinaNombre", rutina.nombre);
         startActivity(intent);
     }
+
+    @Override
+    public void onActivarClick(Rutina rutina) {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            if (!rutina.rutinaActiva) {
+                rutinaDao.setUnicaRutinaActiva(rutina.id);
+            } else {
+                rutina.rutinaActiva = false;
+                rutinaDao.update(rutina);
+            }
+
+            runOnUiThread(this::cargarRutinas);
+        });
+    }
 }
 

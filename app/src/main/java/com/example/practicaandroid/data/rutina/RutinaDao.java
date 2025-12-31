@@ -3,6 +3,7 @@ package com.example.practicaandroid.data.rutina;
 import androidx.room.Dao;
 import androidx.room.Insert;
 import androidx.room.Delete;
+import androidx.room.Transaction;
 import androidx.room.Update;
 import androidx.room.Query;
 
@@ -24,4 +25,19 @@ public interface RutinaDao {
 
     @Query("SELECT * FROM rutinas ORDER BY fechaCreacion DESC")
     List<Rutina> getAllRutinas();
+
+    @Query("UPDATE rutinas SET rutinaActiva = 0")
+    void desactivarTodasLasRutinas();
+
+    @Query("UPDATE rutinas SET rutinaActiva = 1 WHERE id = :rutinaId")
+    void activarRutinaPorId(long rutinaId);
+
+    @Transaction
+    default void setUnicaRutinaActiva(long rutinaId) {
+        desactivarTodasLasRutinas();
+        activarRutinaPorId(rutinaId);
+    }
+
+    @Query("SELECT * FROM rutinas WHERE rutinaActiva = 1 LIMIT 1")
+    Rutina getRutinaActiva();
 }
