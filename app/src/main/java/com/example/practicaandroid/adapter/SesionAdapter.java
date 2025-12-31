@@ -27,6 +27,7 @@ public class SesionAdapter extends RecyclerView.Adapter<SesionAdapter.SesionView
         void onEditarClick(Sesion sesion);
         void onEliminarClick(Sesion sesion);
         void onMarcarCompletadaClick(Sesion sesion);
+        void onVerEjerciciosClick(Sesion sesion);
     }
 
     public SesionAdapter(OnSesionClickListener listener) {
@@ -97,6 +98,9 @@ public class SesionAdapter extends RecyclerView.Adapter<SesionAdapter.SesionView
                 tvEstado.setTextColor(itemView.getContext().getResources().getColor(android.R.color.holo_green_dark));
                 btnCompletar.setText("Desmarcar");
             }
+
+            // Click en la tarjeta completa para ver ejercicios
+            itemView.setOnClickListener(v -> listener.onVerEjerciciosClick(sesion));
 
             btnEditar.setOnClickListener(v -> listener.onEditarClick(sesion));
             btnEliminar.setOnClickListener(v -> listener.onEliminarClick(sesion));

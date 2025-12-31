@@ -2,6 +2,7 @@ package com.example.practicaandroid;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -231,6 +232,14 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
                 cargarSesiones();
             });
         });
+    }
+
+    @Override
+    public void onVerEjerciciosClick(Sesion sesion) {
+        Intent intent = new Intent(this, SesionEjerciciosActivity.class);
+        intent.putExtra("sesionId", sesion.id);
+        intent.putExtra("sesionNombre", sesion.nombre);
+        startActivity(intent);
     }
 }
 
