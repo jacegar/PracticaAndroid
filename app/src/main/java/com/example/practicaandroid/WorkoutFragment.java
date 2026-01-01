@@ -111,9 +111,15 @@ public class WorkoutFragment extends Fragment {
 
         btnCompletar.setOnClickListener(v -> {
             if (proximaSesionActual != null) {
+                final Context context = getContext();
+                if (context == null) return;
+                String parte1 = context.getString(R.string.want_complete_session1);
+                String parte2 = context.getString(R.string.want_complete_session2);
+                String mensaje = parte1 + proximaSesionActual.nombre + parte2;
+
                 new AlertDialog.Builder(getContext())
                         .setTitle(R.string.complete_session)
-                        .setMessage(R.string.want_complete_session1 + proximaSesionActual.nombre + R.string.want_complete_session2)
+                        .setMessage(mensaje)
                         .setPositiveButton(R.string.yes_complete, (dialog, which) -> marcarSesionComoCompletada(proximaSesionActual))
                         .setNegativeButton(R.string.cancel, null)
                         .show();
@@ -262,7 +268,11 @@ public class WorkoutFragment extends Fragment {
 
             if (ejercicios != null && !ejercicios.isEmpty()) {
                 StringBuilder ejerciciosBuilder = new StringBuilder();
-                ejerciciosBuilder.append(R.string.exercises + ":\n");
+                final Context context = getContext();
+                if (context == null) return;
+                String str_ejercicios = context.getString(R.string.exercises);
+
+                ejerciciosBuilder.append(str_ejercicios + ":\n");
                 for (Ejercicio ejercicio : ejercicios) {
                     ejerciciosBuilder.append("- ").append(ejercicio.nombre).append("\n");
                 }

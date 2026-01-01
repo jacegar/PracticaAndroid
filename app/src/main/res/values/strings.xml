@@ -28,4 +28,8 @@
     <string name="updated_session">Updated session</string>
     <string name="no_exercises_in_session">There are no exercises in this session.</string>
     <string name="congratulations_no_sessions">Congratulations! There are no pending sessions in this workout</string>
+    <!-- En res/values/strings.xml -->
+    <string name="want_complete_session">¿Estás seguro de que quieres marcar la sesión \'%1$s\' como
+        completada?
+    </string>
 </resources>
