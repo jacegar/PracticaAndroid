@@ -7,4 +7,26 @@
     <string name="settings">Ajustes</string>
     <string name="activate">Activar</string>
     <string name="deactivate">Desactivar</string>
+    <string name="training">Entrenamiento</string>
+    <string name="active_workout">Rutina Activa</string>
+    <string name="active_workout_description">Descripcion de la rutina activa</string>
+    <string name="next_session">Próxima sesión</string>
+    <string name="next_session_name">Nombre de la próxima sesión</string>
+    <string name="next_session_exercises">Ejercicios de la próxima sesión</string>
+    <string name="complete">Completar</string>
+    <string name="edit">Editar</string>
+    <string name="no_active_workout">No hay una rutina activa. ¡Activa una para empezar!</string>
+    <string name="manage_workouts">Gestionar rutinas</string>
+    <string name="complete_session">Completar sesión</string>
+    <string name="want_complete_session1">¿Quieres completar la sesión \'</string>
+    <string name="want_complete_session2">\'?</string>
+    <string name="yes_complete">Si, completar</string>
+    <string name="cancel">Cancelar</string>
+    <string name="completed_session">¡Sesión completada!</string>
+    <string name="edit_session">Editar sesión</string>
+    <string name="save">Guardar</string>
+    <string name="name_required">El nombre es obligatorio</string>
+    <string name="updated_session">Sesión actualizada</string>
+    <string name="no_exercises_in_session">No hay ejercicios en esta sesión</string>
+    <string name="congratulations_no_sessions">¡Enhorabuena! No hay sesiones pendientes en esta rutina</string>
 </resources>

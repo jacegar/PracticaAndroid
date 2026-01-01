@@ -11,7 +11,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="32dp"
-        android:text="Entrenamiento"
+        android:text="@string/training"
         android:textSize="24sp"
         android:textStyle="bold"
         app:layout_constraintEnd_toEndOf="parent"
@@ -46,7 +46,7 @@
                 android:textColor="?attr/colorPrimary"
                 android:textSize="20sp"
                 android:textStyle="bold"
-                tools:text="Rutina activa" />
+                tools:text="@string/active_workout" />
 
             <TextView
                 android:id="@+id/tvDescripcionRutinaActiva"
@@ -54,7 +54,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="4dp"
                 android:textSize="14sp"
-                tools:text="Descripcion de la rutina activa" />
+                tools:text="@string/active_workout_description" />
 
             <View
                 android:layout_width="match_parent"
@@ -66,7 +66,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="16dp"
-                android:text="PRÓXIMA SESIÓN"
+                android:text="@string/next_session"
                 android:textColor="?attr/colorPrimary"
                 android:textSize="12sp"
                 android:textStyle="bold" />
@@ -79,7 +79,7 @@
                 android:textColor="?attr/colorPrimary"
                 android:textSize="16sp"
                 android:textStyle="italic"
-                tools:text="Nombre de la proxima sesion" />
+                tools:text="@string/next_session_name" />
 
             <TextView
                 android:id="@+id/tvEjerciciosProximaSesion"
@@ -87,7 +87,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
                 android:textSize="14sp"
-                tools:text="Ejercicios proxima sesion" />
+                tools:text="@string/next_session_exercises" />
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -100,7 +100,7 @@
                     android:layout_width="0dp"
                     android:layout_height="wrap_content"
                     android:layout_weight="1"
-                    android:text="Completar"
+                    android:text="@string/complete"
                     android:textSize="12sp"
                     android:backgroundTint="@android:color/holo_green_light" />
 
@@ -110,7 +110,7 @@
                     android:layout_height="wrap_content"
                     android:layout_marginStart="8dp"
                     android:layout_weight="1"
-                    android:text="Editar"
+                    android:text="@string/edit"
                     android:textSize="12sp" />
             </LinearLayout>
 
@@ -124,7 +124,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:gravity="center"
-        android:text="No hay ninguna rutina activada. ¡Activa una para empezar!"
+        android:text="@string/no_active_workout"
         android:textSize="16sp"
         android:visibility="gone"
         app:layout_constraintBottom_toTopOf="@id/btnRutinas"
@@ -140,7 +140,7 @@
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="32dp"
-        android:text="Gestionar Rutinas"
+        android:text="@string/manage_workouts"
         android:textSize="16sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
