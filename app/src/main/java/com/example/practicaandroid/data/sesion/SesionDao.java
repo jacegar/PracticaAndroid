@@ -33,4 +33,11 @@ public interface SesionDao {
     //sesiones completadas en un rango de fechas (Para estadísticas)
     @Query("SELECT * FROM sesiones WHERE fechaRealizada BETWEEN :inicio AND :fin ORDER BY fechaRealizada DESC")
     List<Sesion> getSesionesCompletadasEnRango(long inicio, long fin);
+
+    //Proxima sesion no planificada
+    @Query("SELECT * FROM sesiones WHERE rutinaId = :rutinaId AND" +
+            " (fechaRealizada IS NULL OR fechaRealizada = 0) ORDER BY diaPlanificado ASC LIMIT 1")
+    Sesion getProximaSesionDeRutina(long rutinaId);
+
+
 }
