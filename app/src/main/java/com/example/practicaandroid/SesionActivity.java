@@ -170,8 +170,10 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
     private void crearSesion(String nombre, long diaPlanificado) {
         Executors.newSingleThreadExecutor().execute(() -> {
             Sesion sesion = new Sesion(rutinaId, nombre, diaPlanificado);
-            sesionDao.insert(sesion);
 
+            //Creamos la notificacion con el id actualizado para poder borrarla luego si es necesario
+            long nuevoId = sesionDao.insert(sesion);
+            sesion.id = nuevoId;
             crearNotificacion(sesion);
 
             runOnUiThread(() -> {
@@ -189,6 +191,8 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
 
         // Si la sesion es en el futuro, programamos la notificacion
         if (retrasoInicial > 0) {
+            String workTag = "sesion-" + sesion.id;
+
             Data inputData = new Data.Builder()
                     .putLong("id", sesion.id)
                     .putString("nombre", sesion.nombre)
@@ -198,10 +202,16 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
             OneTimeWorkRequest reminderRequest = new OneTimeWorkRequest.Builder(SessionReminderWorker.class)
                     .setInitialDelay(retrasoInicial, TimeUnit.MILLISECONDS)
                     .setInputData(inputData)
+                    .addTag(workTag)
                     .build();
 
             WorkManager.getInstance(getApplicationContext()).enqueue(reminderRequest);
         }
+    }
+
+    private void cancelarNotificacion(Sesion sesion) {
+        String workTag = "sesion-" + sesion.id;
+        WorkManager.getInstance(getApplicationContext()).cancelAllWorkByTag(workTag);
     }
 
     @Override
@@ -237,6 +247,10 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
         Executors.newSingleThreadExecutor().execute(() -> {
             sesion.nombre = nombre;
             sesion.diaPlanificado = diaPlanificado;
+
+            cancelarNotificacion(sesion);
+            crearNotificacion(sesion);
+
             sesionDao.update(sesion);
 
             runOnUiThread(() -> {
@@ -258,6 +272,7 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
 
     private void eliminarSesion(Sesion sesion) {
         Executors.newSingleThreadExecutor().execute(() -> {
+            cancelarNotificacion(sesion);
             sesionDao.delete(sesion);
 
             runOnUiThread(() -> {
