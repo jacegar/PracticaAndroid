@@ -44,6 +44,10 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
     private String rutinaNombre;
     private long diaPlanificadoSeleccionado;
 
+    private android.widget.Spinner spinnerWeekFilter;
+    private java.util.List<Sesion> allSesiones = new java.util.ArrayList<>();
+    private java.util.List<WeekItem> weekItems = new java.util.ArrayList<>();
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -66,7 +70,22 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
         TextView tvTitulo = findViewById(R.id.tvTitulo);
         tvTitulo.setText("Sesiones de: " + rutinaNombre);
 
-        // Configurar RecyclerView
+        // Configurar RecyclerView y filtro de semana
+        spinnerWeekFilter = findViewById(R.id.spinnerWeekFilter);
+        android.widget.ArrayAdapter<String> spinnerAdapter = new android.widget.ArrayAdapter<>(
+                this, android.R.layout.simple_spinner_item, new java.util.ArrayList<>());
+        spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        spinnerWeekFilter.setAdapter(spinnerAdapter);
+        spinnerWeekFilter.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(android.widget.AdapterView<?> parent, View view, int position, long id) {
+                applyWeekFilter(position);
+            }
+
+            @Override
+            public void onNothingSelected(android.widget.AdapterView<?> parent) { }
+        });
+
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
         adapter = new SesionAdapter(this);
@@ -83,7 +102,11 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
     private void cargarSesiones() {
         Executors.newSingleThreadExecutor().execute(() -> {
             List<Sesion> sesiones = sesionDao.getSesionByRutina(rutinaId);
-            runOnUiThread(() -> adapter.setSesiones(sesiones));
+            allSesiones = sesiones;
+            runOnUiThread(() -> {
+                buildWeekItemsAndPopulateSpinner(sesiones);
+                adapter.setSesiones(sesiones);
+            });
         });
     }
 
@@ -273,6 +296,102 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
         intent.putExtra("sesionId", sesion.id);
         intent.putExtra("sesionNombre", sesion.nombre);
         startActivity(intent);
+    }
+
+    // Construir lista de semanas disponibles y poblar el spinner
+    private void buildWeekItemsAndPopulateSpinner(java.util.List<Sesion> sesiones) {
+        java.util.Map<Long, WeekItem> weekMap = new java.util.HashMap<>();
+        java.util.Calendar cal = java.util.Calendar.getInstance();
+        // Force first day of week to Monday
+        int firstDay = java.util.Calendar.MONDAY;
+
+        for (Sesion s : sesiones) {
+            cal.setTimeInMillis(s.diaPlanificado);
+            cal.set(java.util.Calendar.HOUR_OF_DAY, 0);
+            cal.set(java.util.Calendar.MINUTE, 0);
+            cal.set(java.util.Calendar.SECOND, 0);
+            cal.set(java.util.Calendar.MILLISECOND, 0);
+
+            while (cal.get(java.util.Calendar.DAY_OF_WEEK) != firstDay) {
+                cal.add(java.util.Calendar.DAY_OF_MONTH, -1);
+            }
+
+            long weekStart = cal.getTimeInMillis();
+            long weekEnd = weekStart + 7L * 24 * 60 * 60 * 1000 - 1;
+
+            if (!weekMap.containsKey(weekStart)) {
+                String label = formatLabel(weekStart, weekEnd);
+                weekMap.put(weekStart, new WeekItem(weekStart, weekEnd, label));
+            }
+        }
+
+        weekItems.clear();
+        java.util.List<Long> starts = new java.util.ArrayList<>(weekMap.keySet());
+        java.util.Collections.sort(starts, java.util.Collections.reverseOrder());
+        for (Long s : starts) {
+            weekItems.add(weekMap.get(s));
+        }
+
+        final java.util.List<String> labels = new java.util.ArrayList<>();
+        labels.add(getString(R.string.all_weeks));
+        for (WeekItem wi : weekItems) {
+            labels.add(wi.label);
+        }
+
+        // Actualizar spinner en UI thread
+        runOnUiThread(() -> {
+            android.widget.ArrayAdapter<String> spinnerAdapter = (android.widget.ArrayAdapter<String>) spinnerWeekFilter.getAdapter();
+            spinnerAdapter.clear();
+            spinnerAdapter.addAll(labels);
+            spinnerAdapter.notifyDataSetChanged();
+            // Auto-select current week if available, otherwise 'All weeks'
+            int selection = 0;
+            long now = System.currentTimeMillis();
+            for (int i = 0; i < weekItems.size(); i++) {
+                WeekItem wi = weekItems.get(i);
+                if (now >= wi.start && now <= wi.end) {
+                    selection = i + 1; // +1 because 0 = All weeks
+                    break;
+                }
+            }
+            spinnerWeekFilter.setSelection(selection);
+        });
+    }
+
+    private void applyWeekFilter(int spinnerPosition) {
+        if (spinnerPosition == 0) {
+            adapter.setSesiones(allSesiones);
+            return;
+        }
+
+        int idx = spinnerPosition - 1;
+        if (idx < 0 || idx >= weekItems.size()) return;
+
+        WeekItem w = weekItems.get(idx);
+        java.util.List<Sesion> filtered = new java.util.ArrayList<>();
+        for (Sesion s : allSesiones) {
+            if (s.diaPlanificado >= w.start && s.diaPlanificado <= w.end) {
+                filtered.add(s);
+            }
+        }
+        adapter.setSesiones(filtered);
+    }
+
+    private String formatLabel(long start, long end) {
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("dd/MM/yyyy", java.util.Locale.getDefault());
+        return sdf.format(new java.util.Date(start)) + " - " + sdf.format(new java.util.Date(end));
+    }
+
+    private static class WeekItem {
+        long start;
+        long end;
+        String label;
+
+        WeekItem(long start, long end, String label) {
+            this.start = start;
+            this.end = end;
+            this.label = label;
+        }
     }
 }
 

@@ -79,4 +79,5 @@
     <string name="not_channel_name">Session notifications</string>
     <string name="not_channel_description">a</string>
     <string name="notification_content_format">Your session \'%1$s\' is about to start at %2$s.</string>
+    <string name="all_weeks">Todas las semanas</string>
 </resources>
