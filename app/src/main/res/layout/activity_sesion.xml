@@ -20,6 +20,12 @@
             android:background="?attr/colorPrimary"
             android:textColor="@android:color/white" />
 
+        <Spinner
+            android:id="@+id/spinnerWeekFilter"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="8dp" />
+
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerView"
             android:layout_width="match_parent"
