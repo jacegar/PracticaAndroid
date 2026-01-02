@@ -14,7 +14,7 @@
     <string name="next_session_exercises">Next session exercises</string>
     <string name="complete">Complete</string>
     <string name="edit">Edit</string>
-    <string name="no_active_workout">There is no active workcout. Activate one to start!</string>
+    <string name="no_active_workout">There is no active workout. Activate one to start!</string>
     <string name="manage_workouts">Manage workouts</string>
     <string name="complete_session">Complete session</string>
     <string name="want_complete_session1">Do you want to complete session \'</string>
@@ -76,4 +76,7 @@
     <string name="lb">lb</string>
     <string name="weight_hint">Weight (%1$s)</string>
     <string name="weight_unit_changed">Weight unit changed</string>
+    <string name="not_channel_name">Session notifications</string>
+    <string name="not_channel_description">a</string>
+    <string name="notification_content_format">Your session \'%1$s\' is about to start at %2$s.</string>
 </resources>

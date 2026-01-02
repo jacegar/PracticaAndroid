@@ -1,8 +1,11 @@
 package com.example.practicaandroid;
 
+import android.app.AlarmManager;
 import android.app.DatePickerDialog;
+import android.app.PendingIntent;
 import android.app.TimePickerDialog;
 import android.content.Intent;
+import android.os.Build;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -14,11 +17,16 @@ import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
+import androidx.work.Data;
+import androidx.work.OneTimeWorkRequest;
+import androidx.work.WorkManager;
+import java.util.concurrent.TimeUnit;
 
 import com.example.practicaandroid.adapter.SesionAdapter;
 import com.example.practicaandroid.data.AppDatabase;
 import com.example.practicaandroid.data.sesion.Sesion;
 import com.example.practicaandroid.data.sesion.SesionDao;
+import com.example.practicaandroid.notifications.SessionReminderWorker;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.text.SimpleDateFormat;
@@ -141,11 +149,36 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
             Sesion sesion = new Sesion(rutinaId, nombre, diaPlanificado);
             sesionDao.insert(sesion);
 
+            crearNotificacion(sesion);
+
             runOnUiThread(() -> {
                 Toast.makeText(this, "Sesión creada", Toast.LENGTH_SHORT).show();
                 cargarSesiones();
             });
         });
+    }
+
+    private void crearNotificacion(Sesion sesion){
+        long diaPlanificadoMillis = sesion.diaPlanificado;
+        long horasAntes = 24; //Aqui deberia ir una variable global configurable desde configuracion
+        long tiempoNotificacionMillis = diaPlanificadoMillis - (horasAntes * 60 * 60 * 1000);
+        long retrasoInicial = tiempoNotificacionMillis - System.currentTimeMillis();
+
+        // Si la sesion es en el futuro, programamos la notificacion
+        if (retrasoInicial > 0) {
+            Data inputData = new Data.Builder()
+                    .putLong("id", sesion.id)
+                    .putString("nombre", sesion.nombre)
+                    .putLong("fecha", sesion.diaPlanificado)
+                    .build();
+
+            OneTimeWorkRequest reminderRequest = new OneTimeWorkRequest.Builder(SessionReminderWorker.class)
+                    .setInitialDelay(retrasoInicial, TimeUnit.MILLISECONDS)
+                    .setInputData(inputData)
+                    .build();
+
+            WorkManager.getInstance(getApplicationContext()).enqueue(reminderRequest);
+        }
     }
 
     @Override

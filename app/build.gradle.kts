@@ -38,9 +38,9 @@ dependencies {
     implementation(libs.material)
     implementation(libs.activity)
     implementation(libs.constraintlayout)
-
     // Room - SQLite Database
     implementation(libs.room.runtime)
+    implementation(libs.work.runtime)
     annotationProcessor(libs.room.compiler)
 
     //Barra navegacion

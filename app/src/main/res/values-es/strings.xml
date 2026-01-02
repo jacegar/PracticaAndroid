@@ -73,4 +73,7 @@
     <string name="lb">lb</string>
     <string name="weight_hint">Peso (%1$s)</string>
     <string name="weight_unit_changed">Unidad de peso cambiada</string>
+    <string name="not_channel_name">Notificaciones de sesión</string>
+    <string name="not_channel_description">Canal para notificaciones de sesiones inminentes</string>
+    <string name="notification_content_format">Tu sesión \'%1$s\' comienza a las %2$s.</string>
 </resources>
