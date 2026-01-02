@@ -74,6 +74,9 @@ public class SettingsFragment extends Fragment {
 
         languageAutoComplete.setAdapter(adapter);
 
+        // Configure to show all items without filtering
+        languageAutoComplete.setThreshold(Integer.MAX_VALUE);
+
         // Set current language
         String currentLanguage = getCurrentLanguageCode();
         if (currentLanguage.equals("es")) {
@@ -81,6 +84,12 @@ public class SettingsFragment extends Fragment {
         } else {
             languageAutoComplete.setText(getString(R.string.language_english), false);
         }
+
+        // Allow clicking to open dropdown again and show all options
+        languageAutoComplete.setOnClickListener(v -> {
+            languageAutoComplete.setText("");
+            languageAutoComplete.showDropDown();
+        });
 
         // Set listener for language selection
         languageAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
@@ -92,6 +101,9 @@ public class SettingsFragment extends Fragment {
             } else {
                 languageCode = "en";
             }
+
+            // Set the selected text
+            languageAutoComplete.setText(selectedLanguage, false);
 
             // Only apply if different from current
             if (!languageCode.equals(getCurrentLanguageCode())) {
@@ -150,6 +162,9 @@ public class SettingsFragment extends Fragment {
 
         weightUnitAutoComplete.setAdapter(adapter);
 
+        // Configure to show all items without filtering
+        weightUnitAutoComplete.setThreshold(Integer.MAX_VALUE);
+
         // Set current weight unit
         String currentWeightUnit = getCurrentWeightUnit();
         if (currentWeightUnit.equals("kg")) {
@@ -157,6 +172,12 @@ public class SettingsFragment extends Fragment {
         } else {
             weightUnitAutoComplete.setText(getString(R.string.weight_unit_lb), false);
         }
+
+        // Allow clicking to open dropdown again and show all options
+        weightUnitAutoComplete.setOnClickListener(v -> {
+            weightUnitAutoComplete.setText("");
+            weightUnitAutoComplete.showDropDown();
+        });
 
         // Set listener for weight unit selection
         weightUnitAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
@@ -169,20 +190,30 @@ public class SettingsFragment extends Fragment {
                 weightUnitCode = "lb";
             }
 
+            // Set the selected text
+            weightUnitAutoComplete.setText(selectedWeightUnit, false);
+
             // Only apply if different from current
             if (!weightUnitCode.equals(getCurrentWeightUnit())) {
                 // Save weight unit preference
                 saveWeightUnitPreference(weightUnitCode);
 
-                // Update the displayed text
-                weightUnitAutoComplete.setText(selectedWeightUnit, false);
-
-                // Show confirmation message
+                // Show confirmation message and restart app
                 Toast.makeText(requireContext(),
-                        getString(R.string.weight_unit) + ": " + weightUnitCode,
+                        R.string.weight_unit_changed,
                         Toast.LENGTH_SHORT).show();
+
+                // Restart activity to apply changes
+                restartActivity();
             }
         });
+    }
+
+    private void restartActivity() {
+        android.content.Intent intent = requireActivity().getIntent();
+        intent.putExtra("open_settings", true);
+        requireActivity().finish();
+        requireActivity().startActivity(intent);
     }
 
     private String getCurrentWeightUnit() {

@@ -72,4 +72,5 @@
     <string name="kg">kg</string>
     <string name="lb">lb</string>
     <string name="weight_hint">Peso (%1$s)</string>
+    <string name="weight_unit_changed">Unidad de peso cambiada</string>
 </resources>
