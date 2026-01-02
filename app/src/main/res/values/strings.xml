@@ -64,4 +64,9 @@
     <string name="filter_by_type">Filter by type</string>
     <string name="all_types">All types</string>
     <string name="no_exercises_match">No exercises match the search</string>
+    <!-- Settings -->
+    <string name="language">Language</string>
+    <string name="language_changed">Language changed. Restart the app to apply changes.</string>
+    <string name="language_spanish">Spanish</string>
+    <string name="language_english">English</string>
 </resources>

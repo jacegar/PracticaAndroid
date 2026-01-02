@@ -61,4 +61,9 @@
     <string name="filter_by_type">Filtrar por tipo</string>
     <string name="all_types">Todos los tipos</string>
     <string name="no_exercises_match">No hay ejercicios que coincidan con la búsqueda</string>
+    <!-- Settings -->
+    <string name="language">Idioma</string>
+    <string name="language_changed">Idioma cambiado</string>
+    <string name="language_spanish">Español</string>
+    <string name="language_english">Inglés</string>
 </resources>

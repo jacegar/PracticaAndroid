@@ -1,5 +1,8 @@
 package com.example.practicaandroid;
 
+import android.content.Context;
+import android.content.SharedPreferences;
+import android.content.res.Configuration;
 import android.os.Bundle;
 
 import androidx.activity.EdgeToEdge;
@@ -10,11 +13,20 @@ import androidx.fragment.app.Fragment;
 import com.example.practicaandroid.data.AppDatabase;
 import com.google.android.material.bottomnavigation.BottomNavigationView;
 
+import java.util.Locale;
+
 public class MainActivity extends AppCompatActivity {
+
+    private static final String PREFS_NAME = "AppSettings";
+    private static final String LANGUAGE_KEY = "language";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
+        // Load saved language before setting content view
+        loadLocale();
+
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> insets);
@@ -30,7 +42,14 @@ public class MainActivity extends AppCompatActivity {
         Fragment progressFragment = new ProgressFragment();
         Fragment settingsFragment = new SettingsFragment();
 
-        setCurrentFragment(workoutFragment);
+        // Check if we should open settings (after language change)
+        boolean openSettings = getIntent().getBooleanExtra("open_settings", false);
+        if (openSettings) {
+            setCurrentFragment(settingsFragment);
+            bottomNavigationView.setSelectedItemId(R.id.settings);
+        } else {
+            setCurrentFragment(workoutFragment);
+        }
 
         bottomNavigationView.setOnItemSelectedListener(item -> {
             Fragment selectedFragment = null;
@@ -59,6 +78,19 @@ public class MainActivity extends AppCompatActivity {
                 .beginTransaction()
                 .replace(R.id.flFragment, fragment)
                 .commit();
+    }
+
+    private void loadLocale() {
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        String languageCode = prefs.getString(LANGUAGE_KEY, Locale.getDefault().getLanguage());
+
+        Locale locale = new Locale(languageCode);
+        Locale.setDefault(locale);
+
+        Configuration config = new Configuration();
+        config.setLocale(locale);
+
+        getResources().updateConfiguration(config, getResources().getDisplayMetrics());
     }
 }
 
