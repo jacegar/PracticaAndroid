@@ -104,6 +104,15 @@ public class WorkoutFragment extends Fragment {
     }
 
     private void configurarListeners() {
+        cardRutinaActiva.setOnClickListener(v -> {
+            if (rutinaActivaActual != null) {
+                Intent intent = new Intent(getActivity(), SesionActivity.class);
+                intent.putExtra("rutinaId", rutinaActivaActual.id);
+                intent.putExtra("rutinaNombre", rutinaActivaActual.nombre);
+                startActivity(intent);
+            }
+        });
+
         btnRutinas.setOnClickListener(v -> {
             Intent intent = new Intent(getActivity(), RutinaActivity.class);
             startActivity(intent);
