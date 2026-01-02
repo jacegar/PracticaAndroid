@@ -66,4 +66,10 @@
     <string name="language_changed">Idioma cambiado</string>
     <string name="language_spanish">Español</string>
     <string name="language_english">Inglés</string>
+    <string name="weight_unit">Unidad de Peso</string>
+    <string name="weight_unit_kg">Kilogramos (kg)</string>
+    <string name="weight_unit_lb">Libras (lb)</string>
+    <string name="kg">kg</string>
+    <string name="lb">lb</string>
+    <string name="weight_hint">Peso (%1$s)</string>
 </resources>

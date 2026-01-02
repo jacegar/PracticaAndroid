@@ -12,6 +12,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.practicaandroid.R;
+import com.example.practicaandroid.SettingsFragment;
 import com.example.practicaandroid.data.ejercicio.Ejercicio;
 import com.example.practicaandroid.data.relaciones.SesionEjercicio;
 
@@ -91,6 +92,9 @@ public class SesionEjercicioAdapter extends RecyclerView.Adapter<SesionEjercicio
             tvNombre.setText(ejercicio.nombre);
             tvTipo.setText(ejercicio.tipo);
 
+            // Obtener la unidad de peso configurada
+            String weightUnit = SettingsFragment.getWeightUnit(itemView.getContext());
+
             // Mostrar datos según el tipo
             StringBuilder datos = new StringBuilder();
             if ("FUERZA".equals(ejercicio.tipo)) {
@@ -101,7 +105,7 @@ public class SesionEjercicioAdapter extends RecyclerView.Adapter<SesionEjercicio
                 }
                 if (se.peso > 0) {
                     if (datos.length() > 0) datos.append(" - ");
-                    datos.append(se.peso).append(" kg");
+                    datos.append(se.peso).append(" ").append(weightUnit);
                 }
             } else if ("CARDIO".equals(ejercicio.tipo)) {
                 if (se.duracionSegundos > 0) {

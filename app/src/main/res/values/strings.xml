@@ -69,4 +69,10 @@
     <string name="language_changed">Language changed. Restart the app to apply changes.</string>
     <string name="language_spanish">Spanish</string>
     <string name="language_english">English</string>
+    <string name="weight_unit">Weight Unit</string>
+    <string name="weight_unit_kg">Kilograms (kg)</string>
+    <string name="weight_unit_lb">Pounds (lb)</string>
+    <string name="kg">kg</string>
+    <string name="lb">lb</string>
+    <string name="weight_hint">Weight (%1$s)</string>
 </resources>

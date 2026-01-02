@@ -20,8 +20,10 @@ public class SettingsFragment extends Fragment {
 
     private static final String PREFS_NAME = "AppSettings";
     private static final String LANGUAGE_KEY = "language";
+    private static final String WEIGHT_UNIT_KEY = "weight_unit";
 
     private AutoCompleteTextView languageAutoComplete;
+    private AutoCompleteTextView weightUnitAutoComplete;
     private SharedPreferences sharedPreferences;
 
     public SettingsFragment() {
@@ -48,8 +50,10 @@ public class SettingsFragment extends Fragment {
         View view = inflater.inflate(R.layout.fragment_settings, container, false);
 
         languageAutoComplete = view.findViewById(R.id.languageAutoComplete);
+        weightUnitAutoComplete = view.findViewById(R.id.weightUnitAutoComplete);
 
         setupLanguageSelector();
+        setupWeightUnitSelector();
 
         return view;
     }
@@ -89,14 +93,17 @@ public class SettingsFragment extends Fragment {
                 languageCode = "en";
             }
 
-            // Save language preference
-            saveLanguagePreference(languageCode);
+            // Only apply if different from current
+            if (!languageCode.equals(getCurrentLanguageCode())) {
+                // Save language preference
+                saveLanguagePreference(languageCode);
 
-            // Apply language change
-            setLocale(languageCode);
+                // Apply language change
+                setLocale(languageCode);
 
-            // Show confirmation message
-            Toast.makeText(requireContext(), R.string.language_changed, Toast.LENGTH_LONG).show();
+                // Show confirmation message
+                Toast.makeText(requireContext(), R.string.language_changed, Toast.LENGTH_LONG).show();
+            }
         });
     }
 
@@ -125,5 +132,71 @@ public class SettingsFragment extends Fragment {
         intent.putExtra("open_settings", true);
         requireActivity().finish();
         requireActivity().startActivity(intent);
+    }
+
+    private void setupWeightUnitSelector() {
+        // Create weight unit options
+        String[] weightUnits = new String[]{
+                getString(R.string.weight_unit_kg),
+                getString(R.string.weight_unit_lb)
+        };
+
+        // Create adapter for dropdown
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(
+                requireContext(),
+                android.R.layout.simple_dropdown_item_1line,
+                weightUnits
+        );
+
+        weightUnitAutoComplete.setAdapter(adapter);
+
+        // Set current weight unit
+        String currentWeightUnit = getCurrentWeightUnit();
+        if (currentWeightUnit.equals("kg")) {
+            weightUnitAutoComplete.setText(getString(R.string.weight_unit_kg), false);
+        } else {
+            weightUnitAutoComplete.setText(getString(R.string.weight_unit_lb), false);
+        }
+
+        // Set listener for weight unit selection
+        weightUnitAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
+            String selectedWeightUnit = (String) parent.getItemAtPosition(position);
+            String weightUnitCode;
+
+            if (selectedWeightUnit.equals(getString(R.string.weight_unit_kg))) {
+                weightUnitCode = "kg";
+            } else {
+                weightUnitCode = "lb";
+            }
+
+            // Only apply if different from current
+            if (!weightUnitCode.equals(getCurrentWeightUnit())) {
+                // Save weight unit preference
+                saveWeightUnitPreference(weightUnitCode);
+
+                // Update the displayed text
+                weightUnitAutoComplete.setText(selectedWeightUnit, false);
+
+                // Show confirmation message
+                Toast.makeText(requireContext(),
+                        getString(R.string.weight_unit) + ": " + weightUnitCode,
+                        Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private String getCurrentWeightUnit() {
+        return sharedPreferences.getString(WEIGHT_UNIT_KEY, "kg");
+    }
+
+    private void saveWeightUnitPreference(String weightUnit) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putString(WEIGHT_UNIT_KEY, weightUnit);
+        editor.apply();
+    }
+
+    public static String getWeightUnit(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        return prefs.getString(WEIGHT_UNIT_KEY, "kg");
     }
 }

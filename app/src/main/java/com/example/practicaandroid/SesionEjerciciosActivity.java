@@ -23,6 +23,7 @@ import com.example.practicaandroid.data.ejercicio.EjercicioDao;
 import com.example.practicaandroid.data.relaciones.SesionEjercicio;
 import com.example.practicaandroid.data.relaciones.SesionEjercicioDao;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.textfield.TextInputLayout;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -247,6 +248,11 @@ public class SesionEjerciciosActivity extends AppCompatActivity implements Sesio
         EditText etDuracion = dialogView.findViewById(R.id.etDuracion);
         EditText etDistancia = dialogView.findViewById(R.id.etDistancia);
 
+        // Obtener la unidad de peso configurada y establecer el hint
+        TextInputLayout tilPeso = dialogView.findViewById(R.id.tilPeso);
+        String weightUnit = SettingsFragment.getWeightUnit(this);
+        tilPeso.setHint(getString(R.string.weight_hint, weightUnit));
+
         // Mostrar campos según el tipo
         if ("FUERZA".equals(ejercicio.tipo)) {
             layoutFuerza.setVisibility(View.VISIBLE);
@@ -333,6 +339,11 @@ public class SesionEjerciciosActivity extends AppCompatActivity implements Sesio
         EditText etPeso = dialogView.findViewById(R.id.etPeso);
         EditText etDuracion = dialogView.findViewById(R.id.etDuracion);
         EditText etDistancia = dialogView.findViewById(R.id.etDistancia);
+
+        // Obtener la unidad de peso configurada y establecer el hint
+        TextInputLayout tilPeso = dialogView.findViewById(R.id.tilPeso);
+        String weightUnit = SettingsFragment.getWeightUnit(this);
+        tilPeso.setHint(getString(R.string.weight_hint, weightUnit));
 
         // Mostrar campos según el tipo y prellenar
         if ("FUERZA".equals(ejercicio.tipo)) {
