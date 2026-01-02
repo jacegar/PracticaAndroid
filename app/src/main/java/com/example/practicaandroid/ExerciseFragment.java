@@ -74,6 +74,26 @@ public class ExerciseFragment extends Fragment implements EjercicioAdapter.OnEje
         fab = view.findViewById(R.id.fab);
         fab.setOnClickListener(v -> mostrarDialogoCrear());
 
+        // Configurar SearchView
+        androidx.appcompat.widget.SearchView searchView = view.findViewById(R.id.searchView);
+        if (searchView != null) {
+            searchView.setIconifiedByDefault(false);
+            searchView.setQueryHint("Buscar ejercicios...");
+            searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
+                @Override
+                public boolean onQueryTextSubmit(String query) {
+                    adapter.filtrar(query);
+                    return true;
+                }
+
+                @Override
+                public boolean onQueryTextChange(String newText) {
+                    adapter.filtrar(newText);
+                    return true;
+                }
+            });
+        }
+
         // Cargar ejercicios
         cargarEjercicios();
     }

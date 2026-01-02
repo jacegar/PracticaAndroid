@@ -18,6 +18,7 @@ import java.util.List;
 public class EjercicioAdapter extends RecyclerView.Adapter<EjercicioAdapter.EjercicioViewHolder> {
 
     private List<Ejercicio> ejercicios = new ArrayList<>();
+    private List<Ejercicio> ejerciciosCompletos = new ArrayList<>();
     private OnEjercicioClickListener listener;
 
     public interface OnEjercicioClickListener {
@@ -31,6 +32,27 @@ public class EjercicioAdapter extends RecyclerView.Adapter<EjercicioAdapter.Ejer
 
     public void setEjercicios(List<Ejercicio> ejercicios) {
         this.ejercicios = ejercicios != null ? ejercicios : new ArrayList<>();
+        this.ejerciciosCompletos = new ArrayList<>(this.ejercicios);
+        notifyDataSetChanged();
+    }
+
+    public void filtrar(String texto) {
+        if (texto == null || texto.trim().isEmpty()) {
+            ejercicios = new ArrayList<>(ejerciciosCompletos);
+        } else {
+            String textoBusqueda = texto.toLowerCase().trim();
+            List<Ejercicio> listaFiltrada = new ArrayList<>();
+
+            for (Ejercicio ejercicio : ejerciciosCompletos) {
+                if (ejercicio.nombre.toLowerCase().contains(textoBusqueda) ||
+                    ejercicio.tipo.toLowerCase().contains(textoBusqueda) ||
+                    ejercicio.descripcion.toLowerCase().contains(textoBusqueda)) {
+                    listaFiltrada.add(ejercicio);
+                }
+            }
+
+            ejercicios = listaFiltrada;
+        }
         notifyDataSetChanged();
     }
 
