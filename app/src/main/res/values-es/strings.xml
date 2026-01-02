@@ -29,4 +29,36 @@
     <string name="updated_session">Sesión actualizada</string>
     <string name="no_exercises_in_session">No hay ejercicios en esta sesión</string>
     <string name="congratulations_no_sessions">¡Enhorabuena! No hay sesiones pendientes en esta rutina</string>
+    <!-- Exercise Fragment -->
+    <string name="search_exercises_hint">Buscar ejercicios...</string>
+    <string name="new_exercise">Nuevo Ejercicio</string>
+    <string name="create">Crear</string>
+    <string name="name_cannot_be_empty">El nombre no puede estar vacío</string>
+    <string name="exercise_created">Ejercicio creado</string>
+    <string name="edit_exercise">Editar Ejercicio</string>
+    <string name="exercise_updated">Ejercicio actualizado</string>
+    <string name="delete_exercise">Eliminar Ejercicio</string>
+    <string name="delete_exercise_confirmation">¿Estás seguro de eliminar \'%1$s\'?</string>
+    <string name="delete">Eliminar</string>
+    <string name="exercise_deleted">Ejercicio eliminado</string>
+    <!-- Session Exercises -->
+    <string name="session_not_found">Error: Sesión no encontrada</string>
+    <string name="no_exercises_available">No hay ejercicios disponibles. Crea algunos primero.</string>
+    <string name="exercises_colon">Ejercicios: %1$s</string>
+    <string name="select_exercise">Seleccionar Ejercicio</string>
+    <string name="add_exercise_to_session">Añadir Ejercicio a la Sesión</string>
+    <string name="add">Añadir</string>
+    <string name="type_colon">Tipo: %1$s</string>
+    <string name="numeric_values_error">Error en los valores numéricos</string>
+    <string name="exercise_added_to_session">Ejercicio añadido a la sesión</string>
+    <string name="edit_exercise_data">Editar Datos del Ejercicio</string>
+    <string name="data_updated">Datos actualizados</string>
+    <string name="remove_exercise_from_session">¿Quitar \'%1$s\' de esta sesión?</string>
+    <string name="exercise_removed_from_session">Ejercicio eliminado de la sesión</string>
+    <string name="marked_as_completed">Marcado como completado</string>
+    <string name="marked_as_pending">Marcado como pendiente</string>
+    <string name="search_exercises">Buscar ejercicios...</string>
+    <string name="filter_by_type">Filtrar por tipo</string>
+    <string name="all_types">Todos los tipos</string>
+    <string name="no_exercises_match">No hay ejercicios que coincidan con la búsqueda</string>
 </resources>

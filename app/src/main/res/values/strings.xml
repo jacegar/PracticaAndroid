@@ -32,4 +32,36 @@
     <string name="want_complete_session">¿Estás seguro de que quieres marcar la sesión \'%1$s\' como
         completada?
     </string>
+    <!-- Exercise Fragment -->
+    <string name="search_exercises_hint">Search exercises...</string>
+    <string name="new_exercise">New Exercise</string>
+    <string name="create">Create</string>
+    <string name="name_cannot_be_empty">Name cannot be empty</string>
+    <string name="exercise_created">Exercise created</string>
+    <string name="edit_exercise">Edit Exercise</string>
+    <string name="exercise_updated">Exercise updated</string>
+    <string name="delete_exercise">Delete Exercise</string>
+    <string name="delete_exercise_confirmation">Are you sure you want to delete \'%1$s\'?</string>
+    <string name="delete">Delete</string>
+    <string name="exercise_deleted">Exercise deleted</string>
+    <!-- Session Exercises -->
+    <string name="session_not_found">Error: Session not found</string>
+    <string name="no_exercises_available">No exercises available. Create some first.</string>
+    <string name="exercises_colon">Exercises: %1$s</string>
+    <string name="select_exercise">Select Exercise</string>
+    <string name="add_exercise_to_session">Add Exercise to Session</string>
+    <string name="add">Add</string>
+    <string name="type_colon">Type: %1$s</string>
+    <string name="numeric_values_error">Error in numeric values</string>
+    <string name="exercise_added_to_session">Exercise added to session</string>
+    <string name="edit_exercise_data">Edit Exercise Data</string>
+    <string name="data_updated">Data updated</string>
+    <string name="remove_exercise_from_session">Remove \'%1$s\' from this session?</string>
+    <string name="exercise_removed_from_session">Exercise removed from session</string>
+    <string name="marked_as_completed">Marked as completed</string>
+    <string name="marked_as_pending">Marked as pending</string>
+    <string name="search_exercises">Search exercises...</string>
+    <string name="filter_by_type">Filter by type</string>
+    <string name="all_types">All types</string>
+    <string name="no_exercises_match">No exercises match the search</string>
 </resources>
