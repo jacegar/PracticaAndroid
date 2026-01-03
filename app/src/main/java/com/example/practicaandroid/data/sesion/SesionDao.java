@@ -40,4 +40,6 @@ public interface SesionDao {
     Sesion getProximaSesionDeRutina(long rutinaId);
 
 
+    @Query("SELECT * FROM sesiones WHERE diaPlanificado > :timestamp")
+    List<Sesion> getSesionesFuturas(long timestamp);
 }

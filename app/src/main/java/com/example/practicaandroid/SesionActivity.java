@@ -1,11 +1,10 @@
 package com.example.practicaandroid;
 
-import android.app.AlarmManager;
 import android.app.DatePickerDialog;
-import android.app.PendingIntent;
 import android.app.TimePickerDialog;
+import android.content.Context;
 import android.content.Intent;
-import android.os.Build;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -185,8 +184,9 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
 
     private void crearNotificacion(Sesion sesion){
         long diaPlanificadoMillis = sesion.diaPlanificado;
-        long horasAntes = 24; //Aqui deberia ir una variable global configurable desde configuracion
-        long tiempoNotificacionMillis = diaPlanificadoMillis - (horasAntes * 60 * 60 * 1000);
+        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
+        long minutos_antes = sharedPreferences.getInt("minutos_antes_notificacion", 60*24);
+        long tiempoNotificacionMillis = diaPlanificadoMillis - (minutos_antes * 60 * 1000);
         long retrasoInicial = tiempoNotificacionMillis - System.currentTimeMillis();
 
         // Si la sesion es en el futuro, programamos la notificacion

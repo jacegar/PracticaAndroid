@@ -5,6 +5,8 @@ import android.content.SharedPreferences;
 import android.content.res.Configuration;
 import android.os.Bundle;
 
+import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 
 import android.view.LayoutInflater;
@@ -12,7 +14,10 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.AutoCompleteTextView;
+import android.widget.Button;
 import android.widget.Toast;
+
+import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Locale;
 
@@ -24,6 +29,8 @@ public class SettingsFragment extends Fragment {
 
     private AutoCompleteTextView languageAutoComplete;
     private AutoCompleteTextView weightUnitAutoComplete;
+    private TextInputEditText notificationHoursEditText;
+    private Button saveNotificationHoursButton;
     private SharedPreferences sharedPreferences;
 
     public SettingsFragment() {
@@ -56,6 +63,46 @@ public class SettingsFragment extends Fragment {
         setupWeightUnitSelector();
 
         return view;
+    }
+
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        notificationHoursEditText = view.findViewById(R.id.notificationHoursEditText);
+        saveNotificationHoursButton = view.findViewById(R.id.saveNotificationHoursButton);
+
+        cargarPreferenciaRecordatorio();
+
+        saveNotificationHoursButton.setOnClickListener(v -> {
+            String tiempoString = notificationHoursEditText.getText().toString();
+            if (!tiempoString.isEmpty()) {
+                try {
+                    int tiempoSeleccionado = Integer.parseInt(tiempoString);
+                    guardarPreferenciaRecordatorio(tiempoSeleccionado);
+                } catch (NumberFormatException e) {
+                    Toast.makeText(getActivity(), R.string.introduce_valid_number, Toast.LENGTH_SHORT).show();
+                }
+            } else {
+                Toast.makeText(getActivity(), R.string.field_not_empty, Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void cargarPreferenciaRecordatorio() {
+        int tiempoGuardado = sharedPreferences.getInt("minutos_antes_notificacion", 24*60);
+        notificationHoursEditText.setText(String.valueOf(tiempoGuardado));
+    }
+
+    private void guardarPreferenciaRecordatorio(int horasSeleccionadas) {
+        SharedPreferences.Editor editor = sharedPreferences.edit();
+        editor.putInt("minutos_antes_notificacion", horasSeleccionadas);
+        editor.apply();
+
+        Toast.makeText(getActivity(), R.string.saved_reminder_configuration, Toast.LENGTH_SHORT).show();
+
+        if (getActivity() instanceof MainActivity) {
+            ((MainActivity) getActivity()).reprogramarTodasLasNotificaciones();
+        }
     }
 
     private void setupLanguageSelector() {
