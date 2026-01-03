@@ -18,6 +18,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
+import androidx.work.WorkManager;
 
 import com.example.practicaandroid.data.AppDatabase;
 import com.example.practicaandroid.data.ejercicio.Ejercicio;
@@ -147,6 +148,8 @@ public class WorkoutFragment extends Fragment {
         sesion.fechaRealizada = System.currentTimeMillis();
         Executors.newSingleThreadExecutor().execute(() -> {
             sesionDao.update(sesion);
+            String workTag = "sesion-" + sesion.id;
+            WorkManager.getInstance(requireContext()).cancelAllWorkByTag(workTag);
             if (getActivity() != null) {
                 getActivity().runOnUiThread(this::cargarInformacionRutinaActiva);
             }

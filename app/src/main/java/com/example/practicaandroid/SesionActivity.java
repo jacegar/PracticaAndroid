@@ -134,7 +134,7 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
 
                     crearSesion(nombre, diaPlanificadoSeleccionado);
                 })
-                .setNegativeButton("Cancelar", null)
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 
@@ -183,29 +183,31 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
     }
 
     private void crearNotificacion(Sesion sesion){
-        long diaPlanificadoMillis = sesion.diaPlanificado;
-        SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
-        long minutos_antes = sharedPreferences.getInt("minutos_antes_notificacion", 60*24);
-        long tiempoNotificacionMillis = diaPlanificadoMillis - (minutos_antes * 60 * 1000);
-        long retrasoInicial = tiempoNotificacionMillis - System.currentTimeMillis();
+        if(sesion.fechaRealizada == 0) {
+            long diaPlanificadoMillis = sesion.diaPlanificado;
+            SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
+            long minutos_antes = sharedPreferences.getInt("minutos_antes_notificacion", 60 * 24);
+            long tiempoNotificacionMillis = diaPlanificadoMillis - (minutos_antes * 60 * 1000);
+            long retrasoInicial = tiempoNotificacionMillis - System.currentTimeMillis();
 
-        // Si la sesion es en el futuro, programamos la notificacion
-        if (retrasoInicial > 0) {
-            String workTag = "sesion-" + sesion.id;
+            // Si la sesion es en el futuro, programamos la notificacion
+            if (retrasoInicial > 0) {
+                String workTag = "sesion-" + sesion.id;
 
-            Data inputData = new Data.Builder()
-                    .putLong("id", sesion.id)
-                    .putString("nombre", sesion.nombre)
-                    .putLong("fecha", sesion.diaPlanificado)
-                    .build();
+                Data inputData = new Data.Builder()
+                        .putLong("id", sesion.id)
+                        .putString("nombre", sesion.nombre)
+                        .putLong("fecha", sesion.diaPlanificado)
+                        .build();
 
-            OneTimeWorkRequest reminderRequest = new OneTimeWorkRequest.Builder(SessionReminderWorker.class)
-                    .setInitialDelay(retrasoInicial, TimeUnit.MILLISECONDS)
-                    .setInputData(inputData)
-                    .addTag(workTag)
-                    .build();
+                OneTimeWorkRequest reminderRequest = new OneTimeWorkRequest.Builder(SessionReminderWorker.class)
+                        .setInitialDelay(retrasoInicial, TimeUnit.MILLISECONDS)
+                        .setInputData(inputData)
+                        .addTag(workTag)
+                        .build();
 
-            WorkManager.getInstance(getApplicationContext()).enqueue(reminderRequest);
+                WorkManager.getInstance(getApplicationContext()).enqueue(reminderRequest);
+            }
         }
     }
 
@@ -287,10 +289,12 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
         String mensaje;
         if (sesion.fechaRealizada == 0) {
             // Marcar como completada
+            cancelarNotificacion(sesion);
             sesion.fechaRealizada = System.currentTimeMillis();
             mensaje = "Sesión marcada como completada";
         } else {
             // Desmarcar como completada
+            crearNotificacion(sesion);
             sesion.fechaRealizada = 0;
             mensaje = "Sesión marcada como pendiente";
         }
