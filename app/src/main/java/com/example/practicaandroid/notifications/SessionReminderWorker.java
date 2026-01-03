@@ -1,12 +1,16 @@
 package com.example.practicaandroid.notifications;
+import android.app.PendingIntent;
 import android.content.Context;
 import androidx.annotation.NonNull;
 import androidx.work.Worker;
 import androidx.work.WorkerParameters;
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.content.Intent;
+
 import androidx.core.app.NotificationCompat;
 
+import com.example.practicaandroid.MainActivity;
 import com.example.practicaandroid.R;
 
 import java.text.SimpleDateFormat;
@@ -50,12 +54,23 @@ public class SessionReminderWorker extends Worker {
                 sessionTitle,
                 formattedTime
         );
+
+        Intent intent = new Intent(context, MainActivity.class);
+        intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK |Intent.FLAG_ACTIVITY_CLEAR_TOP);
+        PendingIntent pendingIntent = PendingIntent.getActivity(
+                context,
+                0,
+                intent,
+                PendingIntent.FLAG_IMMUTABLE | PendingIntent.FLAG_UPDATE_CURRENT
+        );
+
         NotificationCompat.Builder builder = new NotificationCompat.Builder(context, CHANNEL_ID)
                 .setSmallIcon(R.drawable.ic_notification)
                 .setContentTitle(sessionTitle)
                 .setContentText(contentText)
                 .setPriority(NotificationCompat.PRIORITY_DEFAULT)
-                .setAutoCancel(true);
+                .setAutoCancel(true)
+                .setContentIntent(pendingIntent);
 
         notificationManager.notify(Long.valueOf(sessionId).hashCode(), builder.build());
 
