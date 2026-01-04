@@ -63,7 +63,7 @@
                         android:layout_marginTop="16dp"
                         app:boxStrokeColor="?attr/colorPrimary">
 
-                        <AutoCompleteTextView
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
                             android:id="@+id/languageAutoComplete"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"
@@ -106,7 +106,7 @@
                         android:layout_marginTop="16dp"
                         app:boxStrokeColor="?attr/colorPrimary">
 
-                        <AutoCompleteTextView
+                        <com.google.android.material.textfield.MaterialAutoCompleteTextView
                             android:id="@+id/weightUnitAutoComplete"
                             android:layout_width="match_parent"
                             android:layout_height="wrap_content"

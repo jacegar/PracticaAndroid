@@ -13,10 +13,10 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
-import android.widget.AutoCompleteTextView;
 import android.widget.Button;
 import android.widget.Toast;
 
+import com.google.android.material.textfield.MaterialAutoCompleteTextView;
 import com.google.android.material.textfield.TextInputEditText;
 
 import java.util.Locale;
@@ -27,8 +27,8 @@ public class SettingsFragment extends Fragment {
     private static final String LANGUAGE_KEY = "language";
     private static final String WEIGHT_UNIT_KEY = "weight_unit";
 
-    private AutoCompleteTextView languageAutoComplete;
-    private AutoCompleteTextView weightUnitAutoComplete;
+    private MaterialAutoCompleteTextView languageAutoComplete;
+    private MaterialAutoCompleteTextView weightUnitAutoComplete;
     private TextInputEditText notificationHoursEditText;
     private Button saveNotificationHoursButton;
     private SharedPreferences sharedPreferences;
@@ -132,12 +132,6 @@ public class SettingsFragment extends Fragment {
             languageAutoComplete.setText(getString(R.string.language_english), false);
         }
 
-        // Allow clicking to open dropdown again and show all options
-        languageAutoComplete.setOnClickListener(v -> {
-            languageAutoComplete.setText("");
-            languageAutoComplete.showDropDown();
-        });
-
         // Set listener for language selection
         languageAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
             String selectedLanguage = (String) parent.getItemAtPosition(position);
@@ -219,12 +213,6 @@ public class SettingsFragment extends Fragment {
         } else {
             weightUnitAutoComplete.setText(getString(R.string.weight_unit_lb), false);
         }
-
-        // Allow clicking to open dropdown again and show all options
-        weightUnitAutoComplete.setOnClickListener(v -> {
-            weightUnitAutoComplete.setText("");
-            weightUnitAutoComplete.showDropDown();
-        });
 
         // Set listener for weight unit selection
         weightUnitAutoComplete.setOnItemClickListener((parent, view, position, id) -> {
