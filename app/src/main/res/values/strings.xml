@@ -28,10 +28,7 @@
     <string name="updated_session">Updated session</string>
     <string name="no_exercises_in_session">There are no exercises in this session.</string>
     <string name="congratulations_no_sessions">Congratulations! There are no pending sessions in this workout</string>
-    <!-- En res/values/strings.xml -->
-    <string name="want_complete_session">¿Estás seguro de que quieres marcar la sesión \'%1$s\' como
-        completada?
-    </string>
+    <string name="want_complete_session">Are you sure you want to mark session \'%1$s\' as completed?</string>
     <!-- Exercise Fragment -->
     <string name="search_exercises_hint">Search exercises...</string>
     <string name="new_exercise">New Exercise</string>
@@ -79,7 +76,7 @@
     <string name="not_channel_name">Session notifications</string>
     <string name="not_channel_description">a</string>
     <string name="notification_content_format">Your session \'%1$s\' is about to start at %2$s.</string>
-    <string name="all_weeks">Todas las semanas</string>
+    <string name="all_weeks">All weeks</string>
     <string name="saved_configuration">Saved configuration</string>
     <string name="session_reminder">Session reminder</string>
     <string name="session_reminder_text">Set session reminder lead time (in minutes).</string>
@@ -96,4 +93,27 @@
     <string name="strenght_type">STRENGHT</string>
     <string name="cardio_type">CARDIO</string>
     <string name="flexibility_type">FLEXIBILITY</string>
+    <string name="recurring_session">Recurring session</string>
+    <string name="repeat_every_week">Repeat every week</string>
+    <string name="select_days">Select days:</string>
+    <string name="monday">Monday</string>
+    <string name="tuesday">Tuesday</string>
+    <string name="wednesday">Wednesday</string>
+    <string name="thursday">Thursday</string>
+    <string name="friday">Friday</string>
+    <string name="saturday">Saturday</string>
+    <string name="sunday">Sunday</string>
+    <string name="repeat_for_weeks">Repeat for how many weeks?</string>
+    <string name="weeks">weeks</string>
+    <string name="delete_all_recurring">Delete all recurring sessions</string>
+    <string name="delete_only_this">Delete only this session</string>
+    <string name="delete_recurring_message">This session is part of a recurring series. What would you like to do?</string>
+    <string name="sessions_created">%1$d sessions created</string>
+    <string name="recurring_sessions_deleted">All recurring sessions deleted</string>
+    <string name="recurring_indicator">(Recurring)</string>
+    <string name="edit_recurring_session">Edit recurring session</string>
+    <string name="edit_recurring_message">This session is part of a recurring series. Do you want to apply changes to all sessions in the group?</string>
+    <string name="edit_all_recurring">Edit all recurring sessions</string>
+    <string name="edit_only_this">Edit only this session</string>
+    <string name="all_recurring_sessions_updated">All recurring sessions updated</string>
 </resources>

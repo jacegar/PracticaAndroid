@@ -34,9 +34,11 @@ public class SesionEjerciciosActivity extends AppCompatActivity implements Sesio
 
     private SesionEjercicioDao sesionEjercicioDao;
     private EjercicioDao ejercicioDao;
+    private com.example.practicaandroid.data.sesion.SesionDao sesionDao;
     private SesionEjercicioAdapter adapter;
     private long sesionId;
     private String sesionNombre;
+    private com.example.practicaandroid.data.sesion.Sesion sesionActual;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -56,6 +58,12 @@ public class SesionEjerciciosActivity extends AppCompatActivity implements Sesio
         // Inicializar base de datos
         sesionEjercicioDao = AppDatabase.getInstance(this).sesionEjercicioDao();
         ejercicioDao = AppDatabase.getInstance(this).ejercicioDao();
+        sesionDao = AppDatabase.getInstance(this).sesionDao();
+
+        // Cargar información de la sesión
+        Executors.newSingleThreadExecutor().execute(() -> {
+            sesionActual = sesionDao.getSesionById(sesionId);
+        });
 
         // Configurar título
         TextView tvTitulo = findViewById(R.id.tvTitulo);
@@ -270,54 +278,124 @@ public class SesionEjerciciosActivity extends AppCompatActivity implements Sesio
                 .setTitle(R.string.add_exercise_to_session)
                 .setView(dialogView)
                 .setPositiveButton(R.string.add, (dialog, which) -> {
-                    // Obtener siguiente orden
-                    Executors.newSingleThreadExecutor().execute(() -> {
-                        List<SesionEjercicio> existentes = sesionEjercicioDao.getBySesion(sesionId);
-                        int siguienteOrden = existentes.size();
-
-                        SesionEjercicio sesionEjercicio = new SesionEjercicio(sesionId, ejercicio.id, siguienteOrden);
-
-                        // Asignar valores según el tipo
-                        if ("FUERZA".equals(ejercicio.tipo)) {
-                            try {
-                                String seriesStr = etSeries.getText().toString().trim();
-                                String repsStr = etRepeticiones.getText().toString().trim();
-                                String pesoStr = etPeso.getText().toString().trim();
-
-                                sesionEjercicio.series = seriesStr.isEmpty() ? 0 : Integer.parseInt(seriesStr);
-                                sesionEjercicio.repeticiones = repsStr.isEmpty() ? 0 : Integer.parseInt(repsStr);
-                                sesionEjercicio.peso = pesoStr.isEmpty() ? 0 : Float.parseFloat(pesoStr);
-                            } catch (NumberFormatException e) {
-                                runOnUiThread(() ->
-                                    Toast.makeText(this, R.string.numeric_values_error, Toast.LENGTH_SHORT).show()
-                                );
-                                return;
-                            }
-                        } else if ("CARDIO".equals(ejercicio.tipo)) {
-                            try {
-                                String duracionStr = etDuracion.getText().toString().trim();
-                                String distanciaStr = etDistancia.getText().toString().trim();
-
-                                sesionEjercicio.duracionSegundos = duracionStr.isEmpty() ? 0 : Integer.parseInt(duracionStr) * 60; // convertir minutos a segundos
-                                sesionEjercicio.distanciaKm = distanciaStr.isEmpty() ? 0 : Float.parseFloat(distanciaStr);
-                            } catch (NumberFormatException e) {
-                                runOnUiThread(() ->
-                                    Toast.makeText(this, R.string.numeric_values_error, Toast.LENGTH_SHORT).show()
-                                );
-                                return;
-                            }
-                        }
-
-                        sesionEjercicioDao.insert(sesionEjercicio);
-
-                        runOnUiThread(() -> {
-                            Toast.makeText(this, "Ejercicio añadido a la sesión", Toast.LENGTH_SHORT).show();
-                            cargarEjerciciosSesion();
-                        });
-                    });
+                    // Verificar si es una sesión recurrente
+                    if (sesionActual != null && sesionActual.recurringGroupId != null && !sesionActual.recurringGroupId.isEmpty()) {
+                        new AlertDialog.Builder(this)
+                                .setTitle(R.string.edit_recurring_session)
+                                .setMessage(R.string.edit_recurring_message)
+                                .setPositiveButton(R.string.edit_all_recurring, (d, w) ->
+                                    añadirEjercicioConDatos(ejercicio, etSeries, etRepeticiones, etPeso, etDuracion, etDistancia, true))
+                                .setNegativeButton(R.string.edit_only_this, (d, w) ->
+                                    añadirEjercicioConDatos(ejercicio, etSeries, etRepeticiones, etPeso, etDuracion, etDistancia, false))
+                                .setNeutralButton(R.string.cancel, null)
+                                .show();
+                    } else {
+                        añadirEjercicioConDatos(ejercicio, etSeries, etRepeticiones, etPeso, etDuracion, etDistancia, false);
+                    }
                 })
                 .setNegativeButton(R.string.cancel, null)
                 .show();
+    }
+
+    private void añadirEjercicioConDatos(Ejercicio ejercicio, EditText etSeries, EditText etRepeticiones,
+                                         EditText etPeso, EditText etDuracion, EditText etDistancia,
+                                         boolean aplicarATodasRecurrentes) {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            try {
+                // Crear el ejercicio base con los datos
+                SesionEjercicio sesionEjercicioBase = crearSesionEjercicioConDatos(
+                        sesionId, ejercicio, etSeries, etRepeticiones, etPeso, etDuracion, etDistancia);
+
+                if (sesionEjercicioBase == null) {
+                    return; // Error en los datos
+                }
+
+                if (aplicarATodasRecurrentes && sesionActual != null && sesionActual.recurringGroupId != null) {
+                    // Obtener todas las sesiones del grupo
+                    List<com.example.practicaandroid.data.sesion.Sesion> sesionesGrupo =
+                            sesionDao.getSesionesByRecurringGroup(sesionActual.recurringGroupId);
+
+                    // Añadir el ejercicio a cada sesión del grupo
+                    for (com.example.practicaandroid.data.sesion.Sesion s : sesionesGrupo) {
+                        List<SesionEjercicio> existentes = sesionEjercicioDao.getBySesion(s.id);
+                        int siguienteOrden = existentes.size();
+
+                        SesionEjercicio nuevoEjercicio = new SesionEjercicio(s.id, ejercicio.id, siguienteOrden);
+                        copiarDatosSesionEjercicio(sesionEjercicioBase, nuevoEjercicio);
+                        sesionEjercicioDao.insert(nuevoEjercicio);
+                    }
+
+                    runOnUiThread(() -> {
+                        Toast.makeText(this, R.string.all_recurring_sessions_updated, Toast.LENGTH_SHORT).show();
+                        cargarEjerciciosSesion();
+                    });
+                } else {
+                    // Solo añadir a esta sesión
+                    sesionEjercicioDao.insert(sesionEjercicioBase);
+
+                    runOnUiThread(() -> {
+                        Toast.makeText(this, R.string.exercise_added_to_session, Toast.LENGTH_SHORT).show();
+                        cargarEjerciciosSesion();
+                    });
+                }
+            } catch (Exception e) {
+                runOnUiThread(() ->
+                    Toast.makeText(this, R.string.numeric_values_error, Toast.LENGTH_SHORT).show()
+                );
+            }
+        });
+    }
+
+    private SesionEjercicio crearSesionEjercicioConDatos(long sesionId, Ejercicio ejercicio,
+                                                         EditText etSeries, EditText etRepeticiones,
+                                                         EditText etPeso, EditText etDuracion,
+                                                         EditText etDistancia) {
+        List<SesionEjercicio> existentes = sesionEjercicioDao.getBySesion(sesionId);
+        int siguienteOrden = existentes.size();
+
+        SesionEjercicio sesionEjercicio = new SesionEjercicio(sesionId, ejercicio.id, siguienteOrden);
+
+        // Asignar valores según el tipo
+        if ("FUERZA".equals(ejercicio.tipo)) {
+            try {
+                String seriesStr = etSeries.getText().toString().trim();
+                String repsStr = etRepeticiones.getText().toString().trim();
+                String pesoStr = etPeso.getText().toString().trim();
+
+                sesionEjercicio.series = seriesStr.isEmpty() ? 0 : Integer.parseInt(seriesStr);
+                sesionEjercicio.repeticiones = repsStr.isEmpty() ? 0 : Integer.parseInt(repsStr);
+                sesionEjercicio.peso = pesoStr.isEmpty() ? 0 : Float.parseFloat(pesoStr);
+            } catch (NumberFormatException e) {
+                runOnUiThread(() ->
+                    Toast.makeText(this, R.string.numeric_values_error, Toast.LENGTH_SHORT).show()
+                );
+                return null;
+            }
+        } else if ("CARDIO".equals(ejercicio.tipo)) {
+            try {
+                String duracionStr = etDuracion.getText().toString().trim();
+                String distanciaStr = etDistancia.getText().toString().trim();
+
+                sesionEjercicio.duracionSegundos = duracionStr.isEmpty() ? 0 : Integer.parseInt(duracionStr) * 60;
+                sesionEjercicio.distanciaKm = distanciaStr.isEmpty() ? 0 : Float.parseFloat(distanciaStr);
+            } catch (NumberFormatException e) {
+                runOnUiThread(() ->
+                    Toast.makeText(this, R.string.numeric_values_error, Toast.LENGTH_SHORT).show()
+                );
+                return null;
+            }
+        }
+
+        return sesionEjercicio;
+    }
+
+    private void copiarDatosSesionEjercicio(SesionEjercicio origen, SesionEjercicio destino) {
+        destino.series = origen.series;
+        destino.repeticiones = origen.repeticiones;
+        destino.peso = origen.peso;
+        destino.duracionSegundos = origen.duracionSegundos;
+        destino.distanciaKm = origen.distanciaKm;
+        destino.completado = origen.completado;
     }
 
     @Override
@@ -366,67 +444,143 @@ public class SesionEjerciciosActivity extends AppCompatActivity implements Sesio
                 .setTitle("Editar Datos del Ejercicio")
                 .setView(dialogView)
                 .setPositiveButton("Guardar", (dialog, which) -> {
-                    Executors.newSingleThreadExecutor().execute(() -> {
-                        // Actualizar valores según el tipo
-                        if ("FUERZA".equals(ejercicio.tipo)) {
-                            try {
-                                String seriesStr = etSeries.getText().toString().trim();
-                                String repsStr = etRepeticiones.getText().toString().trim();
-                                String pesoStr = etPeso.getText().toString().trim();
-
-                                sesionEjercicio.series = seriesStr.isEmpty() ? 0 : Integer.parseInt(seriesStr);
-                                sesionEjercicio.repeticiones = repsStr.isEmpty() ? 0 : Integer.parseInt(repsStr);
-                                sesionEjercicio.peso = pesoStr.isEmpty() ? 0 : Float.parseFloat(pesoStr);
-                            } catch (NumberFormatException e) {
-                                runOnUiThread(() ->
-                                    Toast.makeText(this, "Error en los valores numéricos", Toast.LENGTH_SHORT).show()
-                                );
-                                return;
-                            }
-                        } else if ("CARDIO".equals(ejercicio.tipo)) {
-                            try {
-                                String duracionStr = etDuracion.getText().toString().trim();
-                                String distanciaStr = etDistancia.getText().toString().trim();
-
-                                sesionEjercicio.duracionSegundos = duracionStr.isEmpty() ? 0 : Integer.parseInt(duracionStr) * 60;
-                                sesionEjercicio.distanciaKm = distanciaStr.isEmpty() ? 0 : Float.parseFloat(distanciaStr);
-                            } catch (NumberFormatException e) {
-                                runOnUiThread(() ->
-                                    Toast.makeText(this, "Error en los valores numéricos", Toast.LENGTH_SHORT).show()
-                                );
-                                return;
-                            }
-                        }
-
-                        sesionEjercicioDao.update(sesionEjercicio);
-
-                        runOnUiThread(() -> {
-                            Toast.makeText(this, "Datos actualizados", Toast.LENGTH_SHORT).show();
-                            cargarEjerciciosSesion();
-                        });
-                    });
+                    // Verificar si es una sesión recurrente
+                    if (sesionActual != null && sesionActual.recurringGroupId != null && !sesionActual.recurringGroupId.isEmpty()) {
+                        new AlertDialog.Builder(this)
+                                .setTitle(R.string.edit_recurring_session)
+                                .setMessage(R.string.edit_recurring_message)
+                                .setPositiveButton(R.string.edit_all_recurring, (d, w) ->
+                                    actualizarEjercicioConDatos(sesionEjercicio, ejercicio, etSeries, etRepeticiones, etPeso, etDuracion, etDistancia, true))
+                                .setNegativeButton(R.string.edit_only_this, (d, w) ->
+                                    actualizarEjercicioConDatos(sesionEjercicio, ejercicio, etSeries, etRepeticiones, etPeso, etDuracion, etDistancia, false))
+                                .setNeutralButton(R.string.cancel, null)
+                                .show();
+                    } else {
+                        actualizarEjercicioConDatos(sesionEjercicio, ejercicio, etSeries, etRepeticiones, etPeso, etDuracion, etDistancia, false);
+                    }
                 })
                 .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 
+    private void actualizarEjercicioConDatos(SesionEjercicio sesionEjercicio, Ejercicio ejercicio,
+                                             EditText etSeries, EditText etRepeticiones, EditText etPeso,
+                                             EditText etDuracion, EditText etDistancia, boolean aplicarATodasRecurrentes) {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            try {
+                // Actualizar valores según el tipo
+                if ("FUERZA".equals(ejercicio.tipo)) {
+                    String seriesStr = etSeries.getText().toString().trim();
+                    String repsStr = etRepeticiones.getText().toString().trim();
+                    String pesoStr = etPeso.getText().toString().trim();
+
+                    sesionEjercicio.series = seriesStr.isEmpty() ? 0 : Integer.parseInt(seriesStr);
+                    sesionEjercicio.repeticiones = repsStr.isEmpty() ? 0 : Integer.parseInt(repsStr);
+                    sesionEjercicio.peso = pesoStr.isEmpty() ? 0 : Float.parseFloat(pesoStr);
+                } else if ("CARDIO".equals(ejercicio.tipo)) {
+                    String duracionStr = etDuracion.getText().toString().trim();
+                    String distanciaStr = etDistancia.getText().toString().trim();
+
+                    sesionEjercicio.duracionSegundos = duracionStr.isEmpty() ? 0 : Integer.parseInt(duracionStr) * 60;
+                    sesionEjercicio.distanciaKm = distanciaStr.isEmpty() ? 0 : Float.parseFloat(distanciaStr);
+                }
+
+                if (aplicarATodasRecurrentes && sesionActual != null && sesionActual.recurringGroupId != null) {
+                    // Obtener todas las sesiones del grupo
+                    List<com.example.practicaandroid.data.sesion.Sesion> sesionesGrupo =
+                            sesionDao.getSesionesByRecurringGroup(sesionActual.recurringGroupId);
+
+                    // Actualizar el ejercicio en cada sesión del grupo
+                    for (com.example.practicaandroid.data.sesion.Sesion s : sesionesGrupo) {
+                        // Buscar si existe este ejercicio en la sesión
+                        List<SesionEjercicio> ejerciciosSesion = sesionEjercicioDao.getBySesion(s.id);
+                        for (SesionEjercicio se : ejerciciosSesion) {
+                            if (se.ejercicioId == ejercicio.id) {
+                                // Actualizar con los nuevos valores
+                                copiarDatosSesionEjercicio(sesionEjercicio, se);
+                                sesionEjercicioDao.update(se);
+                                break;
+                            }
+                        }
+                    }
+
+                    runOnUiThread(() -> {
+                        Toast.makeText(this, R.string.all_recurring_sessions_updated, Toast.LENGTH_SHORT).show();
+                        cargarEjerciciosSesion();
+                    });
+                } else {
+                    // Solo actualizar esta sesión
+                    sesionEjercicioDao.update(sesionEjercicio);
+
+                    runOnUiThread(() -> {
+                        Toast.makeText(this, R.string.data_updated, Toast.LENGTH_SHORT).show();
+                        cargarEjerciciosSesion();
+                    });
+                }
+            } catch (NumberFormatException e) {
+                runOnUiThread(() ->
+                    Toast.makeText(this, R.string.numeric_values_error, Toast.LENGTH_SHORT).show()
+                );
+            }
+        });
+    }
+
     @Override
     public void onEliminarClick(SesionEjercicio sesionEjercicio, Ejercicio ejercicio) {
-        new AlertDialog.Builder(this)
-                .setTitle(R.string.delete_exercise)
-                .setMessage(getString(R.string.remove_exercise_from_session, ejercicio.nombre))
-                .setPositiveButton(R.string.delete, (dialog, which) -> {
-                    Executors.newSingleThreadExecutor().execute(() -> {
-                        sesionEjercicioDao.delete(sesionEjercicio);
+        // Verificar si es una sesión recurrente
+        if (sesionActual != null && sesionActual.recurringGroupId != null && !sesionActual.recurringGroupId.isEmpty()) {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.delete_exercise)
+                    .setMessage(getString(R.string.remove_exercise_from_session, ejercicio.nombre))
+                    .setPositiveButton(R.string.delete_all_recurring, (dialog, which) ->
+                        eliminarEjercicioDeTodasRecurrentes(ejercicio))
+                    .setNegativeButton(R.string.delete_only_this, (dialog, which) ->
+                        eliminarEjercicio(sesionEjercicio))
+                    .setNeutralButton(R.string.cancel, null)
+                    .show();
+        } else {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.delete_exercise)
+                    .setMessage(getString(R.string.remove_exercise_from_session, ejercicio.nombre))
+                    .setPositiveButton(R.string.delete, (dialog, which) -> eliminarEjercicio(sesionEjercicio))
+                    .setNegativeButton(R.string.cancel, null)
+                    .show();
+        }
+    }
 
-                        runOnUiThread(() -> {
-                            Toast.makeText(this, R.string.exercise_removed_from_session, Toast.LENGTH_SHORT).show();
-                            cargarEjerciciosSesion();
-                        });
-                    });
-                })
-                .setNegativeButton(R.string.cancel, null)
-                .show();
+    private void eliminarEjercicio(SesionEjercicio sesionEjercicio) {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            sesionEjercicioDao.delete(sesionEjercicio);
+
+            runOnUiThread(() -> {
+                Toast.makeText(this, R.string.exercise_removed_from_session, Toast.LENGTH_SHORT).show();
+                cargarEjerciciosSesion();
+            });
+        });
+    }
+
+    private void eliminarEjercicioDeTodasRecurrentes(Ejercicio ejercicio) {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            // Obtener todas las sesiones del grupo
+            List<com.example.practicaandroid.data.sesion.Sesion> sesionesGrupo =
+                    sesionDao.getSesionesByRecurringGroup(sesionActual.recurringGroupId);
+
+            // Eliminar el ejercicio de cada sesión del grupo
+            for (com.example.practicaandroid.data.sesion.Sesion s : sesionesGrupo) {
+                List<SesionEjercicio> ejerciciosSesion = sesionEjercicioDao.getBySesion(s.id);
+                for (SesionEjercicio se : ejerciciosSesion) {
+                    if (se.ejercicioId == ejercicio.id) {
+                        sesionEjercicioDao.delete(se);
+                        break;
+                    }
+                }
+            }
+
+            runOnUiThread(() -> {
+                Toast.makeText(this, R.string.all_recurring_sessions_updated, Toast.LENGTH_SHORT).show();
+                cargarEjerciciosSesion();
+            });
+        });
     }
 
     @Override

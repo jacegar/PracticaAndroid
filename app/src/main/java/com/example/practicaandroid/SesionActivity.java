@@ -120,6 +120,23 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
         EditText etNombre = dialogView.findViewById(R.id.etNombre);
         TextView tvDiaPlanificado = dialogView.findViewById(R.id.tvDiaPlanificado);
 
+        // Elementos de recurrencia
+        android.widget.CheckBox cbRecurring = dialogView.findViewById(R.id.cbRecurring);
+        android.widget.LinearLayout layoutRecurringOptions = dialogView.findViewById(R.id.layoutRecurringOptions);
+        android.widget.CheckBox cbMonday = dialogView.findViewById(R.id.cbMonday);
+        android.widget.CheckBox cbTuesday = dialogView.findViewById(R.id.cbTuesday);
+        android.widget.CheckBox cbWednesday = dialogView.findViewById(R.id.cbWednesday);
+        android.widget.CheckBox cbThursday = dialogView.findViewById(R.id.cbThursday);
+        android.widget.CheckBox cbFriday = dialogView.findViewById(R.id.cbFriday);
+        android.widget.CheckBox cbSaturday = dialogView.findViewById(R.id.cbSaturday);
+        android.widget.CheckBox cbSunday = dialogView.findViewById(R.id.cbSunday);
+        EditText etWeeksCount = dialogView.findViewById(R.id.etWeeksCount);
+
+        // Mostrar/ocultar opciones de recurrencia
+        cbRecurring.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            layoutRecurringOptions.setVisibility(isChecked ? View.VISIBLE : View.GONE);
+        });
+
         // Por defecto, establecer la fecha actual
         diaPlanificadoSeleccionado = System.currentTimeMillis();
         actualizarTextoDiaPlanificado(tvDiaPlanificado);
@@ -138,7 +155,39 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
                         return;
                     }
 
-                    crearSesion(nombre, diaPlanificadoSeleccionado);
+                    if (cbRecurring.isChecked()) {
+                        // Crear sesiones recurrentes
+                        java.util.List<Integer> selectedDays = new java.util.ArrayList<>();
+                        if (cbMonday.isChecked()) selectedDays.add(Calendar.MONDAY);
+                        if (cbTuesday.isChecked()) selectedDays.add(Calendar.TUESDAY);
+                        if (cbWednesday.isChecked()) selectedDays.add(Calendar.WEDNESDAY);
+                        if (cbThursday.isChecked()) selectedDays.add(Calendar.THURSDAY);
+                        if (cbFriday.isChecked()) selectedDays.add(Calendar.FRIDAY);
+                        if (cbSaturday.isChecked()) selectedDays.add(Calendar.SATURDAY);
+                        if (cbSunday.isChecked()) selectedDays.add(Calendar.SUNDAY);
+
+                        if (selectedDays.isEmpty()) {
+                            Toast.makeText(this, "Selecciona al menos un día", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        String weeksStr = etWeeksCount.getText().toString().trim();
+                        int weeksCount = 4;
+                        try {
+                            weeksCount = Integer.parseInt(weeksStr);
+                            if (weeksCount <= 0) {
+                                Toast.makeText(this, "El número de semanas debe ser mayor a 0", Toast.LENGTH_SHORT).show();
+                                return;
+                            }
+                        } catch (NumberFormatException e) {
+                            Toast.makeText(this, "Número de semanas inválido", Toast.LENGTH_SHORT).show();
+                            return;
+                        }
+
+                        crearSesionesRecurrentes(nombre, diaPlanificadoSeleccionado, selectedDays, weeksCount);
+                    } else {
+                        crearSesion(nombre, diaPlanificadoSeleccionado);
+                    }
                 })
                 .setNegativeButton(R.string.cancel, null)
                 .show();
@@ -188,6 +237,74 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
         });
     }
 
+    private void crearSesionesRecurrentes(String nombre, long diaBase, java.util.List<Integer> selectedDays, int weeksCount) {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            // Generar un ID único para este grupo de sesiones recurrentes
+            String recurringGroupId = "recurring_" + System.currentTimeMillis();
+
+            Calendar baseCal = Calendar.getInstance();
+            baseCal.setTimeInMillis(diaBase);
+            int baseHour = baseCal.get(Calendar.HOUR_OF_DAY);
+            int baseMinute = baseCal.get(Calendar.MINUTE);
+
+            // Obtener el inicio de la semana actual (lunes)
+            Calendar weekStart = Calendar.getInstance();
+            weekStart.setTimeInMillis(diaBase);
+            weekStart.set(Calendar.HOUR_OF_DAY, 0);
+            weekStart.set(Calendar.MINUTE, 0);
+            weekStart.set(Calendar.SECOND, 0);
+            weekStart.set(Calendar.MILLISECOND, 0);
+
+            // Retroceder al lunes de la semana
+            while (weekStart.get(Calendar.DAY_OF_WEEK) != Calendar.MONDAY) {
+                weekStart.add(Calendar.DAY_OF_MONTH, -1);
+            }
+
+            int sessionCount = 0;
+
+            // Crear sesiones para cada semana
+            for (int week = 0; week < weeksCount; week++) {
+                for (int dayOfWeek : selectedDays) {
+                    Calendar sessionCal = (Calendar) weekStart.clone();
+
+                    // Calcular el día de la semana
+                    int daysToAdd = 0;
+                    switch (dayOfWeek) {
+                        case Calendar.MONDAY: daysToAdd = 0; break;
+                        case Calendar.TUESDAY: daysToAdd = 1; break;
+                        case Calendar.WEDNESDAY: daysToAdd = 2; break;
+                        case Calendar.THURSDAY: daysToAdd = 3; break;
+                        case Calendar.FRIDAY: daysToAdd = 4; break;
+                        case Calendar.SATURDAY: daysToAdd = 5; break;
+                        case Calendar.SUNDAY: daysToAdd = 6; break;
+                    }
+
+                    sessionCal.add(Calendar.WEEK_OF_YEAR, week);
+                    sessionCal.add(Calendar.DAY_OF_MONTH, daysToAdd);
+                    sessionCal.set(Calendar.HOUR_OF_DAY, baseHour);
+                    sessionCal.set(Calendar.MINUTE, baseMinute);
+
+                    // No crear sesiones en el pasado
+                    if (sessionCal.getTimeInMillis() >= System.currentTimeMillis()) {
+                        Sesion sesion = new Sesion(rutinaId, nombre, sessionCal.getTimeInMillis());
+                        sesion.recurringGroupId = recurringGroupId;
+
+                        long nuevoId = sesionDao.insert(sesion);
+                        sesion.id = nuevoId;
+                        crearNotificacion(sesion);
+                        sessionCount++;
+                    }
+                }
+            }
+
+            final int totalCreated = sessionCount;
+            runOnUiThread(() -> {
+                Toast.makeText(this, getString(R.string.sessions_created, totalCreated), Toast.LENGTH_SHORT).show();
+                cargarSesiones();
+            });
+        });
+    }
+
     private void crearNotificacion(Sesion sesion){
         if(sesion.fechaRealizada == 0) {
             long diaPlanificadoMillis = sesion.diaPlanificado;
@@ -224,9 +341,30 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
 
     @Override
     public void onEditarClick(Sesion sesion) {
+        // Si es una sesión recurrente, preguntar si desea editar todas
+        if (sesion.recurringGroupId != null && !sesion.recurringGroupId.isEmpty()) {
+            new AlertDialog.Builder(this)
+                    .setTitle(R.string.edit_recurring_session)
+                    .setMessage(R.string.edit_recurring_message)
+                    .setPositiveButton(R.string.edit_all_recurring, (dialog, which) -> mostrarDialogoEditar(sesion, true))
+                    .setNegativeButton(R.string.edit_only_this, (dialog, which) -> mostrarDialogoEditar(sesion, false))
+                    .setNeutralButton(R.string.cancel, null)
+                    .show();
+        } else {
+            mostrarDialogoEditar(sesion, false);
+        }
+    }
+
+    private void mostrarDialogoEditar(Sesion sesion, boolean editarTodasRecurrentes) {
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_sesion, null);
         EditText etNombre = dialogView.findViewById(R.id.etNombre);
         TextView tvDiaPlanificado = dialogView.findViewById(R.id.tvDiaPlanificado);
+
+        // Ocultar opciones de recurrencia en edición
+        android.widget.CheckBox cbRecurring = dialogView.findViewById(R.id.cbRecurring);
+        android.widget.LinearLayout layoutRecurringOptions = dialogView.findViewById(R.id.layoutRecurringOptions);
+        cbRecurring.setVisibility(View.GONE);
+        layoutRecurringOptions.setVisibility(View.GONE);
 
         etNombre.setText(sesion.nombre);
         diaPlanificadoSeleccionado = sesion.diaPlanificado;
@@ -245,7 +383,11 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
                         return;
                     }
 
-                    actualizarSesion(sesion, nombre, diaPlanificadoSeleccionado);
+                    if (editarTodasRecurrentes) {
+                        actualizarSesionesRecurrentes(sesion, nombre, diaPlanificadoSeleccionado);
+                    } else {
+                        actualizarSesion(sesion, nombre, diaPlanificadoSeleccionado);
+                    }
                 })
                 .setNegativeButton("Cancelar", null)
                 .show();
@@ -268,14 +410,55 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
         });
     }
 
+    private void actualizarSesionesRecurrentes(Sesion sesion, String nombre, long diaPlanificado) {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            // Obtener todas las sesiones del grupo
+            List<Sesion> sesionesGrupo = sesionDao.getSesionesByRecurringGroup(sesion.recurringGroupId);
+
+            // Calcular la diferencia de tiempo si se cambió la hora
+            long diferenciaTiempo = diaPlanificado - sesion.diaPlanificado;
+
+            // Actualizar todas las sesiones del grupo
+            for (Sesion s : sesionesGrupo) {
+                s.nombre = nombre;
+
+                // Si se cambió la fecha/hora, aplicar la diferencia a todas las sesiones
+                if (diferenciaTiempo != 0) {
+                    s.diaPlanificado += diferenciaTiempo;
+                }
+
+                cancelarNotificacion(s);
+                crearNotificacion(s);
+                sesionDao.update(s);
+            }
+
+            runOnUiThread(() -> {
+                Toast.makeText(this, R.string.all_recurring_sessions_updated, Toast.LENGTH_SHORT).show();
+                cargarSesiones();
+            });
+        });
+    }
+
     @Override
     public void onEliminarClick(Sesion sesion) {
-        new AlertDialog.Builder(this)
-                .setTitle("Eliminar Sesión")
-                .setMessage("¿Estás seguro de eliminar '" + sesion.nombre + "'?")
-                .setPositiveButton("Eliminar", (dialog, which) -> eliminarSesion(sesion))
-                .setNegativeButton("Cancelar", null)
-                .show();
+        // Si es una sesión recurrente, preguntar qué desea eliminar
+        if (sesion.recurringGroupId != null && !sesion.recurringGroupId.isEmpty()) {
+            new AlertDialog.Builder(this)
+                    .setTitle("Eliminar Sesión")
+                    .setMessage(R.string.delete_recurring_message)
+                    .setPositiveButton(R.string.delete_all_recurring, (dialog, which) -> eliminarSesionesRecurrentes(sesion.recurringGroupId))
+                    .setNegativeButton(R.string.delete_only_this, (dialog, which) -> eliminarSesion(sesion))
+                    .setNeutralButton(R.string.cancel, null)
+                    .show();
+        } else {
+            // Sesión individual, eliminación normal
+            new AlertDialog.Builder(this)
+                    .setTitle("Eliminar Sesión")
+                    .setMessage("¿Estás seguro de eliminar '" + sesion.nombre + "'?")
+                    .setPositiveButton("Eliminar", (dialog, which) -> eliminarSesion(sesion))
+                    .setNegativeButton("Cancelar", null)
+                    .show();
+        }
     }
 
     private void eliminarSesion(Sesion sesion) {
@@ -285,6 +468,24 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
 
             runOnUiThread(() -> {
                 Toast.makeText(this, "Sesión eliminada", Toast.LENGTH_SHORT).show();
+                cargarSesiones();
+            });
+        });
+    }
+
+    private void eliminarSesionesRecurrentes(String recurringGroupId) {
+        Executors.newSingleThreadExecutor().execute(() -> {
+            // Obtener todas las sesiones del grupo para cancelar sus notificaciones
+            List<Sesion> sesionesGrupo = sesionDao.getSesionesByRecurringGroup(recurringGroupId);
+            for (Sesion sesion : sesionesGrupo) {
+                cancelarNotificacion(sesion);
+            }
+
+            // Eliminar todas las sesiones del grupo
+            sesionDao.deleteByRecurringGroup(recurringGroupId);
+
+            runOnUiThread(() -> {
+                Toast.makeText(this, R.string.recurring_sessions_deleted, Toast.LENGTH_SHORT).show();
                 cargarSesiones();
             });
         });

@@ -22,6 +22,9 @@ public interface SesionDao {
     @Query("SELECT * FROM sesiones WHERE rutinaId = :rutinaId")
     List<Sesion> getSesionByRutina(long rutinaId);
 
+    @Query("SELECT * FROM sesiones WHERE id = :sesionId")
+    Sesion getSesionById(long sesionId);
+
     //sesiones planificadas en un rango de fechas
     @Query("SELECT * FROM sesiones WHERE diaPlanificado BETWEEN :inicio AND :fin")
     List<Sesion> getSesionesEnRango(long inicio, long fin);
@@ -42,4 +45,14 @@ public interface SesionDao {
 
     @Query("SELECT * FROM sesiones WHERE diaPlanificado > :timestamp")
     List<Sesion> getSesionesFuturas(long timestamp);
+
+    // Métodos para sesiones recurrentes
+    @Query("SELECT * FROM sesiones WHERE recurringGroupId = :groupId")
+    List<Sesion> getSesionesByRecurringGroup(String groupId);
+
+    @Query("DELETE FROM sesiones WHERE recurringGroupId = :groupId")
+    void deleteByRecurringGroup(String groupId);
+
+    @Query("UPDATE sesiones SET nombre = :nuevoNombre WHERE recurringGroupId = :groupId")
+    void updateNombreByRecurringGroup(String groupId, String nuevoNombre);
 }

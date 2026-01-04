@@ -29,6 +29,7 @@
     <string name="updated_session">Sesión actualizada</string>
     <string name="no_exercises_in_session">No hay ejercicios en esta sesión</string>
     <string name="congratulations_no_sessions">¡Enhorabuena! No hay sesiones pendientes en esta rutina</string>
+    <string name="want_complete_session">¿Estás seguro de que quieres marcar la sesión \'%1$s\' como completada?</string>
     <!-- Exercise Fragment -->
     <string name="search_exercises_hint">Buscar ejercicios...</string>
     <string name="new_exercise">Nuevo Ejercicio</string>
@@ -90,4 +91,27 @@
     <string name="strenght_type">FUERZA</string>
     <string name="cardio_type">CARDIO</string>
     <string name="flexibility_type">FLEXIBILIDAD</string>
+    <string name="recurring_session">Sesión recurrente</string>
+    <string name="repeat_every_week">Repetir cada semana</string>
+    <string name="select_days">Selecciona los días:</string>
+    <string name="monday">Lunes</string>
+    <string name="tuesday">Martes</string>
+    <string name="wednesday">Miércoles</string>
+    <string name="thursday">Jueves</string>
+    <string name="friday">Viernes</string>
+    <string name="saturday">Sábado</string>
+    <string name="sunday">Domingo</string>
+    <string name="repeat_for_weeks">¿Cuántas semanas repetir?</string>
+    <string name="weeks">semanas</string>
+    <string name="delete_all_recurring">Eliminar todas las sesiones recurrentes</string>
+    <string name="delete_only_this">Eliminar solo esta sesión</string>
+    <string name="delete_recurring_message">Esta sesión es parte de una serie recurrente. ¿Qué deseas hacer?</string>
+    <string name="sessions_created">%1$d sesiones creadas</string>
+    <string name="recurring_sessions_deleted">Todas las sesiones recurrentes eliminadas</string>
+    <string name="recurring_indicator">(Recurrente)</string>
+    <string name="edit_recurring_session">Editar sesión recurrente</string>
+    <string name="edit_recurring_message">Esta sesión es parte de una serie recurrente. ¿Deseas aplicar los cambios a todas las sesiones del grupo?</string>
+    <string name="edit_all_recurring">Editar todas las sesiones recurrentes</string>
+    <string name="edit_only_this">Editar solo esta sesión</string>
+    <string name="all_recurring_sessions_updated">Todas las sesiones recurrentes actualizadas</string>
 </resources>

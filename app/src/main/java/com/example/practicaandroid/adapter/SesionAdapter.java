@@ -84,7 +84,12 @@ public class SesionAdapter extends RecyclerView.Adapter<SesionAdapter.SesionView
             // Capitalizar primera letra del día
             diaSemana = diaSemana.substring(0, 1).toUpperCase() + diaSemana.substring(1);
 
-            tvDiaPlanificado.setText(diaSemana + " - " + fechaCompleta);
+            // Añadir indicador de recurrencia si es una sesión recurrente
+            String textoFecha = diaSemana + " - " + fechaCompleta;
+            if (sesion.recurringGroupId != null && !sesion.recurringGroupId.isEmpty()) {
+                textoFecha += " " + itemView.getContext().getString(R.string.recurring_indicator);
+            }
+            tvDiaPlanificado.setText(textoFecha);
 
             // Mostrar estado
             if (sesion.fechaRealizada == 0) {
