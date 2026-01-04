@@ -1,5 +1,5 @@
 <resources>
-    <string name="app_name" translatable="false">PracticaAndroid</string>
+    <string name="app_name" translatable="false">FitTracker</string>
     <string name="workout">Workout</string>
     <string name="exercises">Exercises</string>
     <string name="progress" >Progress</string>

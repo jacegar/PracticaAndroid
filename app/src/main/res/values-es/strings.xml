@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
-    <string name="app_name">PracticaAndroid</string>
+    <string name="app_name">FitTracker</string>
     <string name="workout">Rutina</string>
     <string name="exercises">Ejercicios</string>
     <string name="progress">Tu progreso</string>
