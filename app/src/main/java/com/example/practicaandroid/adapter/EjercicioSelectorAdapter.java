@@ -1,8 +1,10 @@
 package com.example.practicaandroid.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.TextSwitcher;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -10,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.practicaandroid.R;
 import com.example.practicaandroid.data.ejercicio.Ejercicio;
+import com.example.practicaandroid.util.TextResolver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -18,13 +21,15 @@ public class EjercicioSelectorAdapter extends RecyclerView.Adapter<EjercicioSele
 
     private List<Ejercicio> ejercicios = new ArrayList<>();
     private OnEjercicioClickListener listener;
+    private Context context;
 
     public interface OnEjercicioClickListener {
         void onEjercicioClick(Ejercicio ejercicio);
     }
 
-    public EjercicioSelectorAdapter(OnEjercicioClickListener listener) {
+    public EjercicioSelectorAdapter(Context context, OnEjercicioClickListener listener) {
         this.listener = listener;
+        this.context = context;
     }
 
     public void setEjercicios(List<Ejercicio> ejercicios) {
@@ -43,7 +48,7 @@ public class EjercicioSelectorAdapter extends RecyclerView.Adapter<EjercicioSele
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Ejercicio ejercicio = ejercicios.get(position);
-        holder.bind(ejercicio, listener);
+        holder.bind(context, ejercicio, listener);
     }
 
     @Override
@@ -63,8 +68,8 @@ public class EjercicioSelectorAdapter extends RecyclerView.Adapter<EjercicioSele
             tvDescripcion = itemView.findViewById(R.id.tvDescripcion);
         }
 
-        void bind(Ejercicio ejercicio, OnEjercicioClickListener listener) {
-            tvNombre.setText(ejercicio.nombre);
+        void bind(Context context, Ejercicio ejercicio, OnEjercicioClickListener listener) {
+            tvNombre.setText(TextResolver.resolve(context, ejercicio.nombre));
             tvTipo.setText(ejercicio.tipo);
 
             if (ejercicio.descripcion != null && !ejercicio.descripcion.trim().isEmpty()) {

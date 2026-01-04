@@ -27,6 +27,7 @@ import com.example.practicaandroid.data.rutina.Rutina;
 import com.example.practicaandroid.data.rutina.RutinaDao;
 import com.example.practicaandroid.data.sesion.Sesion;
 import com.example.practicaandroid.data.sesion.SesionDao;
+import com.example.practicaandroid.util.TextResolver;
 
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
@@ -286,7 +287,7 @@ public class WorkoutFragment extends Fragment {
 
                 ejerciciosBuilder.append(str_ejercicios + ":\n");
                 for (Ejercicio ejercicio : ejercicios) {
-                    ejerciciosBuilder.append("- ").append(ejercicio.nombre).append("\n");
+                    ejerciciosBuilder.append("- ").append(TextResolver.resolve(requireContext(), ejercicio.nombre)).append("\n");
                 }
                 if (ejerciciosBuilder.length() > 0) {
                     ejerciciosBuilder.setLength(ejerciciosBuilder.length() - 1);

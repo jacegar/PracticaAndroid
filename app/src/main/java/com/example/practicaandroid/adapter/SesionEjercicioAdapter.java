@@ -15,6 +15,7 @@ import com.example.practicaandroid.R;
 import com.example.practicaandroid.SettingsFragment;
 import com.example.practicaandroid.data.ejercicio.Ejercicio;
 import com.example.practicaandroid.data.relaciones.SesionEjercicio;
+import com.example.practicaandroid.util.TextResolver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -62,7 +63,7 @@ public class SesionEjercicioAdapter extends RecyclerView.Adapter<SesionEjercicio
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         EjercicioConDatos item = ejercicios.get(position);
-        holder.bind(item, listener);
+        holder.bind(context, item, listener);
     }
 
     @Override
@@ -85,11 +86,11 @@ public class SesionEjercicioAdapter extends RecyclerView.Adapter<SesionEjercicio
             btnEliminar = itemView.findViewById(R.id.btnEliminar);
         }
 
-        void bind(EjercicioConDatos item, OnSesionEjercicioClickListener listener) {
+        void bind(Context context, EjercicioConDatos item, OnSesionEjercicioClickListener listener) {
             SesionEjercicio se = item.sesionEjercicio;
             Ejercicio ejercicio = item.ejercicio;
 
-            tvNombre.setText(ejercicio.nombre);
+            tvNombre.setText(TextResolver.resolve(context,ejercicio.nombre));
             tvTipo.setText(ejercicio.tipo);
 
             // Obtener la unidad de peso configurada

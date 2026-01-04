@@ -12,6 +12,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.SearchView;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
@@ -22,6 +23,8 @@ import com.example.practicaandroid.data.ejercicio.Ejercicio;
 import com.example.practicaandroid.data.ejercicio.EjercicioDao;
 import com.example.practicaandroid.data.relaciones.SesionEjercicio;
 import com.example.practicaandroid.data.relaciones.SesionEjercicioDao;
+import com.example.practicaandroid.data.sesion.Sesion;
+import com.example.practicaandroid.util.TextResolver;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -128,10 +131,8 @@ public class SesionEjerciciosActivity extends AppCompatActivity implements Sesio
 
         // Configurar RecyclerView
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        EjercicioSelectorAdapter selectorAdapter = new EjercicioSelectorAdapter(ejercicio -> {
-            // Cerrar el diálogo y mostrar el diálogo de añadir datos
-            mostrarDialogoAñadirDatos(ejercicio);
-        });
+        // Cerrar el diálogo y mostrar el diálogo de añadir datos
+        EjercicioSelectorAdapter selectorAdapter = new EjercicioSelectorAdapter(this, this::mostrarDialogoAñadirDatos);
         recyclerView.setAdapter(selectorAdapter);
 
         // Lista filtrada de ejercicios
@@ -172,9 +173,9 @@ public class SesionEjerciciosActivity extends AppCompatActivity implements Sesio
                         // Filtro por texto (nombre o descripción)
                         if (!textoActual[0].isEmpty()) {
                             String texto = textoActual[0].toLowerCase();
-                            boolean matchNombre = ej.nombre.toLowerCase().contains(texto);
+                            boolean matchNombre = TextResolver.resolve(this, ej.nombre).toLowerCase().contains(texto);
                             boolean matchDescripcion = ej.descripcion != null &&
-                                    ej.descripcion.toLowerCase().contains(texto);
+                                    TextResolver.resolve(this, ej.descripcion).toLowerCase().contains(texto);
                             return matchNombre || matchDescripcion;
                         }
 
@@ -204,7 +205,7 @@ public class SesionEjerciciosActivity extends AppCompatActivity implements Sesio
             searchEditText.setHintTextColor(getResources().getColor(android.R.color.darker_gray, null));
         }
 
-        searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
+        searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
             @Override
             public boolean onQueryTextSubmit(String query) {
                 return false;
@@ -243,7 +244,7 @@ public class SesionEjerciciosActivity extends AppCompatActivity implements Sesio
         TextView tvNombre = dialogView.findViewById(R.id.tvNombreEjercicio);
         TextView tvTipo = dialogView.findViewById(R.id.tvTipoEjercicio);
 
-        tvNombre.setText(ejercicio.nombre);
+        tvNombre.setText(TextResolver.resolve(this,ejercicio.nombre));
         tvTipo.setText(getString(R.string.type_colon, ejercicio.tipo));
 
         // Campos según el tipo de ejercicio
@@ -405,7 +406,7 @@ public class SesionEjerciciosActivity extends AppCompatActivity implements Sesio
         TextView tvNombre = dialogView.findViewById(R.id.tvNombreEjercicio);
         TextView tvTipo = dialogView.findViewById(R.id.tvTipoEjercicio);
 
-        tvNombre.setText(ejercicio.nombre);
+        tvNombre.setText(TextResolver.resolve(this,ejercicio.nombre));
         tvTipo.setText("Tipo: " + ejercicio.tipo);
 
         // Campos según el tipo de ejercicio
@@ -531,7 +532,7 @@ public class SesionEjerciciosActivity extends AppCompatActivity implements Sesio
         if (sesionActual != null && sesionActual.recurringGroupId != null && !sesionActual.recurringGroupId.isEmpty()) {
             new AlertDialog.Builder(this)
                     .setTitle(R.string.delete_exercise)
-                    .setMessage(getString(R.string.remove_exercise_from_session, ejercicio.nombre))
+                    .setMessage(getString(R.string.remove_exercise_from_session, TextResolver.resolve(this,ejercicio.nombre)))
                     .setPositiveButton(R.string.delete_all_recurring, (dialog, which) ->
                         eliminarEjercicioDeTodasRecurrentes(ejercicio))
                     .setNegativeButton(R.string.delete_only_this, (dialog, which) ->
@@ -541,7 +542,7 @@ public class SesionEjerciciosActivity extends AppCompatActivity implements Sesio
         } else {
             new AlertDialog.Builder(this)
                     .setTitle(R.string.delete_exercise)
-                    .setMessage(getString(R.string.remove_exercise_from_session, ejercicio.nombre))
+                    .setMessage(getString(R.string.remove_exercise_from_session, TextResolver.resolve(this, ejercicio.nombre)))
                     .setPositiveButton(R.string.delete, (dialog, which) -> eliminarEjercicio(sesionEjercicio))
                     .setNegativeButton(R.string.cancel, null)
                     .show();
@@ -562,11 +563,11 @@ public class SesionEjerciciosActivity extends AppCompatActivity implements Sesio
     private void eliminarEjercicioDeTodasRecurrentes(Ejercicio ejercicio) {
         Executors.newSingleThreadExecutor().execute(() -> {
             // Obtener todas las sesiones del grupo
-            List<com.example.practicaandroid.data.sesion.Sesion> sesionesGrupo =
+            List<Sesion> sesionesGrupo =
                     sesionDao.getSesionesByRecurringGroup(sesionActual.recurringGroupId);
 
             // Eliminar el ejercicio de cada sesión del grupo
-            for (com.example.practicaandroid.data.sesion.Sesion s : sesionesGrupo) {
+            for (Sesion s : sesionesGrupo) {
                 List<SesionEjercicio> ejerciciosSesion = sesionEjercicioDao.getBySesion(s.id);
                 for (SesionEjercicio se : ejerciciosSesion) {
                     if (se.ejercicioId == ejercicio.id) {

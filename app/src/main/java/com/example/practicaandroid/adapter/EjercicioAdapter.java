@@ -1,5 +1,6 @@
 package com.example.practicaandroid.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -11,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.practicaandroid.R;
 import com.example.practicaandroid.data.ejercicio.Ejercicio;
+import com.example.practicaandroid.util.TextResolver;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -20,14 +22,16 @@ public class EjercicioAdapter extends RecyclerView.Adapter<EjercicioAdapter.Ejer
     private List<Ejercicio> ejercicios = new ArrayList<>();
     private List<Ejercicio> ejerciciosCompletos = new ArrayList<>();
     private OnEjercicioClickListener listener;
+    private Context context;
 
     public interface OnEjercicioClickListener {
         void onEditarClick(Ejercicio ejercicio);
         void onEliminarClick(Ejercicio ejercicio);
     }
 
-    public EjercicioAdapter(OnEjercicioClickListener listener) {
+    public EjercicioAdapter(Context context, OnEjercicioClickListener listener) {
         this.listener = listener;
+        this.context = context;
     }
 
     public void setEjercicios(List<Ejercicio> ejercicios) {
@@ -44,10 +48,10 @@ public class EjercicioAdapter extends RecyclerView.Adapter<EjercicioAdapter.Ejer
             List<Ejercicio> listaFiltrada = new ArrayList<>();
 
             for (Ejercicio ejercicio : ejerciciosCompletos) {
-                if (ejercicio.nombre.toLowerCase().contains(textoBusqueda) ||
+                if (TextResolver.resolve(context, ejercicio.nombre).toLowerCase().contains(textoBusqueda) ||
                     ejercicio.tipo.toLowerCase().contains(textoBusqueda) ||
-                    ejercicio.descripcion.toLowerCase().contains(textoBusqueda)) {
-                    listaFiltrada.add(ejercicio);
+                    TextResolver.resolve(context, ejercicio.descripcion).toLowerCase().contains(textoBusqueda)) {
+                        listaFiltrada.add(ejercicio);
                 }
             }
 
@@ -67,7 +71,7 @@ public class EjercicioAdapter extends RecyclerView.Adapter<EjercicioAdapter.Ejer
     @Override
     public void onBindViewHolder(@NonNull EjercicioViewHolder holder, int position) {
         Ejercicio ejercicio = ejercicios.get(position);
-        holder.bind(ejercicio, listener);
+        holder.bind(context, ejercicio, listener);
     }
 
     @Override
@@ -88,9 +92,9 @@ public class EjercicioAdapter extends RecyclerView.Adapter<EjercicioAdapter.Ejer
             btnEliminar = itemView.findViewById(R.id.btnEliminar);
         }
 
-        void bind(Ejercicio ejercicio, OnEjercicioClickListener listener) {
-            tvNombre.setText(ejercicio.nombre);
-            tvDescripcion.setText(ejercicio.descripcion.isEmpty() ? "Sin descripción" : ejercicio.descripcion);
+        void bind(Context context, Ejercicio ejercicio, OnEjercicioClickListener listener) {
+            tvNombre.setText(TextResolver.resolve(context, ejercicio.nombre));
+            tvDescripcion.setText(ejercicio.descripcion.isEmpty() ? "Sin descripción" : TextResolver.resolve(context, ejercicio.descripcion));
             tvTipo.setText("Tipo: " + ejercicio.tipo);
 
             btnEditar.setOnClickListener(v -> listener.onEditarClick(ejercicio));

@@ -120,32 +120,31 @@ public abstract class AppDatabase extends RoomDatabase {
         @Override
         public void onCreate(@NonNull SupportSQLiteDatabase db){
             super.onCreate(db);
-            /*
+
             databaseWriteExecutor.execute(() -> {
                 EjercicioDao dao = INSTANCE.ejercicioDao();
                 List<Ejercicio> ejercicioList = new ArrayList<>();
 
                 ejercicioList.add(new Ejercicio(
-                        "ejercicio_res_nombre_flexiones",
-                        "ejercicio_res_desc_flexiones",
-                        "strength_type"
+                        "res:ejercicio_res_name_flexiones",
+                        "res:ejercicio_res_desc_flexiones",
+                        "FUERZA"
                 ));
 
                 ejercicioList.add(new Ejercicio(
-                        "ejercicio_res_nombre_sentadillas",
-                        "ejercicio_res_desc_sentadillas",
-                        "strength_type"
+                        "res:ejercicio_res_name_sentadillas",
+                        "res:ejercicio_res_desc_sentadillas",
+                        "flexibility_type"
                 ));
 
                 ejercicioList.add(new Ejercicio(
-                        "ejercicio_res_nombre_plancha",
-                        "ejercicio_res_desc_plancha",
+                        "res:ejercicio_res_name_plancha",
+                        "res:ejercicio_res_desc_plancha",
                         "cardio_type"
                 ));
 
                 dao.insertAll(ejercicioList);
             });
-             */
         }
     };
 

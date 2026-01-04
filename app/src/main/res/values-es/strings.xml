@@ -88,9 +88,6 @@
     <string name="week_current">Semana actual</string>
     <string name="week_next">Semana próxima</string>
     <string name="week_next_2">Dentro de dos semanas</string>
-    <string name="strenght_type">FUERZA</string>
-    <string name="cardio_type">CARDIO</string>
-    <string name="flexibility_type">FLEXIBILIDAD</string>
     <string name="recurring_session">Sesión recurrente</string>
     <string name="repeat_every_week">Repetir cada semana</string>
     <string name="select_days">Selecciona los días:</string>
@@ -114,4 +111,11 @@
     <string name="edit_all_recurring">Editar todas las sesiones recurrentes</string>
     <string name="edit_only_this">Editar solo esta sesión</string>
     <string name="all_recurring_sessions_updated">Todas las sesiones recurrentes actualizadas</string>
+    <string name="strenght_type">FUERZA</string>
+    <string name="cardio_type">CARDIO</string>
+    <string name="flexibility_type">FLEXIBILIDAD</string>
+    <string name="ejercicio_res_name_flexiones">Flexiones</string>
+    <string name="ejercicio_res_desc_flexiones">Descripcion flexiones</string>
+    <string name="ejercicio_res_name_sentadillas">Sentadillas</string>
+    <string name="ejercicio_res_desc_sentadillas">Sentadillas description</string>
 </resources>

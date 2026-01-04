@@ -87,12 +87,6 @@
     <string name="week_current">Current week</string>
     <string name="week_next">Next week</string>
     <string name="week_next_2">Week after next</string>
-    <string name="strength_type_key" translatable="false">strength_type</string>
-    <string name="cardio_type_key" translatable="false">cardio_type</string>
-    <string name="flexibility_type_key" translatable="false">flexibility_type</string>
-    <string name="strenght_type">STRENGHT</string>
-    <string name="cardio_type">CARDIO</string>
-    <string name="flexibility_type">FLEXIBILITY</string>
     <string name="recurring_session">Recurring session</string>
     <string name="repeat_every_week">Repeat every week</string>
     <string name="select_days">Select days:</string>
@@ -116,4 +110,14 @@
     <string name="edit_all_recurring">Edit all recurring sessions</string>
     <string name="edit_only_this">Edit only this session</string>
     <string name="all_recurring_sessions_updated">All recurring sessions updated</string>
+    <string name="strength_type_key" translatable="false">strength_type</string>
+    <string name="cardio_type_key" translatable="false">cardio_type</string>
+    <string name="flexibility_type_key" translatable="false">flexibility_type</string>
+    <string name="strenght_type">STRENGHT</string>
+    <string name="cardio_type">CARDIO</string>
+    <string name="flexibility_type">FLEXIBILITY</string>
+    <string name="ejercicio_res_name_flexiones">Push ups</string>
+    <string name="ejercicio_res_desc_flexiones">Push ups description</string>
+    <string name="ejercicio_res_name_sentadillas">Squats</string>
+    <string name="ejercicio_res_desc_sentadillas">Squats description</string>
 </resources>

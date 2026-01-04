@@ -1,6 +1,7 @@
 package com.example.practicaandroid;
 
 import android.app.AlertDialog;
+import android.content.Context;
 import android.os.Bundle;
 
 import androidx.annotation.NonNull;
@@ -22,6 +23,7 @@ import com.example.practicaandroid.data.AppDatabase;
 import com.example.practicaandroid.data.ejercicio.Ejercicio;
 import com.example.practicaandroid.data.ejercicio.EjercicioDao;
 import com.example.practicaandroid.data.ejercicio.TipoEjercicio;
+import com.example.practicaandroid.util.TextResolver;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
 import java.util.List;
@@ -67,7 +69,7 @@ public class ExerciseFragment extends Fragment implements EjercicioAdapter.OnEje
         // Configurar RecyclerView
         recyclerView = view.findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(requireContext()));
-        adapter = new EjercicioAdapter(this);
+        adapter = new EjercicioAdapter(requireContext(), this);
         recyclerView.setAdapter(adapter);
 
         // Botón flotante para crear nuevo ejercicio
@@ -137,7 +139,7 @@ public class ExerciseFragment extends Fragment implements EjercicioAdapter.OnEje
 
                     crearEjercicio(nombre, descripcion, tipo);
                 })
-                .setNegativeButton("Cancelar", null)
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 
@@ -161,8 +163,9 @@ public class ExerciseFragment extends Fragment implements EjercicioAdapter.OnEje
         Spinner spinnerTipo = dialogView.findViewById(R.id.spinnerTipo);
 
         // Prellenar campos con datos actuales
-        etNombre.setText(ejercicio.nombre);
-        etDescripcion.setText(ejercicio.descripcion);
+        Context context = requireContext();
+        etNombre.setText(TextResolver.resolve(context, ejercicio.nombre));
+        etDescripcion.setText(TextResolver.resolve(context,ejercicio.descripcion));
 
         // Configurar Spinner con los tipos
         String[] tipos = new String[TipoEjercicio.values().length];
@@ -188,7 +191,7 @@ public class ExerciseFragment extends Fragment implements EjercicioAdapter.OnEje
         new AlertDialog.Builder(requireContext())
                 .setTitle("Editar Ejercicio")
                 .setView(dialogView)
-                .setPositiveButton("Guardar", (dialog, which) -> {
+                .setPositiveButton(R.string.save, (dialog, which) -> {
                     String nombre = etNombre.getText().toString().trim();
                     String descripcion = etDescripcion.getText().toString().trim();
                     String tipo = spinnerTipo.getSelectedItem().toString();
@@ -200,7 +203,7 @@ public class ExerciseFragment extends Fragment implements EjercicioAdapter.OnEje
 
                     actualizarEjercicio(ejercicio, nombre, descripcion, tipo);
                 })
-                .setNegativeButton("Cancelar", null)
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 
@@ -222,9 +225,9 @@ public class ExerciseFragment extends Fragment implements EjercicioAdapter.OnEje
     public void onEliminarClick(Ejercicio ejercicio) {
         new AlertDialog.Builder(requireContext())
                 .setTitle("Eliminar Ejercicio")
-                .setMessage("¿Estás seguro de eliminar '" + ejercicio.nombre + "'?")
+                .setMessage("¿Estás seguro de eliminar '" + TextResolver.resolve(requireContext(), ejercicio.nombre) + "'?")
                 .setPositiveButton("Eliminar", (dialog, which) -> eliminarEjercicio(ejercicio))
-                .setNegativeButton("Cancelar", null)
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 
