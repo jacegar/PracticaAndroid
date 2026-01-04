@@ -46,6 +46,8 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
     private android.widget.Spinner spinnerWeekFilter;
     private java.util.List<Sesion> allSesiones = new java.util.ArrayList<>();
     private java.util.List<WeekItem> weekItems = new java.util.ArrayList<>();
+    private int currentWeekFilterPosition = 2; // Por defecto semana actual (índice 2)
+    private boolean isUpdatingSpinner = false; // Bandera para evitar disparos durante actualización programática
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -78,7 +80,10 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
         spinnerWeekFilter.setOnItemSelectedListener(new android.widget.AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(android.widget.AdapterView<?> parent, View view, int position, long id) {
-                applyWeekFilter(position);
+                if (!isUpdatingSpinner) {
+                    currentWeekFilterPosition = position; // Guardar la posición seleccionada
+                    applyWeekFilter(position);
+                }
             }
 
             @Override
@@ -104,7 +109,8 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
             allSesiones = sesiones;
             runOnUiThread(() -> {
                 buildWeekItemsAndPopulateSpinner(sesiones);
-                adapter.setSesiones(sesiones);
+                // Aplicar el filtro actual en lugar de mostrar todas las sesiones
+                applyWeekFilter(currentWeekFilterPosition);
             });
         });
     }
@@ -366,12 +372,14 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
 
         // Actualizar spinner en UI thread
         runOnUiThread(() -> {
+            isUpdatingSpinner = true; // Activar bandera para evitar trigger del listener
             android.widget.ArrayAdapter<String> spinnerAdapter = (android.widget.ArrayAdapter<String>) spinnerWeekFilter.getAdapter();
             spinnerAdapter.clear();
             spinnerAdapter.addAll(labels);
             spinnerAdapter.notifyDataSetChanged();
-            // Auto-select current week (segunda semana en la lista después de "All weeks" e índice 0 de anterior)
-            spinnerWeekFilter.setSelection(2);
+            // Restaurar la posición previamente seleccionada (o semana actual si es la primera vez)
+            spinnerWeekFilter.setSelection(currentWeekFilterPosition);
+            isUpdatingSpinner = false; // Desactivar bandera
         });
     }
 
