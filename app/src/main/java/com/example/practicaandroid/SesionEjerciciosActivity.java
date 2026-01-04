@@ -24,7 +24,9 @@ import com.example.practicaandroid.data.ejercicio.EjercicioDao;
 import com.example.practicaandroid.data.relaciones.SesionEjercicio;
 import com.example.practicaandroid.data.relaciones.SesionEjercicioDao;
 import com.example.practicaandroid.data.sesion.Sesion;
+import com.example.practicaandroid.data.sesion.SesionDao;
 import com.example.practicaandroid.util.TextResolver;
+import com.example.practicaandroid.util.TipoEjercicioSpinnerItem;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.textfield.TextInputLayout;
 
@@ -37,11 +39,11 @@ public class SesionEjerciciosActivity extends AppCompatActivity implements Sesio
 
     private SesionEjercicioDao sesionEjercicioDao;
     private EjercicioDao ejercicioDao;
-    private com.example.practicaandroid.data.sesion.SesionDao sesionDao;
+    private SesionDao sesionDao;
     private SesionEjercicioAdapter adapter;
     private long sesionId;
     private String sesionNombre;
-    private com.example.practicaandroid.data.sesion.Sesion sesionActual;
+    private Sesion sesionActual;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -124,7 +126,7 @@ public class SesionEjerciciosActivity extends AppCompatActivity implements Sesio
         View dialogView = LayoutInflater.from(this).inflate(R.layout.dialog_seleccionar_ejercicio, null);
 
         // Referencias a las vistas
-        androidx.appcompat.widget.SearchView searchView = dialogView.findViewById(R.id.searchView);
+        SearchView searchView = dialogView.findViewById(R.id.searchView);
         Spinner spinnerTipoFiltro = dialogView.findViewById(R.id.spinnerTipoFiltro);
         RecyclerView recyclerView = dialogView.findViewById(R.id.recyclerViewEjercicios);
         TextView tvNoResultados = dialogView.findViewById(R.id.tvNoResultados);
@@ -135,18 +137,31 @@ public class SesionEjerciciosActivity extends AppCompatActivity implements Sesio
         EjercicioSelectorAdapter selectorAdapter = new EjercicioSelectorAdapter(this, this::mostrarDialogoAñadirDatos);
         recyclerView.setAdapter(selectorAdapter);
 
-        // Lista filtrada de ejercicios
-        List<Ejercicio> ejerciciosFiltrados = new ArrayList<>(todosEjercicios);
+        // Configurar Spinner de tipos
+        List<TipoEjercicioSpinnerItem> listaTipos = new ArrayList<>();
+        listaTipos.add(new TipoEjercicioSpinnerItem(
+                getString(R.string.all_types),
+                getString(R.string.all_types)
+        ));
+        listaTipos.add(new TipoEjercicioSpinnerItem(
+                "strength_type",
+                getString(R.string.strength_type)
+        ));
+        listaTipos.add(new TipoEjercicioSpinnerItem(
+                "cardio_type",
+                getString(R.string.cardio_type)
+        ));
+        listaTipos.add(new TipoEjercicioSpinnerItem(
+                "flexibility_type",
+                getString(R.string.flexibility_type)
+        ));
 
-        // Configurar spinner de tipos
-        List<String> tipos = new ArrayList<>();
-        tipos.add(getString(R.string.all_types));
-        tipos.add("FUERZA");
-        tipos.add("CARDIO");
-        tipos.add("FLEXIBILIDAD");
+        ArrayAdapter<TipoEjercicioSpinnerItem> spinnerAdapter = new ArrayAdapter<>(
+                this,
+                android.R.layout.simple_spinner_item,
+                listaTipos
+        );
 
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(this,
-                android.R.layout.simple_spinner_item, tipos);
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerTipoFiltro.setAdapter(spinnerAdapter);
 
@@ -159,23 +174,27 @@ public class SesionEjerciciosActivity extends AppCompatActivity implements Sesio
 
         // Función para aplicar filtros
         final String[] textoActual = {""};
-        final String[] tipoActual = {getString(R.string.all_types)};
+        final TipoEjercicioSpinnerItem[] tipoActual = {listaTipos.get(0)};
 
         Runnable aplicarFiltros = () -> {
+            String claveTipoActual = tipoActual[0].getClaveDb();
+
             List<Ejercicio> resultados = todosEjercicios.stream()
                     .filter(ej -> {
+                        boolean tipoCoincide = true;
+
                         // Filtro por tipo
-                        if (!tipoActual[0].equals(getString(R.string.all_types)) &&
-                            !ej.tipo.equals(tipoActual[0])) {
+                        if (!claveTipoActual.equals(getString(R.string.all_types)) &&
+                                !ej.tipo.equals(claveTipoActual)) {
                             return false;
                         }
 
                         // Filtro por texto (nombre o descripción)
                         if (!textoActual[0].isEmpty()) {
                             String texto = textoActual[0].toLowerCase();
-                            boolean matchNombre = TextResolver.resolve(this, ej.nombre).toLowerCase().contains(texto);
+                            boolean matchNombre = TextResolver.resolveTextFromDB(this, ej.nombre).toLowerCase().contains(texto);
                             boolean matchDescripcion = ej.descripcion != null &&
-                                    TextResolver.resolve(this, ej.descripcion).toLowerCase().contains(texto);
+                                    TextResolver.resolveTextFromDB(this, ej.descripcion).toLowerCase().contains(texto);
                             return matchNombre || matchDescripcion;
                         }
 
@@ -223,7 +242,7 @@ public class SesionEjerciciosActivity extends AppCompatActivity implements Sesio
         spinnerTipoFiltro.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                tipoActual[0] = tipos.get(position);
+                tipoActual[0] = (TipoEjercicioSpinnerItem) parent.getItemAtPosition(position);
                 aplicarFiltros.run();
             }
 
@@ -244,7 +263,7 @@ public class SesionEjerciciosActivity extends AppCompatActivity implements Sesio
         TextView tvNombre = dialogView.findViewById(R.id.tvNombreEjercicio);
         TextView tvTipo = dialogView.findViewById(R.id.tvTipoEjercicio);
 
-        tvNombre.setText(TextResolver.resolve(this,ejercicio.nombre));
+        tvNombre.setText(TextResolver.resolveTextFromDB(this,ejercicio.nombre));
         tvTipo.setText(getString(R.string.type_colon, ejercicio.tipo));
 
         // Campos según el tipo de ejercicio
@@ -263,10 +282,10 @@ public class SesionEjerciciosActivity extends AppCompatActivity implements Sesio
         tilPeso.setHint(getString(R.string.weight_hint, weightUnit));
 
         // Mostrar campos según el tipo
-        if ("FUERZA".equals(ejercicio.tipo)) {
+        if ("strength_type".equals(ejercicio.tipo)) {
             layoutFuerza.setVisibility(View.VISIBLE);
             layoutCardio.setVisibility(View.GONE);
-        } else if ("CARDIO".equals(ejercicio.tipo)) {
+        } else if ("cardio_type".equals(ejercicio.tipo)) {
             layoutFuerza.setVisibility(View.GONE);
             layoutCardio.setVisibility(View.VISIBLE);
         } else {
@@ -357,7 +376,7 @@ public class SesionEjerciciosActivity extends AppCompatActivity implements Sesio
         SesionEjercicio sesionEjercicio = new SesionEjercicio(sesionId, ejercicio.id, siguienteOrden);
 
         // Asignar valores según el tipo
-        if ("FUERZA".equals(ejercicio.tipo)) {
+        if ("strength_type".equals(ejercicio.tipo)) {
             try {
                 String seriesStr = etSeries.getText().toString().trim();
                 String repsStr = etRepeticiones.getText().toString().trim();
@@ -372,7 +391,7 @@ public class SesionEjerciciosActivity extends AppCompatActivity implements Sesio
                 );
                 return null;
             }
-        } else if ("CARDIO".equals(ejercicio.tipo)) {
+        } else if ("cardio_type".equals(ejercicio.tipo)) {
             try {
                 String duracionStr = etDuracion.getText().toString().trim();
                 String distanciaStr = etDistancia.getText().toString().trim();
@@ -406,8 +425,8 @@ public class SesionEjerciciosActivity extends AppCompatActivity implements Sesio
         TextView tvNombre = dialogView.findViewById(R.id.tvNombreEjercicio);
         TextView tvTipo = dialogView.findViewById(R.id.tvTipoEjercicio);
 
-        tvNombre.setText(TextResolver.resolve(this,ejercicio.nombre));
-        tvTipo.setText("Tipo: " + ejercicio.tipo);
+        tvNombre.setText(TextResolver.resolveTextFromDB(this,ejercicio.nombre));
+        tvTipo.setText("Tipo: " + TextResolver.resolve(this, ejercicio.tipo));
 
         // Campos según el tipo de ejercicio
         View layoutFuerza = dialogView.findViewById(R.id.layoutFuerza);
@@ -425,13 +444,13 @@ public class SesionEjerciciosActivity extends AppCompatActivity implements Sesio
         tilPeso.setHint(getString(R.string.weight_hint, weightUnit));
 
         // Mostrar campos según el tipo y prellenar
-        if ("FUERZA".equals(ejercicio.tipo)) {
+        if ("strength_type".equals(ejercicio.tipo)) {
             layoutFuerza.setVisibility(View.VISIBLE);
             layoutCardio.setVisibility(View.GONE);
             etSeries.setText(String.valueOf(sesionEjercicio.series));
             etRepeticiones.setText(String.valueOf(sesionEjercicio.repeticiones));
             etPeso.setText(String.valueOf(sesionEjercicio.peso));
-        } else if ("CARDIO".equals(ejercicio.tipo)) {
+        } else if ("cardio_type".equals(ejercicio.tipo)) {
             layoutFuerza.setVisibility(View.GONE);
             layoutCardio.setVisibility(View.VISIBLE);
             etDuracion.setText(String.valueOf(sesionEjercicio.duracionSegundos / 60)); // convertir segundos a minutos
@@ -444,7 +463,7 @@ public class SesionEjerciciosActivity extends AppCompatActivity implements Sesio
         new AlertDialog.Builder(this)
                 .setTitle("Editar Datos del Ejercicio")
                 .setView(dialogView)
-                .setPositiveButton("Guardar", (dialog, which) -> {
+                .setPositiveButton(R.string.save, (dialog, which) -> {
                     // Verificar si es una sesión recurrente
                     if (sesionActual != null && sesionActual.recurringGroupId != null && !sesionActual.recurringGroupId.isEmpty()) {
                         new AlertDialog.Builder(this)
@@ -470,7 +489,7 @@ public class SesionEjerciciosActivity extends AppCompatActivity implements Sesio
         Executors.newSingleThreadExecutor().execute(() -> {
             try {
                 // Actualizar valores según el tipo
-                if ("FUERZA".equals(ejercicio.tipo)) {
+                if ("strength_type".equals(ejercicio.tipo)) {
                     String seriesStr = etSeries.getText().toString().trim();
                     String repsStr = etRepeticiones.getText().toString().trim();
                     String pesoStr = etPeso.getText().toString().trim();
@@ -478,7 +497,7 @@ public class SesionEjerciciosActivity extends AppCompatActivity implements Sesio
                     sesionEjercicio.series = seriesStr.isEmpty() ? 0 : Integer.parseInt(seriesStr);
                     sesionEjercicio.repeticiones = repsStr.isEmpty() ? 0 : Integer.parseInt(repsStr);
                     sesionEjercicio.peso = pesoStr.isEmpty() ? 0 : Float.parseFloat(pesoStr);
-                } else if ("CARDIO".equals(ejercicio.tipo)) {
+                } else if ("cardio_type".equals(ejercicio.tipo)) {
                     String duracionStr = etDuracion.getText().toString().trim();
                     String distanciaStr = etDistancia.getText().toString().trim();
 
@@ -532,7 +551,7 @@ public class SesionEjerciciosActivity extends AppCompatActivity implements Sesio
         if (sesionActual != null && sesionActual.recurringGroupId != null && !sesionActual.recurringGroupId.isEmpty()) {
             new AlertDialog.Builder(this)
                     .setTitle(R.string.delete_exercise)
-                    .setMessage(getString(R.string.remove_exercise_from_session, TextResolver.resolve(this,ejercicio.nombre)))
+                    .setMessage(getString(R.string.remove_exercise_from_session, TextResolver.resolveTextFromDB(this,ejercicio.nombre)))
                     .setPositiveButton(R.string.delete_all_recurring, (dialog, which) ->
                         eliminarEjercicioDeTodasRecurrentes(ejercicio))
                     .setNegativeButton(R.string.delete_only_this, (dialog, which) ->
@@ -542,7 +561,7 @@ public class SesionEjerciciosActivity extends AppCompatActivity implements Sesio
         } else {
             new AlertDialog.Builder(this)
                     .setTitle(R.string.delete_exercise)
-                    .setMessage(getString(R.string.remove_exercise_from_session, TextResolver.resolve(this, ejercicio.nombre)))
+                    .setMessage(getString(R.string.remove_exercise_from_session, TextResolver.resolveTextFromDB(this, ejercicio.nombre)))
                     .setPositiveButton(R.string.delete, (dialog, which) -> eliminarEjercicio(sesionEjercicio))
                     .setNegativeButton(R.string.cancel, null)
                     .show();

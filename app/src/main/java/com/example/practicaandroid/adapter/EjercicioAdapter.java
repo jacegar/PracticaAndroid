@@ -48,9 +48,9 @@ public class EjercicioAdapter extends RecyclerView.Adapter<EjercicioAdapter.Ejer
             List<Ejercicio> listaFiltrada = new ArrayList<>();
 
             for (Ejercicio ejercicio : ejerciciosCompletos) {
-                if (TextResolver.resolve(context, ejercicio.nombre).toLowerCase().contains(textoBusqueda) ||
-                    ejercicio.tipo.toLowerCase().contains(textoBusqueda) ||
-                    TextResolver.resolve(context, ejercicio.descripcion).toLowerCase().contains(textoBusqueda)) {
+                if (TextResolver.resolveTextFromDB(context, ejercicio.nombre).toLowerCase().contains(textoBusqueda) ||
+                    TextResolver.resolve(context, ejercicio.tipo).toLowerCase().contains(textoBusqueda) ||
+                    TextResolver.resolveTextFromDB(context, ejercicio.descripcion).toLowerCase().contains(textoBusqueda)) {
                         listaFiltrada.add(ejercicio);
                 }
             }
@@ -93,9 +93,9 @@ public class EjercicioAdapter extends RecyclerView.Adapter<EjercicioAdapter.Ejer
         }
 
         void bind(Context context, Ejercicio ejercicio, OnEjercicioClickListener listener) {
-            tvNombre.setText(TextResolver.resolve(context, ejercicio.nombre));
-            tvDescripcion.setText(ejercicio.descripcion.isEmpty() ? "Sin descripción" : TextResolver.resolve(context, ejercicio.descripcion));
-            tvTipo.setText("Tipo: " + ejercicio.tipo);
+            tvNombre.setText(TextResolver.resolveTextFromDB(context, ejercicio.nombre));
+            tvDescripcion.setText(ejercicio.descripcion.isEmpty() ? "Sin descripción" : TextResolver.resolveTextFromDB(context, ejercicio.descripcion));
+            tvTipo.setText("Tipo: " + TextResolver.resolve(context, ejercicio.tipo));
 
             btnEditar.setOnClickListener(v -> listener.onEditarClick(ejercicio));
             btnEliminar.setOnClickListener(v -> listener.onEliminarClick(ejercicio));

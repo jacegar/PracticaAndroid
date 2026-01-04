@@ -114,10 +114,6 @@
     <string name="strength_type">FUERZA</string>
     <string name="cardio_type">CARDIO</string>
     <string name="flexibility_type">FLEXIBILIDAD</string>
-    <string name="ejercicio_res_name_flexiones">Flexiones</string>
-    <string name="ejercicio_res_desc_flexiones">Descripcion flexiones</string>
-    <string name="ejercicio_res_name_sentadillas">Sentadillas</string>
-    <string name="ejercicio_res_desc_sentadillas">Sentadillas description</string>
 
     <string name="ejercicio_res_name_press_banca">Press de banca</string>
     <string name="ejercicio_res_desc_press_banca">

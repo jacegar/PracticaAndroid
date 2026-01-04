@@ -287,7 +287,7 @@ public class WorkoutFragment extends Fragment {
 
                 ejerciciosBuilder.append(str_ejercicios + ":\n");
                 for (Ejercicio ejercicio : ejercicios) {
-                    ejerciciosBuilder.append("- ").append(TextResolver.resolve(requireContext(), ejercicio.nombre)).append("\n");
+                    ejerciciosBuilder.append("- ").append(TextResolver.resolveTextFromDB(requireContext(), ejercicio.nombre)).append("\n");
                 }
                 if (ejerciciosBuilder.length() > 0) {
                     ejerciciosBuilder.setLength(ejerciciosBuilder.length() - 1);

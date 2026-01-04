@@ -90,15 +90,15 @@ public class SesionEjercicioAdapter extends RecyclerView.Adapter<SesionEjercicio
             SesionEjercicio se = item.sesionEjercicio;
             Ejercicio ejercicio = item.ejercicio;
 
-            tvNombre.setText(TextResolver.resolve(context,ejercicio.nombre));
-            tvTipo.setText(ejercicio.tipo);
+            tvNombre.setText(TextResolver.resolveTextFromDB(context,ejercicio.nombre));
+            tvTipo.setText(TextResolver.resolve(context, ejercicio.tipo));
 
             // Obtener la unidad de peso configurada
             String weightUnit = SettingsFragment.getWeightUnit(itemView.getContext());
 
             // Mostrar datos según el tipo
             StringBuilder datos = new StringBuilder();
-            if ("FUERZA".equals(ejercicio.tipo)) {
+            if ("strength_type".equals(ejercicio.tipo)) {
                 if (se.series > 0) datos.append(se.series).append(" series");
                 if (se.repeticiones > 0) {
                     if (datos.length() > 0) datos.append(" × ");
@@ -108,7 +108,7 @@ public class SesionEjercicioAdapter extends RecyclerView.Adapter<SesionEjercicio
                     if (datos.length() > 0) datos.append(" - ");
                     datos.append(se.peso).append(" ").append(weightUnit);
                 }
-            } else if ("CARDIO".equals(ejercicio.tipo)) {
+            } else if ("cardio_type".equals(ejercicio.tipo)) {
                 if (se.duracionSegundos > 0) {
                     int minutos = se.duracionSegundos / 60;
                     datos.append(minutos).append(" min");
@@ -117,7 +117,7 @@ public class SesionEjercicioAdapter extends RecyclerView.Adapter<SesionEjercicio
                     if (datos.length() > 0) datos.append(" - ");
                     datos.append(se.distanciaKm).append(" km");
                 }
-            } else if ("FLEXIBILIDAD".equals(ejercicio.tipo)) {
+            } else if ("flexibility_type".equals(ejercicio.tipo)) {
                 datos.append("Ejercicio de flexibilidad");
             }
 

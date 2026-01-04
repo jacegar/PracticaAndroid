@@ -6,6 +6,7 @@ import android.os.Bundle;
 
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
+import androidx.appcompat.widget.SearchView;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,10 +23,11 @@ import com.example.practicaandroid.adapter.EjercicioAdapter;
 import com.example.practicaandroid.data.AppDatabase;
 import com.example.practicaandroid.data.ejercicio.Ejercicio;
 import com.example.practicaandroid.data.ejercicio.EjercicioDao;
-import com.example.practicaandroid.data.ejercicio.TipoEjercicio;
 import com.example.practicaandroid.util.TextResolver;
+import com.example.practicaandroid.util.TipoEjercicioSpinnerItem;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.concurrent.Executors;
 
@@ -77,11 +79,11 @@ public class ExerciseFragment extends Fragment implements EjercicioAdapter.OnEje
         fab.setOnClickListener(v -> mostrarDialogoCrear());
 
         // Configurar SearchView
-        androidx.appcompat.widget.SearchView searchView = view.findViewById(R.id.searchView);
+        SearchView searchView = view.findViewById(R.id.searchView);
         if (searchView != null) {
             searchView.setIconifiedByDefault(false);
             searchView.setQueryHint("Buscar ejercicios...");
-            searchView.setOnQueryTextListener(new androidx.appcompat.widget.SearchView.OnQueryTextListener() {
+            searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
                     adapter.filtrar(query);
@@ -114,13 +116,25 @@ public class ExerciseFragment extends Fragment implements EjercicioAdapter.OnEje
         Spinner spinnerTipo = dialogView.findViewById(R.id.spinnerTipo);
 
         // Configurar Spinner con los tipos
-        String[] tipos = new String[TipoEjercicio.values().length];
-        for (int i = 0; i < TipoEjercicio.values().length; i++) {
-            tipos[i] = TipoEjercicio.values()[i].name();
-        }
+        List<TipoEjercicioSpinnerItem> listaTipos = new ArrayList<>();
+        listaTipos.add(new TipoEjercicioSpinnerItem(
+                "strength_type",
+                getString(R.string.strength_type)
+        ));
+        listaTipos.add(new TipoEjercicioSpinnerItem(
+                "cardio_type",
+                getString(R.string.cardio_type)
+        ));
+        listaTipos.add(new TipoEjercicioSpinnerItem(
+                "flexibility_type",
+                getString(R.string.flexibility_type)
+        ));
 
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(requireContext(),
-                android.R.layout.simple_spinner_item, tipos);
+        ArrayAdapter<TipoEjercicioSpinnerItem> spinnerAdapter = new ArrayAdapter<>(
+                requireContext(),
+                android.R.layout.simple_spinner_item,
+                listaTipos
+        );
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerTipo.setAdapter(spinnerAdapter);
 
@@ -130,7 +144,9 @@ public class ExerciseFragment extends Fragment implements EjercicioAdapter.OnEje
                 .setPositiveButton("Crear", (dialog, which) -> {
                     String nombre = etNombre.getText().toString().trim();
                     String descripcion = etDescripcion.getText().toString().trim();
-                    String tipo = spinnerTipo.getSelectedItem().toString();
+
+                    TipoEjercicioSpinnerItem itemSeleccionado = (TipoEjercicioSpinnerItem) spinnerTipo.getSelectedItem();
+                    String tipo = itemSeleccionado.getClaveDb();
 
                     if (nombre.isEmpty()) {
                         Toast.makeText(requireContext(), "El nombre no puede estar vacío", Toast.LENGTH_SHORT).show();
@@ -164,24 +180,36 @@ public class ExerciseFragment extends Fragment implements EjercicioAdapter.OnEje
 
         // Prellenar campos con datos actuales
         Context context = requireContext();
-        etNombre.setText(TextResolver.resolve(context, ejercicio.nombre));
-        etDescripcion.setText(TextResolver.resolve(context,ejercicio.descripcion));
+        etNombre.setText(TextResolver.resolveTextFromDB(context, ejercicio.nombre));
+        etDescripcion.setText(TextResolver.resolveTextFromDB(context,ejercicio.descripcion));
 
         // Configurar Spinner con los tipos
-        String[] tipos = new String[TipoEjercicio.values().length];
-        for (int i = 0; i < TipoEjercicio.values().length; i++) {
-            tipos[i] = TipoEjercicio.values()[i].name();
-        }
+        List<TipoEjercicioSpinnerItem> listaTipos = new ArrayList<>();
+        listaTipos.add(new TipoEjercicioSpinnerItem(
+                "strength_type",
+                getString(R.string.strength_type)
+        ));
+        listaTipos.add(new TipoEjercicioSpinnerItem(
+                "cardio_type",
+                getString(R.string.cardio_type)
+        ));
+        listaTipos.add(new TipoEjercicioSpinnerItem(
+                "flexibility_type",
+                getString(R.string.flexibility_type)
+        ));
 
-        ArrayAdapter<String> spinnerAdapter = new ArrayAdapter<>(requireContext(),
-                android.R.layout.simple_spinner_item, tipos);
+        ArrayAdapter<TipoEjercicioSpinnerItem> spinnerAdapter = new ArrayAdapter<>(
+                requireContext(),
+                android.R.layout.simple_spinner_item,
+                listaTipos
+        );
         spinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spinnerTipo.setAdapter(spinnerAdapter);
 
-        // Seleccionar el tipo actual en el spinner DESPUÉS de configurar el adapter
+        // Seleccionar el tipo actual en el spinner
         int posicionSeleccionada = 0;
-        for (int i = 0; i < tipos.length; i++) {
-            if (tipos[i].equalsIgnoreCase(ejercicio.tipo)) {
+        for (int i = 0; i < listaTipos.size(); i++) {
+            if (listaTipos.get(i).getClaveDb().equalsIgnoreCase(ejercicio.tipo)) {
                 posicionSeleccionada = i;
                 break;
             }
@@ -194,7 +222,9 @@ public class ExerciseFragment extends Fragment implements EjercicioAdapter.OnEje
                 .setPositiveButton(R.string.save, (dialog, which) -> {
                     String nombre = etNombre.getText().toString().trim();
                     String descripcion = etDescripcion.getText().toString().trim();
-                    String tipo = spinnerTipo.getSelectedItem().toString();
+
+                    TipoEjercicioSpinnerItem itemSeleccionado = (TipoEjercicioSpinnerItem) spinnerTipo.getSelectedItem();
+                    String tipo = itemSeleccionado.getClaveDb();
 
                     if (nombre.isEmpty()) {
                         Toast.makeText(requireContext(), "El nombre no puede estar vacío", Toast.LENGTH_SHORT).show();
@@ -225,7 +255,7 @@ public class ExerciseFragment extends Fragment implements EjercicioAdapter.OnEje
     public void onEliminarClick(Ejercicio ejercicio) {
         new AlertDialog.Builder(requireContext())
                 .setTitle("Eliminar Ejercicio")
-                .setMessage("¿Estás seguro de eliminar '" + TextResolver.resolve(requireContext(), ejercicio.nombre) + "'?")
+                .setMessage("¿Estás seguro de eliminar '" + TextResolver.resolveTextFromDB(requireContext(), ejercicio.nombre) + "'?")
                 .setPositiveButton("Eliminar", (dialog, which) -> eliminarEjercicio(ejercicio))
                 .setNegativeButton(R.string.cancel, null)
                 .show();

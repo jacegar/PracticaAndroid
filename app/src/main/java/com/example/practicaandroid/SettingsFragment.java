@@ -89,7 +89,7 @@ public class SettingsFragment extends Fragment {
     }
 
     private void cargarPreferenciaRecordatorio() {
-        int tiempoGuardado = sharedPreferences.getInt("horas_antes_notificacion", 24*60);
+        int tiempoGuardado = sharedPreferences.getInt("horas_antes_notificacion", 24);
         notificationHoursEditText.setText(String.valueOf(tiempoGuardado));
     }
 

@@ -4,7 +4,6 @@ import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.TextSwitcher;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
@@ -69,8 +68,8 @@ public class EjercicioSelectorAdapter extends RecyclerView.Adapter<EjercicioSele
         }
 
         void bind(Context context, Ejercicio ejercicio, OnEjercicioClickListener listener) {
-            tvNombre.setText(TextResolver.resolve(context, ejercicio.nombre));
-            tvTipo.setText(ejercicio.tipo);
+            tvNombre.setText(TextResolver.resolveTextFromDB(context, ejercicio.nombre));
+            tvTipo.setText(TextResolver.resolve(context, ejercicio.tipo));
 
             if (ejercicio.descripcion != null && !ejercicio.descripcion.trim().isEmpty()) {
                 tvDescripcion.setText(ejercicio.descripcion);

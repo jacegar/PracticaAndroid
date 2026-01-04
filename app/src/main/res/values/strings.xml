@@ -110,16 +110,9 @@
     <string name="edit_all_recurring">Edit all recurring sessions</string>
     <string name="edit_only_this">Edit only this session</string>
     <string name="all_recurring_sessions_updated">All recurring sessions updated</string>
-    <string name="strength_type_key" translatable="false">strength_type</string>
-    <string name="cardio_type_key" translatable="false">cardio_type</string>
-    <string name="flexibility_type_key" translatable="false">flexibility_type</string>
     <string name="strength_type">STRENGTH</string>
     <string name="cardio_type">CARDIO</string>
     <string name="flexibility_type">FLEXIBILITY</string>
-    <string name="ejercicio_res_name_flexiones">Push ups</string>
-    <string name="ejercicio_res_desc_flexiones">Push ups description</string>
-    <string name="ejercicio_res_name_sentadillas">Squats</string>
-    <string name="ejercicio_res_desc_sentadillas">Squats description</string>
 
     <string name="ejercicio_res_name_press_banca">Bench Press</string>
     <string name="ejercicio_res_desc_press_banca">
