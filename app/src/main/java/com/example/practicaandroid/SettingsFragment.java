@@ -89,13 +89,13 @@ public class SettingsFragment extends Fragment {
     }
 
     private void cargarPreferenciaRecordatorio() {
-        int tiempoGuardado = sharedPreferences.getInt("minutos_antes_notificacion", 24*60);
+        int tiempoGuardado = sharedPreferences.getInt("horas_antes_notificacion", 24*60);
         notificationHoursEditText.setText(String.valueOf(tiempoGuardado));
     }
 
     private void guardarPreferenciaRecordatorio(int horasSeleccionadas) {
         SharedPreferences.Editor editor = sharedPreferences.edit();
-        editor.putInt("minutos_antes_notificacion", horasSeleccionadas);
+        editor.putInt("horas_antes_notificacion", horasSeleccionadas);
         editor.apply();
 
         Toast.makeText(getActivity(), R.string.saved_reminder_configuration, Toast.LENGTH_SHORT).show();

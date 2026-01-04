@@ -309,8 +309,8 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
         if(sesion.fechaRealizada == 0) {
             long diaPlanificadoMillis = sesion.diaPlanificado;
             SharedPreferences sharedPreferences = getApplicationContext().getSharedPreferences("AppSettings", Context.MODE_PRIVATE);
-            long minutos_antes = sharedPreferences.getInt("minutos_antes_notificacion", 60 * 24);
-            long tiempoNotificacionMillis = diaPlanificadoMillis - (minutos_antes * 60 * 1000);
+            long horas_antes = sharedPreferences.getInt("horas_antes_notificacion",24);
+            long tiempoNotificacionMillis = diaPlanificadoMillis - (horas_antes * 60 * 60 * 1000);
             long retrasoInicial = tiempoNotificacionMillis - System.currentTimeMillis();
 
             // Si la sesion es en el futuro, programamos la notificacion

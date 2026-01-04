@@ -79,7 +79,7 @@
     <string name="all_weeks">All weeks</string>
     <string name="saved_configuration">Saved configuration</string>
     <string name="session_reminder">Session reminder</string>
-    <string name="session_reminder_text">Set session reminder lead time (in minutes).</string>
+    <string name="session_reminder_text">Set session reminder lead time (in hours).</string>
     <string name="saved_reminder_configuration">Saved reminder configuration.</string>
     <string name="introduce_valid_number">Please, introduce a valid number</string>
     <string name="field_not_empty">The field cannot be empty.</string>

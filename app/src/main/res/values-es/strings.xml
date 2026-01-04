@@ -79,7 +79,7 @@
     <string name="notification_content_format">Tu sesión \'%1$s\' comienza a las %2$s.</string>
     <string name="saved_configuration">Configuración guardada</string>
     <string name="session_reminder">Recordatorio de sesión</string>
-    <string name="session_reminder_text">Establece la hora de los recordatorios de sesiones (en minutos).</string>
+    <string name="session_reminder_text">Establece la hora de los recordatorios de sesiones (en horas).</string>
     <string name="saved_reminder_configuration">Configuracion de recordatorios guardada.</string>
     <string name="introduce_valid_number">Por favor, introduce un número válido.</string>
     <string name="field_not_empty">El campo no puede estar vacío.</string>
