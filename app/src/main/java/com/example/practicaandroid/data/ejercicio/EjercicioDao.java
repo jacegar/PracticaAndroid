@@ -13,6 +13,9 @@ public interface EjercicioDao {
     @Insert
     long insert(Ejercicio ejercicio);
 
+    @Insert
+    void insertAll(List<Ejercicio> ejerciciosList);
+
     @Update
     void update(Ejercicio ejercicio);
 

@@ -87,4 +87,7 @@
     <string name="week_current">Semana actual</string>
     <string name="week_next">Semana próxima</string>
     <string name="week_next_2">Dentro de dos semanas</string>
+    <string name="strenght_type">FUERZA</string>
+    <string name="cardio_type">CARDIO</string>
+    <string name="flexibility_type">FLEXIBILIDAD</string>
 </resources>

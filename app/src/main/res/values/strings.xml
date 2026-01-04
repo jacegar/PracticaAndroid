@@ -90,4 +90,10 @@
     <string name="week_current">Current week</string>
     <string name="week_next">Next week</string>
     <string name="week_next_2">Week after next</string>
+    <string name="strength_type_key" translatable="false">strength_type</string>
+    <string name="cardio_type_key" translatable="false">cardio_type</string>
+    <string name="flexibility_type_key" translatable="false">flexibility_type</string>
+    <string name="strenght_type">STRENGHT</string>
+    <string name="cardio_type">CARDIO</string>
+    <string name="flexibility_type">FLEXIBILITY</string>
 </resources>

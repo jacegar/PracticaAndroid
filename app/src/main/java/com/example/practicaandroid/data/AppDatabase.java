@@ -29,6 +29,11 @@ import com.example.practicaandroid.data.relaciones.EjercicioMusculoDao;
 import com.example.practicaandroid.data.relaciones.EjercicioMaterial;
 import com.example.practicaandroid.data.relaciones.EjercicioMaterialDao;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+
 /**
  * Base de datos principal de la aplicación de entrenamiento
  *
@@ -71,6 +76,8 @@ public abstract class AppDatabase extends RoomDatabase {
 
     // Singleton pattern
     private static volatile AppDatabase INSTANCE;
+    private static final int NUMBER_OF_THREADS = 4;
+    public static final ExecutorService databaseWriteExecutor = Executors.newFixedThreadPool(NUMBER_OF_THREADS);
     private static final String DATABASE_NAME = "entrenamiento_database";
 
     /**
@@ -86,7 +93,9 @@ public abstract class AppDatabase extends RoomDatabase {
                             context.getApplicationContext(),
                             AppDatabase.class,
                             DATABASE_NAME
-                    ).addMigrations(MIGRATION_1_2).build();
+                    ).addMigrations(MIGRATION_1_2)
+                     .addCallback(RoomDatabaseCallback)
+                     .build();
                 }
             }
         }
@@ -97,6 +106,39 @@ public abstract class AppDatabase extends RoomDatabase {
         @Override
         public void migrate(@NonNull SupportSQLiteDatabase database) {
             database.execSQL("ALTER TABLE rutinas ADD COLUMN rutinaActiva INTEGER NOT NULL DEFAULT 0");
+        }
+    };
+
+    private static final  RoomDatabase.Callback RoomDatabaseCallback = new RoomDatabase.Callback(){
+        @Override
+        public void onCreate(@NonNull SupportSQLiteDatabase db){
+            super.onCreate(db);
+            /*
+            databaseWriteExecutor.execute(() -> {
+                EjercicioDao dao = INSTANCE.ejercicioDao();
+                List<Ejercicio> ejercicioList = new ArrayList<>();
+
+                ejercicioList.add(new Ejercicio(
+                        "ejercicio_res_nombre_flexiones",
+                        "ejercicio_res_desc_flexiones",
+                        "strength_type"
+                ));
+
+                ejercicioList.add(new Ejercicio(
+                        "ejercicio_res_nombre_sentadillas",
+                        "ejercicio_res_desc_sentadillas",
+                        "strength_type"
+                ));
+
+                ejercicioList.add(new Ejercicio(
+                        "ejercicio_res_nombre_plancha",
+                        "ejercicio_res_desc_plancha",
+                        "cardio_type"
+                ));
+
+                dao.insertAll(ejercicioList);
+            });
+             */
         }
     };
 
