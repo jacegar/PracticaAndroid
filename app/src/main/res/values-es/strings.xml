@@ -111,11 +111,162 @@
     <string name="edit_all_recurring">Editar todas las sesiones recurrentes</string>
     <string name="edit_only_this">Editar solo esta sesión</string>
     <string name="all_recurring_sessions_updated">Todas las sesiones recurrentes actualizadas</string>
-    <string name="strenght_type">FUERZA</string>
+    <string name="strength_type">FUERZA</string>
     <string name="cardio_type">CARDIO</string>
     <string name="flexibility_type">FLEXIBILIDAD</string>
     <string name="ejercicio_res_name_flexiones">Flexiones</string>
     <string name="ejercicio_res_desc_flexiones">Descripcion flexiones</string>
     <string name="ejercicio_res_name_sentadillas">Sentadillas</string>
     <string name="ejercicio_res_desc_sentadillas">Sentadillas description</string>
+
+    <string name="ejercicio_res_name_press_banca">Press de banca</string>
+    <string name="ejercicio_res_desc_press_banca">
+        Ejercicio compuesto con barra que fortalece pecho, hombros y tríceps.
+    </string>
+
+    <string name="ejercicio_res_name_press_inclinado_mancuernas">Press inclinado con mancuernas</string>
+    <string name="ejercicio_res_desc_press_inclinado_mancuernas">
+        Ejercicio para el pecho superior realizado con mancuernas en un banco inclinado.
+    </string>
+
+    <string name="ejercicio_res_name_aperturas_mancuernas">Aperturas con mancuernas</string>
+    <string name="ejercicio_res_desc_aperturas_mancuernas">
+        Ejercicio de aislamiento que trabaja el pecho mediante un movimiento controlado de apertura.
+    </string>
+
+    <string name="ejercicio_res_name_jalon_pecho">Jalón al pecho</string>
+    <string name="ejercicio_res_desc_jalon_pecho">
+        Ejercicio en máquina enfocado en el desarrollo de los dorsales y la espalda superior.
+    </string>
+
+    <string name="ejercicio_res_name_remo_barra">Remo con barra</string>
+    <string name="ejercicio_res_desc_remo_barra">
+        Ejercicio compuesto para fortalecer la espalda media y superior utilizando barra.
+    </string>
+
+    <string name="ejercicio_res_name_remo_polea_baja">Remo en polea baja</string>
+    <string name="ejercicio_res_desc_remo_polea_baja">
+        Movimiento controlado en polea para trabajar la musculatura de la espalda.
+    </string>
+
+    <string name="ejercicio_res_name_peso_muerto">Peso muerto</string>
+    <string name="ejercicio_res_desc_peso_muerto">
+        Ejercicio compuesto que fortalece la cadena posterior, el core y el agarre.
+    </string>
+
+    <string name="ejercicio_res_name_sentadilla_barra">Sentadilla con barra</string>
+    <string name="ejercicio_res_desc_sentadilla_barra">
+        Ejercicio básico del tren inferior que trabaja cuádriceps, glúteos y core.
+    </string>
+
+    <string name="ejercicio_res_name_prensa_piernas">Prensa de piernas</string>
+    <string name="ejercicio_res_desc_prensa_piernas">
+        Ejercicio en máquina que desarrolla la fuerza del tren inferior con movimiento guiado.
+    </string>
+
+    <string name="ejercicio_res_name_extension_cuadriceps">Extensión de cuádriceps</string>
+    <string name="ejercicio_res_desc_extension_cuadriceps">
+        Ejercicio de aislamiento para fortalecer los cuádriceps en máquina.
+    </string>
+
+    <string name="ejercicio_res_name_curl_femoral">Curl femoral</string>
+    <string name="ejercicio_res_desc_curl_femoral">
+        Ejercicio en máquina diseñado para fortalecer los isquiotibiales.
+    </string>
+
+    <string name="ejercicio_res_name_elevaciones_gemelos_maquina">Elevaciones de gemelos en máquina</string>
+    <string name="ejercicio_res_desc_elevaciones_gemelos_maquina">
+        Ejercicio en máquina para desarrollar la fuerza de los gemelos.
+    </string>
+
+    <string name="ejercicio_res_name_press_militar">Press militar</string>
+    <string name="ejercicio_res_desc_press_militar">
+        Ejercicio de empuje por encima de la cabeza que fortalece hombros y brazos.
+    </string>
+
+    <string name="ejercicio_res_name_elevaciones_laterales">Elevaciones laterales</string>
+    <string name="ejercicio_res_desc_elevaciones_laterales">
+        Ejercicio de aislamiento enfocado en el deltoide lateral con mancuernas.
+    </string>
+
+    <string name="ejercicio_res_name_curl_biceps_barra">Curl de bíceps con barra</string>
+    <string name="ejercicio_res_desc_curl_biceps_barra">
+        Ejercicio de fuerza con barra para desarrollar tamaño y potencia en los bíceps.
+    </string>
+
+    <string name="ejercicio_res_name_curl_biceps_mancuernas">Curl de bíceps con mancuernas</string>
+    <string name="ejercicio_res_desc_curl_biceps_mancuernas">
+        Ejercicio unilateral que permite mayor control y recorrido de movimiento.
+    </string>
+
+    <string name="ejercicio_res_name_extension_triceps_polea">Extensión de tríceps en polea</string>
+    <string name="ejercicio_res_desc_extension_triceps_polea">
+        Ejercicio de aislamiento en polea para fortalecer los tríceps.
+    </string>
+
+    <string name="ejercicio_res_name_press_frances">Press francés</string>
+    <string name="ejercicio_res_desc_press_frances">
+        Ejercicio enfocado en los tríceps realizado con barra o mancuernas.
+    </string>
+
+    <string name="ejercicio_res_name_abdominales_maquina">Abdominales en máquina</string>
+    <string name="ejercicio_res_desc_abdominales_maquina">
+        Ejercicio en máquina para fortalecer la musculatura abdominal.
+    </string>
+
+    <string name="ejercicio_res_name_cinta_correr">Cinta de correr</string>
+    <string name="ejercicio_res_desc_cinta_correr">
+        Ejercicio cardiovascular en cinta para mejorar la resistencia.
+    </string>
+
+    <string name="ejercicio_res_name_bicicleta_estatica">Bicicleta estática</string>
+    <string name="ejercicio_res_desc_bicicleta_estatica">
+        Ejercicio cardiovascular de bajo impacto ideal para mejorar la condición física.
+    </string>
+
+    <string name="ejercicio_res_name_eliptica">Elíptica</string>
+    <string name="ejercicio_res_desc_eliptica">
+        Ejercicio cardiovascular de cuerpo completo con bajo impacto articular.
+    </string>
+
+    <string name="ejercicio_res_name_remo_ergometro">Remo en máquina</string>
+    <string name="ejercicio_res_desc_remo_ergometro">
+        Ejercicio cardiovascular que simula el movimiento de remo y activa todo el cuerpo.
+    </string>
+
+    <string name="ejercicio_res_name_escalera_gimnasio">Escalera de gimnasio</string>
+    <string name="ejercicio_res_desc_escalera_gimnasio">
+        Máquina de cardio que simula subir escaleras para mejorar resistencia y fuerza de piernas.
+    </string>
+
+
+    <string name="ejercicio_res_name_estiramiento_isquiotibiales">Estiramiento de isquiotibiales</string>
+    <string name="ejercicio_res_desc_estiramiento_isquiotibiales">
+        Ejercicio de estiramiento para mejorar la flexibilidad de los isquiotibiales.
+    </string>
+
+    <string name="ejercicio_res_name_estiramiento_cuadriceps">Estiramiento de cuádriceps</string>
+    <string name="ejercicio_res_desc_estiramiento_cuadriceps">
+        Estiramiento enfocado en aumentar la flexibilidad de la parte frontal del muslo.
+    </string>
+
+    <string name="ejercicio_res_name_estiramiento_gluteos">Estiramiento de glúteos</string>
+    <string name="ejercicio_res_desc_estiramiento_gluteos">
+        Movimiento de estiramiento que trabaja la musculatura de los glúteos.
+    </string>
+
+    <string name="ejercicio_res_name_estiramiento_pectoral">Estiramiento de pectorales</string>
+    <string name="ejercicio_res_desc_estiramiento_pectoral">
+        Estiramiento para abrir el pecho y reducir la tensión del tren superior.
+    </string>
+
+    <string name="ejercicio_res_name_estiramiento_dorsal">Estiramiento dorsal</string>
+    <string name="ejercicio_res_desc_estiramiento_dorsal">
+        Ejercicio de estiramiento para mejorar la flexibilidad de la espalda.
+    </string>
+
+    <string name="ejercicio_res_name_movilidad_hombros">Movilidad de hombros</string>
+    <string name="ejercicio_res_desc_movilidad_hombros">
+        Ejercicio de movilidad para mejorar el rango de movimiento y la salud articular del hombro.
+    </string>
 </resources>

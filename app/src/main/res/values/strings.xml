@@ -113,11 +113,161 @@
     <string name="strength_type_key" translatable="false">strength_type</string>
     <string name="cardio_type_key" translatable="false">cardio_type</string>
     <string name="flexibility_type_key" translatable="false">flexibility_type</string>
-    <string name="strenght_type">STRENGHT</string>
+    <string name="strength_type">STRENGTH</string>
     <string name="cardio_type">CARDIO</string>
     <string name="flexibility_type">FLEXIBILITY</string>
     <string name="ejercicio_res_name_flexiones">Push ups</string>
     <string name="ejercicio_res_desc_flexiones">Push ups description</string>
     <string name="ejercicio_res_name_sentadillas">Squats</string>
     <string name="ejercicio_res_desc_sentadillas">Squats description</string>
+
+    <string name="ejercicio_res_name_press_banca">Bench Press</string>
+    <string name="ejercicio_res_desc_press_banca">
+        Compound exercise performed with a barbell to strengthen chest, shoulders, and triceps.
+    </string>
+
+    <string name="ejercicio_res_name_press_inclinado_mancuernas">Incline Dumbbell Press</string>
+    <string name="ejercicio_res_desc_press_inclinado_mancuernas">
+        Upper chest exercise using dumbbells on an inclined bench to improve pushing strength.
+    </string>
+
+    <string name="ejercicio_res_name_aperturas_mancuernas">Dumbbell Flyes</string>
+    <string name="ejercicio_res_desc_aperturas_mancuernas">
+        Isolation exercise that targets the chest through controlled opening and closing movements.
+    </string>
+
+    <string name="ejercicio_res_name_jalon_pecho">Lat Pulldown</string>
+    <string name="ejercicio_res_desc_jalon_pecho">
+        Machine-based pulling exercise focused on developing the latissimus dorsi and upper back.
+    </string>
+
+    <string name="ejercicio_res_name_remo_barra">Barbell Row</string>
+    <string name="ejercicio_res_desc_remo_barra">
+        Compound back exercise performed with a barbell to strengthen the upper and middle back.
+    </string>
+
+    <string name="ejercicio_res_name_remo_polea_baja">Seated Cable Row</string>
+    <string name="ejercicio_res_desc_remo_polea_baja">
+        Controlled rowing movement using a cable machine to target the back muscles.
+    </string>
+
+    <string name="ejercicio_res_name_peso_muerto">Deadlift</string>
+    <string name="ejercicio_res_desc_peso_muerto">
+        Full-body compound exercise that strengthens the posterior chain, core, and grip.
+    </string>
+
+    <string name="ejercicio_res_name_sentadilla_barra">Barbell Squat</string>
+    <string name="ejercicio_res_desc_sentadilla_barra">
+        Lower body compound exercise focusing on quadriceps, glutes, and core stability.
+    </string>
+
+    <string name="ejercicio_res_name_prensa_piernas">Leg Press</string>
+    <string name="ejercicio_res_desc_prensa_piernas">
+        Machine exercise that develops lower body strength with guided movement.
+    </string>
+
+    <string name="ejercicio_res_name_extension_cuadriceps">Leg Extension</string>
+    <string name="ejercicio_res_desc_extension_cuadriceps">
+        Isolation exercise targeting the quadriceps using a leg extension machine.
+    </string>
+
+    <string name="ejercicio_res_name_curl_femoral">Leg Curl</string>
+    <string name="ejercicio_res_desc_curl_femoral">
+        Machine-based exercise designed to strengthen the hamstrings.
+    </string>
+
+    <string name="ejercicio_res_name_elevaciones_gemelos_maquina">Calf Raises Machine</string>
+    <string name="ejercicio_res_desc_elevaciones_gemelos_maquina">
+        Exercise performed on a machine to develop calf muscle strength.
+    </string>
+
+    <string name="ejercicio_res_name_press_militar">Shoulder Press</string>
+    <string name="ejercicio_res_desc_press_militar">
+        Overhead pressing exercise that strengthens shoulders and upper arms.
+    </string>
+
+    <string name="ejercicio_res_name_elevaciones_laterales">Lateral Raises</string>
+    <string name="ejercicio_res_desc_elevaciones_laterales">
+        Isolation exercise focused on the lateral deltoids using dumbbells.
+    </string>
+
+    <string name="ejercicio_res_name_curl_biceps_barra">Barbell Biceps Curl</string>
+    <string name="ejercicio_res_desc_curl_biceps_barra">
+        Strength exercise using a barbell to build biceps size and power.
+    </string>
+
+    <string name="ejercicio_res_name_curl_biceps_mancuernas">Dumbbell Biceps Curl</string>
+    <string name="ejercicio_res_desc_curl_biceps_mancuernas">
+        Unilateral biceps exercise allowing greater range of motion and control.
+    </string>
+
+    <string name="ejercicio_res_name_extension_triceps_polea">Cable Triceps Extension</string>
+    <string name="ejercicio_res_desc_extension_triceps_polea">
+        Isolation movement using a cable machine to strengthen the triceps.
+    </string>
+
+    <string name="ejercicio_res_name_press_frances">French Press</string>
+    <string name="ejercicio_res_desc_press_frances">
+        Triceps-focused exercise performed with a barbell or dumbbells.
+    </string>
+
+    <string name="ejercicio_res_name_abdominales_maquina">Ab Crunch Machine</string>
+    <string name="ejercicio_res_desc_abdominales_maquina">
+        Core exercise performed on a machine to strengthen the abdominal muscles.
+    </string>
+    <string name="ejercicio_res_name_cinta_correr">Treadmill</string>
+    <string name="ejercicio_res_desc_cinta_correr">
+        Cardiovascular exercise performed on a treadmill to improve endurance.
+    </string>
+
+    <string name="ejercicio_res_name_bicicleta_estatica">Stationary Bike</string>
+    <string name="ejercicio_res_desc_bicicleta_estatica">
+        Low-impact cardio exercise ideal for improving cardiovascular fitness.
+    </string>
+
+    <string name="ejercicio_res_name_eliptica">Elliptical Trainer</string>
+    <string name="ejercicio_res_desc_eliptica">
+        Full-body cardio exercise with minimal joint impact.
+    </string>
+
+    <string name="ejercicio_res_name_remo_ergometro">Rowing Machine</string>
+    <string name="ejercicio_res_desc_remo_ergometro">
+        Cardio and strength-based exercise simulating rowing movements.
+    </string>
+
+    <string name="ejercicio_res_name_escalera_gimnasio">Stair Climber</string>
+    <string name="ejercicio_res_desc_escalera_gimnasio">
+        Cardio machine that simulates stair climbing to improve endurance and leg strength.
+    </string>
+
+    <string name="ejercicio_res_name_estiramiento_isquiotibiales">Hamstring Stretch</string>
+    <string name="ejercicio_res_desc_estiramiento_isquiotibiales">
+        Stretching exercise to improve flexibility of the hamstring muscles.
+    </string>
+
+    <string name="ejercicio_res_name_estiramiento_cuadriceps">Quadriceps Stretch</string>
+    <string name="ejercicio_res_desc_estiramiento_cuadriceps">
+        Stretch designed to increase flexibility in the front thigh muscles.
+    </string>
+
+    <string name="ejercicio_res_name_estiramiento_gluteos">Glute Stretch</string>
+    <string name="ejercicio_res_desc_estiramiento_gluteos">
+        Stretching movement targeting the gluteal muscles.
+    </string>
+
+    <string name="ejercicio_res_name_estiramiento_pectoral">Chest Stretch</string>
+    <string name="ejercicio_res_desc_estiramiento_pectoral">
+        Stretch to open the chest and reduce upper body tightness.
+    </string>
+
+    <string name="ejercicio_res_name_estiramiento_dorsal">Lat Stretch</string>
+    <string name="ejercicio_res_desc_estiramiento_dorsal">
+        Stretching exercise aimed at improving flexibility of the back muscles.
+    </string>
+
+    <string name="ejercicio_res_name_movilidad_hombros">Shoulder Mobility</string>
+    <string name="ejercicio_res_desc_movilidad_hombros">
+        Mobility exercise to improve shoulder range of motion and joint health.
+    </string>
+
 </resources>
