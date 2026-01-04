@@ -319,36 +319,43 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
 
     // Construir lista de semanas disponibles y poblar el spinner
     private void buildWeekItemsAndPopulateSpinner(java.util.List<Sesion> sesiones) {
-        java.util.Map<Long, WeekItem> weekMap = new java.util.HashMap<>();
         java.util.Calendar cal = java.util.Calendar.getInstance();
         // Force first day of week to Monday
         int firstDay = java.util.Calendar.MONDAY;
 
-        for (Sesion s : sesiones) {
-            cal.setTimeInMillis(s.diaPlanificado);
-            cal.set(java.util.Calendar.HOUR_OF_DAY, 0);
-            cal.set(java.util.Calendar.MINUTE, 0);
-            cal.set(java.util.Calendar.SECOND, 0);
-            cal.set(java.util.Calendar.MILLISECOND, 0);
+        // Calcular la semana actual
+        cal.setTimeInMillis(System.currentTimeMillis());
+        cal.set(java.util.Calendar.HOUR_OF_DAY, 0);
+        cal.set(java.util.Calendar.MINUTE, 0);
+        cal.set(java.util.Calendar.SECOND, 0);
+        cal.set(java.util.Calendar.MILLISECOND, 0);
 
-            while (cal.get(java.util.Calendar.DAY_OF_WEEK) != firstDay) {
-                cal.add(java.util.Calendar.DAY_OF_MONTH, -1);
-            }
-
-            long weekStart = cal.getTimeInMillis();
-            long weekEnd = weekStart + 7L * 24 * 60 * 60 * 1000 - 1;
-
-            if (!weekMap.containsKey(weekStart)) {
-                String label = formatLabel(weekStart, weekEnd);
-                weekMap.put(weekStart, new WeekItem(weekStart, weekEnd, label));
-            }
+        while (cal.get(java.util.Calendar.DAY_OF_WEEK) != firstDay) {
+            cal.add(java.util.Calendar.DAY_OF_MONTH, -1);
         }
 
+        // Retroceder a la semana anterior
+        cal.add(java.util.Calendar.WEEK_OF_YEAR, -1);
+
+        // Etiquetas descriptivas para cada semana
+        String[] weekLabels = {
+                getString(R.string.week_previous),
+                getString(R.string.week_current),
+                getString(R.string.week_next),
+                getString(R.string.week_next_2)
+        };
+
+        // Generar semana anterior, actual y 2 semanas futuras (total 4 semanas)
         weekItems.clear();
-        java.util.List<Long> starts = new java.util.ArrayList<>(weekMap.keySet());
-        java.util.Collections.sort(starts, java.util.Collections.reverseOrder());
-        for (Long s : starts) {
-            weekItems.add(weekMap.get(s));
+        for (int i = 0; i < 4; i++) {
+            long weekStart = cal.getTimeInMillis();
+            long weekEnd = weekStart + 7L * 24 * 60 * 60 * 1000 - 1;
+            String dateRange = formatLabel(weekStart, weekEnd);
+            String label = weekLabels[i] + " (" + dateRange + ")";
+            weekItems.add(new WeekItem(weekStart, weekEnd, label));
+
+            // Avanzar a la siguiente semana
+            cal.add(java.util.Calendar.WEEK_OF_YEAR, 1);
         }
 
         final java.util.List<String> labels = new java.util.ArrayList<>();
@@ -363,17 +370,8 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
             spinnerAdapter.clear();
             spinnerAdapter.addAll(labels);
             spinnerAdapter.notifyDataSetChanged();
-            // Auto-select current week if available, otherwise 'All weeks'
-            int selection = 0;
-            long now = System.currentTimeMillis();
-            for (int i = 0; i < weekItems.size(); i++) {
-                WeekItem wi = weekItems.get(i);
-                if (now >= wi.start && now <= wi.end) {
-                    selection = i + 1; // +1 because 0 = All weeks
-                    break;
-                }
-            }
-            spinnerWeekFilter.setSelection(selection);
+            // Auto-select current week (segunda semana en la lista después de "All weeks" e índice 0 de anterior)
+            spinnerWeekFilter.setSelection(2);
         });
     }
 

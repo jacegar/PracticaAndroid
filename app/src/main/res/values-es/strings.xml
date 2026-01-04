@@ -82,4 +82,9 @@
     <string name="saved_reminder_configuration">Configuracion de recordatorios guardada.</string>
     <string name="introduce_valid_number">Por favor, introduce un número válido.</string>
     <string name="field_not_empty">El campo no puede estar vacío.</string>
+    <string name="all_weeks">Todas las semanas</string>
+    <string name="week_previous">Semana anterior</string>
+    <string name="week_current">Semana actual</string>
+    <string name="week_next">Semana próxima</string>
+    <string name="week_next_2">Dentro de dos semanas</string>
 </resources>

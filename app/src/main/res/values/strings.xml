@@ -86,4 +86,8 @@
     <string name="saved_reminder_configuration">Saved reminder configuration.</string>
     <string name="introduce_valid_number">Please, introduce a valid number</string>
     <string name="field_not_empty">The field cannot be empty.</string>
+    <string name="week_previous">Previous week</string>
+    <string name="week_current">Current week</string>
+    <string name="week_next">Next week</string>
+    <string name="week_next_2">Week after next</string>
 </resources>
