@@ -12,14 +12,13 @@
         android:orientation="vertical">
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="Ejercicios"
+            android:layout_marginTop="32dp"
+            android:layout_gravity="center_horizontal"
+            android:text="@string/exercises"
             android:textSize="24sp"
-            android:textStyle="bold"
-            android:padding="16dp"
-            android:background="?attr/colorPrimary"
-            android:textColor="@android:color/white" />
+            android:textStyle="bold" />
 
         <com.google.android.material.card.MaterialCardView
             android:layout_width="match_parent"
