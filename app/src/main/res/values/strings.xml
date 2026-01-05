@@ -122,6 +122,12 @@
     <string name="confirmation_delete">Are you sure you want to delete "%1$s"?</string>
     <string name="conceded_notification_permit">Conceded notification permit</string>
     <string name="denied_permit">Denied permit. You will not receive session reminders.</string>
+    <string name="new_workout">New workout</string>
+    <string name="created_workout">Created workout</string>
+    <string name="edit_workout">Edit workout</string>
+    <string name="delete_workout">Delete workout</string>
+    <string name="updated_workout">Updated workout</string>
+    <string name="deleted_workout">Deleted workout</string>
     <string name="strength_type">STRENGTH</string>
     <string name="cardio_type">CARDIO</string>
     <string name="flexibility_type">FLEXIBILITY</string>

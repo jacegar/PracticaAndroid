@@ -123,6 +123,12 @@
     <string name="confirmation_delete">¿Estás seguro de que quieres eliminar "%1$s"?</string>
     <string name="conceded_notification_permit">Permiso de notificaciones concedido</string>
     <string name="denied_permit">Permiso denegado. No reciviras recordatorios de sesiones.</string>
+    <string name="new_workout">Nueva rutina</string>
+    <string name="created_workout">Rutina creada</string>
+    <string name="edit_workout">Editar rutina</string>
+    <string name="delete_workout">Eliminar rutina</string>
+    <string name="updated_workout">Rutina actualizada</string>
+    <string name="deleted_workout">Rutina eliminada</string>
     <string name="strength_type">FUERZA</string>
     <string name="cardio_type">CARDIO</string>
     <string name="flexibility_type">FLEXIBILIDAD</string>

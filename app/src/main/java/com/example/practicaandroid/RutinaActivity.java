@@ -62,20 +62,20 @@ public class RutinaActivity extends AppCompatActivity implements RutinaAdapter.O
         EditText etDescripcion = dialogView.findViewById(R.id.etDescripcion);
 
         new AlertDialog.Builder(this)
-                .setTitle("Nueva Rutina")
+                .setTitle(R.string.new_workout)
                 .setView(dialogView)
-                .setPositiveButton("Crear", (dialog, which) -> {
+                .setPositiveButton(R.string.create, (dialog, which) -> {
                     String nombre = etNombre.getText().toString().trim();
                     String descripcion = etDescripcion.getText().toString().trim();
 
                     if (nombre.isEmpty()) {
-                        Toast.makeText(this, "El nombre es obligatorio", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.name_required, Toast.LENGTH_SHORT).show();
                         return;
                     }
 
                     crearRutina(nombre, descripcion);
                 })
-                .setNegativeButton("Cancelar", null)
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 
@@ -88,7 +88,7 @@ public class RutinaActivity extends AppCompatActivity implements RutinaAdapter.O
             rutinaDao.insert(rutina);
 
             runOnUiThread(() -> {
-                Toast.makeText(this, "Rutina creada", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.created_workout, Toast.LENGTH_SHORT).show();
                 cargarRutinas();
             });
         });
@@ -104,20 +104,20 @@ public class RutinaActivity extends AppCompatActivity implements RutinaAdapter.O
         etDescripcion.setText(rutina.descripcion);
 
         new AlertDialog.Builder(this)
-                .setTitle("Editar Rutina")
+                .setTitle(R.string.edit_workout)
                 .setView(dialogView)
-                .setPositiveButton("Guardar", (dialog, which) -> {
+                .setPositiveButton(R.string.save, (dialog, which) -> {
                     String nombre = etNombre.getText().toString().trim();
                     String descripcion = etDescripcion.getText().toString().trim();
 
                     if (nombre.isEmpty()) {
-                        Toast.makeText(this, "El nombre es obligatorio", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.name_required, Toast.LENGTH_SHORT).show();
                         return;
                     }
 
                     actualizarRutina(rutina, nombre, descripcion);
                 })
-                .setNegativeButton("Cancelar", null)
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 
@@ -128,7 +128,7 @@ public class RutinaActivity extends AppCompatActivity implements RutinaAdapter.O
             rutinaDao.update(rutina);
 
             runOnUiThread(() -> {
-                Toast.makeText(this, "Rutina actualizada", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.updated_workout, Toast.LENGTH_SHORT).show();
                 cargarRutinas();
             });
         });
@@ -137,10 +137,10 @@ public class RutinaActivity extends AppCompatActivity implements RutinaAdapter.O
     @Override
     public void onEliminarClick(Rutina rutina) {
         new AlertDialog.Builder(this)
-                .setTitle("Eliminar Rutina")
-                .setMessage("¿Estás seguro de eliminar '" + rutina.nombre + "'?")
-                .setPositiveButton("Eliminar", (dialog, which) -> eliminarRutina(rutina))
-                .setNegativeButton("Cancelar", null)
+                .setTitle(R.string.delete_workout)
+                .setMessage(getString(R.string.confirmation_delete, rutina.nombre))
+                .setPositiveButton(R.string.delete, (dialog, which) -> eliminarRutina(rutina))
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 
@@ -149,7 +149,7 @@ public class RutinaActivity extends AppCompatActivity implements RutinaAdapter.O
             rutinaDao.delete(rutina);
 
             runOnUiThread(() -> {
-                Toast.makeText(this, "Rutina eliminada", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.deleted_workout, Toast.LENGTH_SHORT).show();
                 cargarRutinas();
             });
         });
