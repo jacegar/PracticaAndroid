@@ -120,6 +120,8 @@
     <string name="no_configured_data">No configured data</string>
     <string name="search_exercises_label">Search exercises...</string>
     <string name="confirmation_delete">Are you sure you want to delete "%1$s"?</string>
+    <string name="conceded_notification_permit">Conceded notification permit</string>
+    <string name="denied_permit">Denied permit. You will not receive session reminders.</string>
     <string name="strength_type">STRENGTH</string>
     <string name="cardio_type">CARDIO</string>
     <string name="flexibility_type">FLEXIBILITY</string>

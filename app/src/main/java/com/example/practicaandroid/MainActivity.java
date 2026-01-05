@@ -40,9 +40,9 @@ public class MainActivity extends AppCompatActivity {
     private final ActivityResultLauncher<String> requestPermissionLauncher =
             registerForActivityResult(new ActivityResultContracts.RequestPermission(), isGranted -> {
                 if (isGranted) {
-                    Toast.makeText(this, "Permiso de notificaciones concedido.", Toast.LENGTH_SHORT).show();
+                    Toast.makeText(this, R.string.conceded_notification_permit, Toast.LENGTH_SHORT).show();
                 } else {
-                    Toast.makeText(this, "Permiso denegado. No recibirás recordatorios de tus sesiones.", Toast.LENGTH_LONG).show();
+                    Toast.makeText(this, R.string.denied_permit, Toast.LENGTH_LONG).show();
                 }
             });
 
