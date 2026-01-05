@@ -7,6 +7,7 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.content.ContextCompat;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -82,7 +83,7 @@ public class ExerciseFragment extends Fragment implements EjercicioAdapter.OnEje
         SearchView searchView = view.findViewById(R.id.searchView);
         if (searchView != null) {
             searchView.setIconifiedByDefault(false);
-            searchView.setQueryHint("Buscar ejercicios...");
+            searchView.setQueryHint(getString(R.string.search_exercises_label));
             searchView.setOnQueryTextListener(new SearchView.OnQueryTextListener() {
                 @Override
                 public boolean onQueryTextSubmit(String query) {
@@ -139,9 +140,9 @@ public class ExerciseFragment extends Fragment implements EjercicioAdapter.OnEje
         spinnerTipo.setAdapter(spinnerAdapter);
 
         new AlertDialog.Builder(requireContext())
-                .setTitle("Nuevo Ejercicio")
+                .setTitle(R.string.new_exercise)
                 .setView(dialogView)
-                .setPositiveButton("Crear", (dialog, which) -> {
+                .setPositiveButton(R.string.create, (dialog, which) -> {
                     String nombre = etNombre.getText().toString().trim();
                     String descripcion = etDescripcion.getText().toString().trim();
 
@@ -149,7 +150,7 @@ public class ExerciseFragment extends Fragment implements EjercicioAdapter.OnEje
                     String tipo = itemSeleccionado.getClaveDb();
 
                     if (nombre.isEmpty()) {
-                        Toast.makeText(requireContext(), "El nombre no puede estar vacío", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), R.string.name_cannot_be_empty, Toast.LENGTH_SHORT).show();
                         return;
                     }
 
@@ -165,7 +166,7 @@ public class ExerciseFragment extends Fragment implements EjercicioAdapter.OnEje
             ejercicioDao.insert(ejercicio);
 
             requireActivity().runOnUiThread(() -> {
-                Toast.makeText(requireContext(), "Ejercicio creado", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), R.string.exercise_created, Toast.LENGTH_SHORT).show();
                 cargarEjercicios();
             });
         });
@@ -217,7 +218,7 @@ public class ExerciseFragment extends Fragment implements EjercicioAdapter.OnEje
         spinnerTipo.setSelection(posicionSeleccionada);
 
         new AlertDialog.Builder(requireContext())
-                .setTitle("Editar Ejercicio")
+                .setTitle(R.string.edit_exercise)
                 .setView(dialogView)
                 .setPositiveButton(R.string.save, (dialog, which) -> {
                     String nombre = etNombre.getText().toString().trim();
@@ -227,7 +228,7 @@ public class ExerciseFragment extends Fragment implements EjercicioAdapter.OnEje
                     String tipo = itemSeleccionado.getClaveDb();
 
                     if (nombre.isEmpty()) {
-                        Toast.makeText(requireContext(), "El nombre no puede estar vacío", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(requireContext(), R.string.name_cannot_be_empty, Toast.LENGTH_SHORT).show();
                         return;
                     }
 
@@ -245,7 +246,7 @@ public class ExerciseFragment extends Fragment implements EjercicioAdapter.OnEje
             ejercicioDao.update(ejercicio);
 
             requireActivity().runOnUiThread(() -> {
-                Toast.makeText(requireContext(), "Ejercicio actualizado", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), R.string.exercise_updated, Toast.LENGTH_SHORT).show();
                 cargarEjercicios();
             });
         });
@@ -253,10 +254,13 @@ public class ExerciseFragment extends Fragment implements EjercicioAdapter.OnEje
 
     @Override
     public void onEliminarClick(Ejercicio ejercicio) {
+        String nombreEjercicio = TextResolver.resolveTextFromDB(requireContext(), ejercicio.nombre);
+        String mensajeConfirmacion = getString(R.string.confirmation_delete, nombreEjercicio);
+
         new AlertDialog.Builder(requireContext())
-                .setTitle("Eliminar Ejercicio")
-                .setMessage("¿Estás seguro de eliminar '" + TextResolver.resolveTextFromDB(requireContext(), ejercicio.nombre) + "'?")
-                .setPositiveButton("Eliminar", (dialog, which) -> eliminarEjercicio(ejercicio))
+                .setTitle(R.string.delete_exercise)
+                .setMessage(mensajeConfirmacion)
+                .setPositiveButton(R.string.delete, (dialog, which) -> eliminarEjercicio(ejercicio))
                 .setNegativeButton(R.string.cancel, null)
                 .show();
     }
@@ -266,7 +270,7 @@ public class ExerciseFragment extends Fragment implements EjercicioAdapter.OnEje
             ejercicioDao.delete(ejercicio);
 
             requireActivity().runOnUiThread(() -> {
-                Toast.makeText(requireContext(), "Ejercicio eliminado", Toast.LENGTH_SHORT).show();
+                Toast.makeText(requireContext(), R.string.exercise_deleted, Toast.LENGTH_SHORT).show();
                 cargarEjercicios();
             });
         });

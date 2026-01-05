@@ -119,6 +119,8 @@
     <string name="uncheck">Desmarcar</string>
     <string name="flexibility_exercise">Ejercicio de flexibilidad</string>
     <string name="no_configured_data">Sin datos configurados</string>
+    <string name="search_exercises_label">Buscar ejercicios...</string>
+    <string name="confirmation_delete">¿Estás seguro de que quieres eliminar "%1$s"?</string>
     <string name="strength_type">FUERZA</string>
     <string name="cardio_type">CARDIO</string>
     <string name="flexibility_type">FLEXIBILIDAD</string>

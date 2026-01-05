@@ -34,13 +34,13 @@
     <string name="new_exercise">New Exercise</string>
     <string name="create">Create</string>
     <string name="name_cannot_be_empty">Name cannot be empty</string>
-    <string name="exercise_created">Exercise created</string>
+    <string name="exercise_created">Created exercise</string>
     <string name="edit_exercise">Edit Exercise</string>
-    <string name="exercise_updated">Exercise updated</string>
+    <string name="exercise_updated">Updated exercise</string>
     <string name="delete_exercise">Delete Exercise</string>
     <string name="delete_exercise_confirmation">Are you sure you want to delete \'%1$s\'?</string>
     <string name="delete">Delete</string>
-    <string name="exercise_deleted">Exercise deleted</string>
+    <string name="exercise_deleted">Deleted exercise</string>
     <!-- Session Exercises -->
     <string name="session_not_found">Error: Session not found</string>
     <string name="no_exercises_available">No exercises available. Create some first.</string>
@@ -118,6 +118,8 @@
     <string name="uncheck">Uncheck</string>
     <string name="flexibility_exercise">Flexibility exercise</string>
     <string name="no_configured_data">No configured data</string>
+    <string name="search_exercises_label">Search exercises...</string>
+    <string name="confirmation_delete">Are you sure you want to delete "%1$s"?</string>
     <string name="strength_type">STRENGTH</string>
     <string name="cardio_type">CARDIO</string>
     <string name="flexibility_type">FLEXIBILITY</string>
