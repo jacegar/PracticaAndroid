@@ -1,5 +1,6 @@
 package com.example.practicaandroid;
 
+import android.graphics.Color;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
@@ -19,9 +20,21 @@ import com.example.practicaandroid.data.relaciones.SesionEjercicioDao;
 import com.example.practicaandroid.data.sesion.Sesion;
 import com.example.practicaandroid.data.sesion.SesionDao;
 import com.example.practicaandroid.util.TextResolver;
+import com.github.mikephil.charting.charts.LineChart;
+import com.github.mikephil.charting.components.Description;
+import com.github.mikephil.charting.components.XAxis;
+import com.github.mikephil.charting.components.YAxis;
+import com.github.mikephil.charting.data.Entry;
+import com.github.mikephil.charting.data.LineData;
+import com.github.mikephil.charting.data.LineDataSet;
+import com.github.mikephil.charting.formatter.ValueFormatter;
+import com.google.android.material.card.MaterialCardView;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
 import java.util.concurrent.Executors;
 
 public class ProgresoDetalleActivity extends AppCompatActivity {
@@ -34,6 +47,8 @@ public class ProgresoDetalleActivity extends AppCompatActivity {
     private TextView tvEstadisticas, tvNoData;
     private RecyclerView recyclerViewHistorial;
     private ProgresoHistorialAdapter adapter;
+    private LineChart lineChart;
+    private MaterialCardView cardGrafica;
 
     private Ejercicio ejercicio;
 
@@ -60,6 +75,8 @@ public class ProgresoDetalleActivity extends AppCompatActivity {
         tvEstadisticas = findViewById(R.id.tvEstadisticas);
         tvNoData = findViewById(R.id.tvNoData);
         recyclerViewHistorial = findViewById(R.id.recyclerViewHistorial);
+        lineChart = findViewById(R.id.lineChart);
+        cardGrafica = findViewById(R.id.cardGrafica);
 
         // Obtener ID del ejercicio
         long ejercicioId = getIntent().getLongExtra("ejercicio_id", -1);
@@ -121,6 +138,9 @@ public class ProgresoDetalleActivity extends AppCompatActivity {
                     recyclerViewHistorial.setAdapter(adapter);
                     adapter.setHistorial(historial);
                 }
+
+                // Configurar gráfica en UI thread
+                configurarGraficaEnUIThread(historial, historialSE);
             });
         });
     }
@@ -221,6 +241,142 @@ public class ProgresoDetalleActivity extends AppCompatActivity {
         }
 
         return stats.toString().trim();
+    }
+
+    private void configurarGraficaEnUIThread(List<ProgresoHistorialAdapter.ItemHistorial> historial,
+                                            List<SesionEjercicio> historialSE) {
+        if (historial.isEmpty() || historial.size() < 2) {
+            cardGrafica.setVisibility(View.GONE);
+            return;
+        }
+
+        cardGrafica.setVisibility(View.VISIBLE);
+
+        List<Entry> entries = new ArrayList<>();
+        List<String> fechasFormateadas = new ArrayList<>();
+        SimpleDateFormat sdf = new SimpleDateFormat("dd/MM", Locale.getDefault());
+
+        // Crear entradas según el tipo de ejercicio
+        // Procesar del más antiguo al más reciente
+        for (int i = historial.size() - 1; i >= 0; i--) {
+            ProgresoHistorialAdapter.ItemHistorial item = historial.get(i);
+            SesionEjercicio se = item.sesionEjercicio;
+            Sesion sesion = item.sesion;
+
+            float valor = 0;
+            boolean agregarPunto = false;
+
+            if (ejercicio.tipo.equals("strength_type")) {
+                // Gráfica de peso
+                if (se.peso > 0) {
+                    valor = se.peso;
+                    agregarPunto = true;
+                }
+            } else if (ejercicio.tipo.equals("cardio_type")) {
+                // Gráfica de distancia o duración
+                if (se.distanciaKm > 0) {
+                    valor = se.distanciaKm;
+                    agregarPunto = true;
+                } else if (se.duracionSegundos > 0) {
+                    valor = se.duracionSegundos / 60f; // Convertir a minutos
+                    agregarPunto = true;
+                }
+            } else {
+                // Para flexibilidad, mostrar repeticiones
+                if (se.repeticiones > 0) {
+                    valor = se.repeticiones;
+                    agregarPunto = true;
+                } else if (se.series > 0) {
+                    valor = se.series;
+                    agregarPunto = true;
+                }
+            }
+
+            if (agregarPunto) {
+                entries.add(new Entry(entries.size(), valor));
+                fechasFormateadas.add(sdf.format(new Date(sesion.fechaRealizada)));
+            }
+        }
+
+        if (entries.isEmpty() || entries.size() < 2) {
+            cardGrafica.setVisibility(View.GONE);
+            return;
+        }
+
+        // Configurar el dataset
+        LineDataSet dataSet = new LineDataSet(entries, getEtiquetaGrafica());
+
+        // Colores
+        int colorPrimario = getResources().getColor(com.google.android.material.R.color.design_default_color_primary, null);
+        dataSet.setColor(colorPrimario);
+        dataSet.setCircleColor(colorPrimario);
+        dataSet.setCircleRadius(5f);
+        dataSet.setLineWidth(2.5f);
+        dataSet.setDrawValues(true);
+        dataSet.setValueTextSize(10f);
+        dataSet.setValueTextColor(Color.BLACK);
+        dataSet.setMode(LineDataSet.Mode.CUBIC_BEZIER);
+        dataSet.setCubicIntensity(0.2f);
+        dataSet.setDrawFilled(true);
+        dataSet.setFillColor(colorPrimario);
+        dataSet.setFillAlpha(50);
+
+        LineData lineData = new LineData(dataSet);
+        lineChart.setData(lineData);
+
+        // Configurar apariencia de la gráfica
+        Description description = new Description();
+        description.setText("");
+        lineChart.setDescription(description);
+        lineChart.setDrawGridBackground(false);
+        lineChart.setTouchEnabled(true);
+        lineChart.setDragEnabled(true);
+        lineChart.setScaleEnabled(true);
+        lineChart.setPinchZoom(true);
+
+        // Configurar eje X (fechas)
+        XAxis xAxis = lineChart.getXAxis();
+        xAxis.setPosition(XAxis.XAxisPosition.BOTTOM);
+        xAxis.setGranularity(1f);
+        xAxis.setDrawGridLines(false);
+
+        final List<String> fechas = fechasFormateadas;
+        xAxis.setValueFormatter(new ValueFormatter() {
+            @Override
+            public String getFormattedValue(float value) {
+                int index = (int) value;
+                if (index >= 0 && index < fechas.size()) {
+                    return fechas.get(index);
+                }
+                return "";
+            }
+        });
+
+        // Configurar eje Y
+        YAxis leftAxis = lineChart.getAxisLeft();
+        leftAxis.setDrawGridLines(true);
+        leftAxis.setGranularityEnabled(true);
+
+        YAxis rightAxis = lineChart.getAxisRight();
+        rightAxis.setEnabled(false);
+
+        // Configurar leyenda
+        lineChart.getLegend().setEnabled(true);
+
+        // Animar la gráfica
+        lineChart.animateX(1000);
+        lineChart.invalidate();
+    }
+
+    private String getEtiquetaGrafica() {
+        if (ejercicio.tipo.equals("strength_type")) {
+            return getString(R.string.weight_format, 0f).replace("0.0", "").trim();
+        } else if (ejercicio.tipo.equals("cardio_type")) {
+            // Determinar si es distancia o duración basándose en el historial ya cargado
+            return "km/min";
+        } else {
+            return getString(R.string.reps);
+        }
     }
 
     @Override

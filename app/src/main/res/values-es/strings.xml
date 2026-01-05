@@ -329,8 +329,10 @@
     <!-- Progress Detail Activity -->
     <string name="general_statistics">Estadísticas Generales</string>
     <string name="progress_history">Historial de Progreso</string>
+    <string name="progress_chart">Gráfica de Evolución</string>
     <string name="no_progress_data">No hay datos de progreso aún. ¡Completa sesiones para rastrear tu progreso!</string>
     <string name="no_data_recorded">Sin datos registrados</string>
+    <string name="no_chart_data">No hay suficientes datos para mostrar la gráfica</string>
 
     <!-- Progress Statistics Formats -->
     <string name="weight_kg_format">%.1f kg</string>

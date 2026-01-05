@@ -326,8 +326,10 @@
     <!-- Progress Detail Activity -->
     <string name="general_statistics">General Statistics</string>
     <string name="progress_history">Progress History</string>
+    <string name="progress_chart">Progress Chart</string>
     <string name="no_progress_data">No progress data yet. Start completing sessions to track your progress!</string>
     <string name="no_data_recorded">No data recorded</string>
+    <string name="no_chart_data">Not enough data to display the chart</string>
 
     <!-- Progress Statistics Formats -->
     <string name="weight_kg_format">%.1f kg</string>

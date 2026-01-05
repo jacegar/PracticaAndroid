@@ -6,10 +6,15 @@
     android:layout_height="match_parent"
     tools:context=".ProgresoDetalleActivity">
 
-    <LinearLayout
+    <androidx.core.widget.NestedScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:orientation="vertical">
+        android:fillViewport="true">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
         <!-- Información del ejercicio -->
         <com.google.android.material.card.MaterialCardView
@@ -93,6 +98,41 @@
 
         </com.google.android.material.card.MaterialCardView>
 
+        <!-- Gráfica de evolución -->
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/cardGrafica"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
+            android:layout_marginBottom="8dp"
+            app:cardElevation="4dp"
+            app:cardCornerRadius="8dp">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical"
+                android:padding="16dp">
+
+                <TextView
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:text="@string/progress_chart"
+                    android:textSize="18sp"
+                    android:textStyle="bold"
+                    android:textColor="?attr/colorPrimary" />
+
+                <com.github.mikephil.charting.charts.LineChart
+                    android:id="@+id/lineChart"
+                    android:layout_width="match_parent"
+                    android:layout_height="250dp"
+                    android:layout_marginTop="8dp" />
+
+            </LinearLayout>
+
+        </com.google.android.material.card.MaterialCardView>
+
         <!-- Historial de progreso -->
         <TextView
             android:layout_width="match_parent"
@@ -108,24 +148,27 @@
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/recyclerViewHistorial"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
             android:padding="8dp"
+            android:paddingBottom="16dp"
+            android:nestedScrollingEnabled="false"
             android:clipToPadding="false" />
 
         <TextView
             android:id="@+id/tvNoData"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"
+            android:layout_height="wrap_content"
+            android:layout_margin="16dp"
             android:gravity="center"
             android:text="@string/no_progress_data"
             android:textSize="16sp"
             android:textColor="@android:color/darker_gray"
             android:visibility="gone" />
 
-    </LinearLayout>
+        </LinearLayout>
+
+    </androidx.core.widget.NestedScrollView>
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
 
