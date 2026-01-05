@@ -82,6 +82,9 @@ public class RutinaActivity extends AppCompatActivity implements RutinaAdapter.O
     private void crearRutina(String nombre, String descripcion) {
         Executors.newSingleThreadExecutor().execute(() -> {
             Rutina rutina = new Rutina(nombre, descripcion, System.currentTimeMillis(), false);
+            if(rutinaDao.count() == 0) {
+                rutina.rutinaActiva = true;
+            }
             rutinaDao.insert(rutina);
 
             runOnUiThread(() -> {

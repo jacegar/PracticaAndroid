@@ -40,4 +40,7 @@ public interface RutinaDao {
 
     @Query("SELECT * FROM rutinas WHERE rutinaActiva = 1 LIMIT 1")
     Rutina getRutinaActiva();
+
+    @Query("SELECT COUNT (*) FROM rutinas")
+    int count();
 }
