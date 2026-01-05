@@ -56,5 +56,9 @@ public interface SesionEjercicioDao {
            "INNER JOIN sesiones s ON se.sesionId = s.id " +
            "WHERE se.ejercicioId = :ejercicioId AND s.fechaRealizada BETWEEN :inicio AND :fin")
     int getFrecuenciaEjercicio(long ejercicioId, long inicio, long fin);
+
+    // Marcar/desmarcar todos los ejercicios de una sesión como completados
+    @Query("UPDATE sesion_ejercicio SET completado = :completado WHERE sesionId = :sesionId")
+    void updateCompletadoBySesion(long sesionId, boolean completado);
 }
 

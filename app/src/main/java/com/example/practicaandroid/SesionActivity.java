@@ -24,6 +24,7 @@ import java.util.concurrent.TimeUnit;
 
 import com.example.practicaandroid.adapter.SesionAdapter;
 import com.example.practicaandroid.data.AppDatabase;
+import com.example.practicaandroid.data.relaciones.SesionEjercicioDao;
 import com.example.practicaandroid.data.sesion.Sesion;
 import com.example.practicaandroid.data.sesion.SesionDao;
 import com.example.practicaandroid.notifications.SessionReminderWorker;
@@ -38,6 +39,7 @@ import java.util.concurrent.Executors;
 public class SesionActivity extends AppCompatActivity implements SesionAdapter.OnSesionClickListener {
 
     private SesionDao sesionDao;
+    private SesionEjercicioDao sesionEjercicioDao;
     private SesionAdapter adapter;
     private RecyclerView recyclerView;
     private long rutinaId;
@@ -67,6 +69,7 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
 
         // Inicializar base de datos
         sesionDao = AppDatabase.getInstance(this).sesionDao();
+        sesionEjercicioDao = AppDatabase.getInstance(this).sesionEjercicioDao();
 
         // Configurar título
         TextView tvTitulo = findViewById(R.id.tvTitulo);
@@ -495,20 +498,24 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
     @Override
     public void onMarcarCompletadaClick(Sesion sesion) {
         String mensaje;
+        boolean completado;
         if (sesion.fechaRealizada == 0) {
             // Marcar como completada
             cancelarNotificacion(sesion);
             sesion.fechaRealizada = System.currentTimeMillis();
             mensaje = getString(R.string.session_marked_completed);
+            completado = true;
         } else {
             // Desmarcar como completada
             crearNotificacion(sesion);
             sesion.fechaRealizada = 0;
             mensaje = getString(R.string.session_marked_pending);
+            completado = false;
         }
 
         Executors.newSingleThreadExecutor().execute(() -> {
             sesionDao.update(sesion);
+            sesionEjercicioDao.updateCompletadoBySesion(sesion.id, completado);
 
             runOnUiThread(() -> {
                 Toast.makeText(this, mensaje, Toast.LENGTH_SHORT).show();

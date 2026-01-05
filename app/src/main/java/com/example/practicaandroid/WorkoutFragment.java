@@ -23,6 +23,7 @@ import androidx.work.WorkManager;
 import com.example.practicaandroid.data.AppDatabase;
 import com.example.practicaandroid.data.ejercicio.Ejercicio;
 import com.example.practicaandroid.data.ejercicio.EjercicioDao;
+import com.example.practicaandroid.data.relaciones.SesionEjercicioDao;
 import com.example.practicaandroid.data.rutina.Rutina;
 import com.example.practicaandroid.data.rutina.RutinaDao;
 import com.example.practicaandroid.data.sesion.Sesion;
@@ -41,6 +42,7 @@ public class WorkoutFragment extends Fragment {
     private RutinaDao rutinaDao;
     private SesionDao sesionDao;
     private EjercicioDao ejercicioDao;
+    private SesionEjercicioDao sesionEjercicioDao;
 
     private CardView cardRutinaActiva;
     private TextView tvNoHayRutinaActiva;
@@ -82,6 +84,7 @@ public class WorkoutFragment extends Fragment {
             rutinaDao = db.rutinaDao();
             sesionDao = db.sesionDao();
             ejercicioDao = db.ejercicioDao();
+            sesionEjercicioDao = db.sesionEjercicioDao();
         }
         inicializarVistas(view);
         configurarListeners();
@@ -149,6 +152,7 @@ public class WorkoutFragment extends Fragment {
         sesion.fechaRealizada = System.currentTimeMillis();
         Executors.newSingleThreadExecutor().execute(() -> {
             sesionDao.update(sesion);
+            sesionEjercicioDao.updateCompletadoBySesion(sesion.id, true);
             String workTag = "sesion-" + sesion.id;
             WorkManager.getInstance(requireContext()).cancelAllWorkByTag(workTag);
             if (getActivity() != null) {
