@@ -52,7 +52,7 @@
     <string name="type_colon">Tipo: %1$s</string>
     <string name="numeric_values_error">Error en los valores numéricos</string>
     <string name="exercise_added_to_session">Ejercicio añadido a la sesión</string>
-    <string name="edit_exercise_data">Editar Datos del Ejercicio</string>
+    <string name="edit_exercise_data">Editar datos del ejercicio</string>
     <string name="data_updated">Datos actualizados</string>
     <string name="remove_exercise_from_session">¿Quitar \'%1$s\' de esta sesión?</string>
     <string name="exercise_removed_from_session">Ejercicio eliminado de la sesión</string>
@@ -140,6 +140,7 @@
     <string name="deleted_session">Sesión eliminada</string>
     <string name="session_marked_completed">Sesión marcada como completada</string>
     <string name="session_marked_pending">Sesión marcada como pendiente</string>
+    <string name="not_found_session">Error: Sesión no encontrada</string>
     <string name="strength_type">FUERZA</string>
     <string name="cardio_type">CARDIO</string>
     <string name="flexibility_type">FLEXIBILIDAD</string>

@@ -51,7 +51,7 @@
     <string name="type_colon">Type: %1$s</string>
     <string name="numeric_values_error">Error in numeric values</string>
     <string name="exercise_added_to_session">Exercise added to session</string>
-    <string name="edit_exercise_data">Edit Exercise Data</string>
+    <string name="edit_exercise_data">Edit exercise data</string>
     <string name="data_updated">Data updated</string>
     <string name="remove_exercise_from_session">Remove \'%1$s\' from this session?</string>
     <string name="exercise_removed_from_session">Exercise removed from session</string>
@@ -139,6 +139,7 @@
     <string name="deleted_session">Deleted session</string>
     <string name="session_marked_completed">Session marked as completed</string>
     <string name="session_marked_pending">Session marked as pending</string>
+    <string name="not_found_session">Error: Could not find session</string>
     <string name="strength_type">STRENGTH</string>
     <string name="cardio_type">CARDIO</string>
     <string name="flexibility_type">FLEXIBILITY</string>

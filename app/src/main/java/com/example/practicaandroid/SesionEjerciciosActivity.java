@@ -55,7 +55,7 @@ public class SesionEjerciciosActivity extends AppCompatActivity implements Sesio
         sesionNombre = getIntent().getStringExtra("sesionNombre");
 
         if (sesionId == -1) {
-            Toast.makeText(this, "Error: Sesión no encontrada", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.not_found_session, Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -426,7 +426,7 @@ public class SesionEjerciciosActivity extends AppCompatActivity implements Sesio
         TextView tvTipo = dialogView.findViewById(R.id.tvTipoEjercicio);
 
         tvNombre.setText(TextResolver.resolveTextFromDB(this,ejercicio.nombre));
-        tvTipo.setText("Tipo: " + TextResolver.resolve(this, ejercicio.tipo));
+        tvTipo.setText(getString(R.string.exercise_type_label, TextResolver.resolve(this, ejercicio.tipo)));
 
         // Campos según el tipo de ejercicio
         View layoutFuerza = dialogView.findViewById(R.id.layoutFuerza);
@@ -461,7 +461,7 @@ public class SesionEjerciciosActivity extends AppCompatActivity implements Sesio
         }
 
         new AlertDialog.Builder(this)
-                .setTitle("Editar Datos del Ejercicio")
+                .setTitle(R.string.edit_exercise_data)
                 .setView(dialogView)
                 .setPositiveButton(R.string.save, (dialog, which) -> {
                     // Verificar si es una sesión recurrente
