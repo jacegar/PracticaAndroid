@@ -71,7 +71,7 @@ public class EjercicioAdapter extends RecyclerView.Adapter<EjercicioAdapter.Ejer
     @Override
     public void onBindViewHolder(@NonNull EjercicioViewHolder holder, int position) {
         Ejercicio ejercicio = ejercicios.get(position);
-        holder.bind(context, ejercicio, listener);
+        holder.bind(this.context, ejercicio, listener);
     }
 
     @Override
@@ -94,8 +94,10 @@ public class EjercicioAdapter extends RecyclerView.Adapter<EjercicioAdapter.Ejer
 
         void bind(Context context, Ejercicio ejercicio, OnEjercicioClickListener listener) {
             tvNombre.setText(TextResolver.resolveTextFromDB(context, ejercicio.nombre));
-            tvDescripcion.setText(ejercicio.descripcion.isEmpty() ? "Sin descripción" : TextResolver.resolveTextFromDB(context, ejercicio.descripcion));
-            tvTipo.setText("Tipo: " + TextResolver.resolve(context, ejercicio.tipo));
+            tvDescripcion.setText(ejercicio.descripcion.isEmpty() ?
+                    context.getString(R.string.no_description) :
+                    TextResolver.resolveTextFromDB(context, ejercicio.descripcion));
+            tvTipo.setText(context.getString(R.string.exercise_type_label, TextResolver.resolve(context, ejercicio.tipo)));
 
             btnEditar.setOnClickListener(v -> listener.onEditarClick(ejercicio));
             btnEliminar.setOnClickListener(v -> listener.onEliminarClick(ejercicio));

@@ -110,6 +110,14 @@
     <string name="edit_all_recurring">Edit all recurring sessions</string>
     <string name="edit_only_this">Edit only this session</string>
     <string name="all_recurring_sessions_updated">All recurring sessions updated</string>
+    <string name="no_description">No description</string>
+    <string name="exercise_type_label">Type: %1$s</string>
+    <string name="creation_date_label">Created: %1$s</string>
+    <string name="pending">⏳ Pending</string>
+    <string name="completed_date_label">"✓ Completed: %1$s</string>
+    <string name="uncheck">Uncheck</string>
+    <string name="flexibility_exercise">Flexibility exercise</string>
+    <string name="no_configured_data">No configured data</string>
     <string name="strength_type">STRENGTH</string>
     <string name="cardio_type">CARDIO</string>
     <string name="flexibility_type">FLEXIBILITY</string>

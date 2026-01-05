@@ -92,7 +92,7 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
 
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new SesionAdapter(this);
+        adapter = new SesionAdapter(this, this);
         recyclerView.setAdapter(adapter);
 
         // Botón flotante para crear nueva sesión

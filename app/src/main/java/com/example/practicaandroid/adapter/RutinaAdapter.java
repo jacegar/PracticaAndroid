@@ -1,5 +1,6 @@
 package com.example.practicaandroid.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -24,6 +25,7 @@ public class RutinaAdapter extends RecyclerView.Adapter<RutinaAdapter.RutinaView
 
     private List<Rutina> rutinas = new ArrayList<>();
     private OnRutinaClickListener listener;
+    private Context context;
 
     public interface OnRutinaClickListener {
         void onEditarClick(Rutina rutina);
@@ -32,7 +34,8 @@ public class RutinaAdapter extends RecyclerView.Adapter<RutinaAdapter.RutinaView
         void onActivarClick(Rutina rutina);
     }
 
-    public RutinaAdapter(OnRutinaClickListener listener) {
+    public RutinaAdapter(Context context, OnRutinaClickListener listener) {
+        this.context = context;
         this.listener = listener;
     }
 
@@ -52,7 +55,7 @@ public class RutinaAdapter extends RecyclerView.Adapter<RutinaAdapter.RutinaView
     @Override
     public void onBindViewHolder(@NonNull RutinaViewHolder holder, int position) {
         Rutina rutina = rutinas.get(position);
-        holder.bind(rutina, listener);
+        holder.bind(this.context, rutina, listener);
     }
 
     @Override
@@ -80,14 +83,14 @@ public class RutinaAdapter extends RecyclerView.Adapter<RutinaAdapter.RutinaView
             ivActivar = itemView.findViewById(R.id.ivActivar);
         }
 
-        void bind(Rutina rutina, OnRutinaClickListener listener) {
+        void bind(Context context, Rutina rutina, OnRutinaClickListener listener) {
             tvNombre.setText(rutina.nombre);
             tvDescripcion.setText(rutina.descripcion);
 
             // Formatear fecha
             SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy", Locale.getDefault());
             String fecha = sdf.format(new Date(rutina.fechaCreacion));
-            tvFecha.setText("Creada: " + fecha);
+            tvFecha.setText(context.getString(R.string.creation_date_label, fecha));
 
             // Click en la tarjeta completa abre las sesiones
             itemView.setOnClickListener(v -> listener.onVerSesionesClick(rutina));

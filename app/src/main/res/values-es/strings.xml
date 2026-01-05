@@ -111,6 +111,14 @@
     <string name="edit_all_recurring">Editar todas las sesiones recurrentes</string>
     <string name="edit_only_this">Editar solo esta sesión</string>
     <string name="all_recurring_sessions_updated">Todas las sesiones recurrentes actualizadas</string>
+    <string name="no_description">Sin descripcion</string>
+    <string name="exercise_type_label">Tipo: %1$s</string>
+    <string name="creation_date_label">Creada: %1$s</string>
+    <string name="pending">⏳ Pendiente</string>
+    <string name="completed_date_label">"✓ Completed: %1$s</string>
+    <string name="uncheck">Desmarcar</string>
+    <string name="flexibility_exercise">Ejercicio de flexibilidad</string>
+    <string name="no_configured_data">Sin datos configurados</string>
     <string name="strength_type">FUERZA</string>
     <string name="cardio_type">CARDIO</string>
     <string name="flexibility_type">FLEXIBILIDAD</string>
@@ -265,4 +273,5 @@
     <string name="ejercicio_res_desc_movilidad_hombros">
         Ejercicio de movilidad para mejorar el rango de movimiento y la salud articular del hombro.
     </string>
+
 </resources>

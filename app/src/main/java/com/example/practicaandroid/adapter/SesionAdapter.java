@@ -1,5 +1,6 @@
 package com.example.practicaandroid.adapter;
 
+import android.content.Context;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -22,6 +23,7 @@ public class SesionAdapter extends RecyclerView.Adapter<SesionAdapter.SesionView
 
     private List<Sesion> sesiones = new ArrayList<>();
     private OnSesionClickListener listener;
+    private Context context;
 
     public interface OnSesionClickListener {
         void onEditarClick(Sesion sesion);
@@ -30,8 +32,9 @@ public class SesionAdapter extends RecyclerView.Adapter<SesionAdapter.SesionView
         void onVerEjerciciosClick(Sesion sesion);
     }
 
-    public SesionAdapter(OnSesionClickListener listener) {
+    public SesionAdapter(Context context, OnSesionClickListener listener) {
         this.listener = listener;
+        this.context = context;
     }
 
     public void setSesiones(List<Sesion> sesiones) {
@@ -50,7 +53,7 @@ public class SesionAdapter extends RecyclerView.Adapter<SesionAdapter.SesionView
     @Override
     public void onBindViewHolder(@NonNull SesionViewHolder holder, int position) {
         Sesion sesion = sesiones.get(position);
-        holder.bind(sesion, listener);
+        holder.bind(this.context, sesion, listener);
     }
 
     @Override
@@ -72,7 +75,7 @@ public class SesionAdapter extends RecyclerView.Adapter<SesionAdapter.SesionView
             btnCompletar = itemView.findViewById(R.id.btnCompletar);
         }
 
-        void bind(Sesion sesion, OnSesionClickListener listener) {
+        void bind(Context context, Sesion sesion, OnSesionClickListener listener) {
             tvNombre.setText(sesion.nombre);
 
             // Formatear día planificado
@@ -93,15 +96,15 @@ public class SesionAdapter extends RecyclerView.Adapter<SesionAdapter.SesionView
 
             // Mostrar estado
             if (sesion.fechaRealizada == 0) {
-                tvEstado.setText("⏳ Pendiente");
+                tvEstado.setText(R.string.pending);
                 tvEstado.setTextColor(itemView.getContext().getResources().getColor(android.R.color.holo_orange_dark));
-                btnCompletar.setText("Completar");
+                btnCompletar.setText(R.string.complete);
             } else {
                 SimpleDateFormat sdfCompletada = new SimpleDateFormat("dd/MM/yyyy HH:mm", Locale.getDefault());
                 String fechaCompletada = sdfCompletada.format(new Date(sesion.fechaRealizada));
-                tvEstado.setText("✓ Completada: " + fechaCompletada);
+                tvEstado.setText(context.getString(R.string.completed_date_label, fechaCompletada));
                 tvEstado.setTextColor(itemView.getContext().getResources().getColor(android.R.color.holo_green_dark));
-                btnCompletar.setText("Desmarcar");
+                btnCompletar.setText(R.string.uncheck);
             }
 
             // Click en la tarjeta completa para ver ejercicios

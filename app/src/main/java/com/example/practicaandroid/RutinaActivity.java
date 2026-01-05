@@ -38,7 +38,7 @@ public class RutinaActivity extends AppCompatActivity implements RutinaAdapter.O
         // Configurar RecyclerView
         recyclerView = findViewById(R.id.recyclerView);
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
-        adapter = new RutinaAdapter(this);
+        adapter = new RutinaAdapter(this,this);
         recyclerView.setAdapter(adapter);
 
         // Botón flotante para crear nueva rutina

@@ -63,7 +63,7 @@ public class SesionEjercicioAdapter extends RecyclerView.Adapter<SesionEjercicio
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         EjercicioConDatos item = ejercicios.get(position);
-        holder.bind(context, item, listener);
+        holder.bind(this.context, item, listener);
     }
 
     @Override
@@ -118,11 +118,11 @@ public class SesionEjercicioAdapter extends RecyclerView.Adapter<SesionEjercicio
                     datos.append(se.distanciaKm).append(" km");
                 }
             } else if ("flexibility_type".equals(ejercicio.tipo)) {
-                datos.append("Ejercicio de flexibilidad");
+                datos.append(R.string.flexibility_exercise);
             }
 
             if (datos.length() == 0) {
-                datos.append("Sin datos configurados");
+                datos.append(R.string.no_configured_data);
             }
 
             tvDatos.setText(datos.toString());
