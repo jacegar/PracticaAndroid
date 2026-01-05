@@ -129,6 +129,17 @@
     <string name="delete_workout">Eliminar rutina</string>
     <string name="updated_workout">Rutina actualizada</string>
     <string name="deleted_workout">Rutina eliminada</string>
+    <string name="not_found_workout_error">Error: Rutina no encontrada.</string>
+    <string name="sessions_title">Sesiones de: %1$s</string>
+    <string name="new_session">Nueva sesión</string>
+    <string name="select_one_day">Selecciona al menos un dia</string>
+    <string name="week_number_higher_zero">El número de semanas debe ser mayor a 0</string>
+    <string name="invalid_week_number">Número de semanas no válido</string>
+    <string name="created_session">Sesion creada</string>
+    <string name="delete_session">Eliminar sesión</string>
+    <string name="deleted_session">Sesión eliminada</string>
+    <string name="session_marked_completed">Sesión marcada como completada</string>
+    <string name="session_marked_pending">Sesión marcada como pendiente</string>
     <string name="strength_type">FUERZA</string>
     <string name="cardio_type">CARDIO</string>
     <string name="flexibility_type">FLEXIBILIDAD</string>

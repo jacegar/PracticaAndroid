@@ -128,6 +128,17 @@
     <string name="delete_workout">Delete workout</string>
     <string name="updated_workout">Updated workout</string>
     <string name="deleted_workout">Deleted workout</string>
+    <string name="not_found_workout_error">Error: Could not find this workout.</string>
+    <string name="sessions_title">Sessions of: %1$s</string>
+    <string name="new_session">New session</string>
+    <string name="select_one_day">Select at least one day</string>
+    <string name="week_number_higher_zero">Week number must be greater than zero</string>
+    <string name="invalid_week_number">Invalid week number</string>
+    <string name="created_session">Created session</string>
+    <string name="delete_session">Delete session</string>
+    <string name="deleted_session">Deleted session</string>
+    <string name="session_marked_completed">Session marked as completed</string>
+    <string name="session_marked_pending">Session marked as pending</string>
     <string name="strength_type">STRENGTH</string>
     <string name="cardio_type">CARDIO</string>
     <string name="flexibility_type">FLEXIBILITY</string>

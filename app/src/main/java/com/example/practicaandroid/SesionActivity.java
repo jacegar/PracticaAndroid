@@ -14,6 +14,7 @@ import android.widget.Toast;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.content.ContextCompat;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 import androidx.work.Data;
@@ -59,7 +60,7 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
         rutinaNombre = getIntent().getStringExtra("rutinaNombre");
 
         if (rutinaId == -1) {
-            Toast.makeText(this, "Error: Rutina no encontrada", Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.not_found_workout_error, Toast.LENGTH_SHORT).show();
             finish();
             return;
         }
@@ -69,7 +70,7 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
 
         // Configurar título
         TextView tvTitulo = findViewById(R.id.tvTitulo);
-        tvTitulo.setText("Sesiones de: " + rutinaNombre);
+        tvTitulo.setText(getString(R.string.sessions_title, rutinaNombre));
 
         // Configurar RecyclerView y filtro de semana
         spinnerWeekFilter = findViewById(R.id.spinnerWeekFilter);
@@ -145,13 +146,13 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
         tvDiaPlanificado.setOnClickListener(v -> mostrarSelectorFechaHora(tvDiaPlanificado));
 
         new AlertDialog.Builder(this)
-                .setTitle("Nueva Sesión")
+                .setTitle(R.string.new_session)
                 .setView(dialogView)
-                .setPositiveButton("Crear", (dialog, which) -> {
+                .setPositiveButton(R.string.create, (dialog, which) -> {
                     String nombre = etNombre.getText().toString().trim();
 
                     if (nombre.isEmpty()) {
-                        Toast.makeText(this, "El nombre es obligatorio", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.name_required, Toast.LENGTH_SHORT).show();
                         return;
                     }
 
@@ -167,7 +168,7 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
                         if (cbSunday.isChecked()) selectedDays.add(Calendar.SUNDAY);
 
                         if (selectedDays.isEmpty()) {
-                            Toast.makeText(this, "Selecciona al menos un día", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, R.string.select_one_day, Toast.LENGTH_SHORT).show();
                             return;
                         }
 
@@ -176,11 +177,11 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
                         try {
                             weeksCount = Integer.parseInt(weeksStr);
                             if (weeksCount <= 0) {
-                                Toast.makeText(this, "El número de semanas debe ser mayor a 0", Toast.LENGTH_SHORT).show();
+                                Toast.makeText(this, R.string.week_number_higher_zero, Toast.LENGTH_SHORT).show();
                                 return;
                             }
                         } catch (NumberFormatException e) {
-                            Toast.makeText(this, "Número de semanas inválido", Toast.LENGTH_SHORT).show();
+                            Toast.makeText(this, R.string.invalid_week_number, Toast.LENGTH_SHORT).show();
                             return;
                         }
 
@@ -231,7 +232,7 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
             crearNotificacion(sesion);
 
             runOnUiThread(() -> {
-                Toast.makeText(this, "Sesión creada", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.created_session, Toast.LENGTH_SHORT).show();
                 cargarSesiones();
             });
         });
@@ -373,13 +374,13 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
         tvDiaPlanificado.setOnClickListener(v -> mostrarSelectorFechaHora(tvDiaPlanificado));
 
         new AlertDialog.Builder(this)
-                .setTitle("Editar Sesión")
+                .setTitle(R.string.edit_session)
                 .setView(dialogView)
-                .setPositiveButton("Guardar", (dialog, which) -> {
+                .setPositiveButton(R.string.save, (dialog, which) -> {
                     String nombre = etNombre.getText().toString().trim();
 
                     if (nombre.isEmpty()) {
-                        Toast.makeText(this, "El nombre es obligatorio", Toast.LENGTH_SHORT).show();
+                        Toast.makeText(this, R.string.name_required, Toast.LENGTH_SHORT).show();
                         return;
                     }
 
@@ -389,7 +390,7 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
                         actualizarSesion(sesion, nombre, diaPlanificadoSeleccionado);
                     }
                 })
-                .setNegativeButton("Cancelar", null)
+                .setNegativeButton(R.string.cancel, null)
                 .show();
     }
 
@@ -404,7 +405,7 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
             sesionDao.update(sesion);
 
             runOnUiThread(() -> {
-                Toast.makeText(this, "Sesión actualizada", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.updated_session, Toast.LENGTH_SHORT).show();
                 cargarSesiones();
             });
         });
@@ -444,7 +445,7 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
         // Si es una sesión recurrente, preguntar qué desea eliminar
         if (sesion.recurringGroupId != null && !sesion.recurringGroupId.isEmpty()) {
             new AlertDialog.Builder(this)
-                    .setTitle("Eliminar Sesión")
+                    .setTitle(R.string.delete_session)
                     .setMessage(R.string.delete_recurring_message)
                     .setPositiveButton(R.string.delete_all_recurring, (dialog, which) -> eliminarSesionesRecurrentes(sesion.recurringGroupId))
                     .setNegativeButton(R.string.delete_only_this, (dialog, which) -> eliminarSesion(sesion))
@@ -453,10 +454,10 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
         } else {
             // Sesión individual, eliminación normal
             new AlertDialog.Builder(this)
-                    .setTitle("Eliminar Sesión")
-                    .setMessage("¿Estás seguro de eliminar '" + sesion.nombre + "'?")
-                    .setPositiveButton("Eliminar", (dialog, which) -> eliminarSesion(sesion))
-                    .setNegativeButton("Cancelar", null)
+                    .setTitle(R.string.delete_session)
+                    .setMessage(getString(R.string.confirmation_delete, sesion.nombre))
+                    .setPositiveButton(R.string.delete, (dialog, which) -> eliminarSesion(sesion))
+                    .setNegativeButton(R.string.cancel, null)
                     .show();
         }
     }
@@ -467,7 +468,7 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
             sesionDao.delete(sesion);
 
             runOnUiThread(() -> {
-                Toast.makeText(this, "Sesión eliminada", Toast.LENGTH_SHORT).show();
+                Toast.makeText(this, R.string.deleted_session, Toast.LENGTH_SHORT).show();
                 cargarSesiones();
             });
         });
@@ -498,12 +499,12 @@ public class SesionActivity extends AppCompatActivity implements SesionAdapter.O
             // Marcar como completada
             cancelarNotificacion(sesion);
             sesion.fechaRealizada = System.currentTimeMillis();
-            mensaje = "Sesión marcada como completada";
+            mensaje = getString(R.string.session_marked_completed);
         } else {
             // Desmarcar como completada
             crearNotificacion(sesion);
             sesion.fechaRealizada = 0;
-            mensaje = "Sesión marcada como pendiente";
+            mensaje = getString(R.string.session_marked_pending);
         }
 
         Executors.newSingleThreadExecutor().execute(() -> {
