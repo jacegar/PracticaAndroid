@@ -98,7 +98,7 @@ public class ProgresoDetalleActivity extends AppCompatActivity {
                 // Mostrar datos del ejercicio
                 tvNombreEjercicio.setText(TextResolver.resolveTextFromDB(this, ejercicio.nombre));
                 tvTipoEjercicio.setText(getString(R.string.type_colon,
-                        TextResolver.resolveTextFromDB(this, ejercicio.tipo)));
+                        TextResolver.resolve(this, ejercicio.tipo)));
 
                 if (ejercicio.descripcion != null && !ejercicio.descripcion.isEmpty()) {
                     tvDescripcionEjercicio.setText(TextResolver.resolveTextFromDB(this, ejercicio.descripcion));

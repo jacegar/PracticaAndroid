@@ -100,7 +100,7 @@ public class EjercicioProgressAdapter extends RecyclerView.Adapter<EjercicioProg
 
             tvNombre.setText(TextResolver.resolveTextFromDB(context, ejercicio.nombre));
             tvTipo.setText(context.getString(R.string.type_colon,
-                    TextResolver.resolveTextFromDB(context, ejercicio.tipo)));
+                    TextResolver.resolve(context, ejercicio.tipo)));
 
             if (ejercicio.descripcion != null && !ejercicio.descripcion.isEmpty()) {
                 tvDescripcion.setText(TextResolver.resolveTextFromDB(context, ejercicio.descripcion));
