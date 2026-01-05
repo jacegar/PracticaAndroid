@@ -314,4 +314,41 @@
         Ejercicio de movilidad para mejorar el rango de movimiento y la salud articular del hombro.
     </string>
 
+    <!-- Progress Fragment -->
+    <string name="progress_title">Progreso de Ejercicios</string>
+    <string name="search_exercises_progress">Buscar por nombre, tipo o descripción...</string>
+    <string name="times_performed">Veces realizado: %1$d</string>
+    <string name="last_progress">Último: %1$s</string>
+    <string name="best_record">Mejor: %1$s</string>
+    <string name="times_performed_format">Veces realizado: %1$d</string>
+    <string name="last_progress_format">Último: %1$s</string>
+    <string name="best_record_format">Mejor: %1$s</string>
+    <string name="tap_to_see_details">Pulsa para ver progreso detallado</string>
+    <string name="no_data">Sin datos</string>
+
+    <!-- Progress Detail Activity -->
+    <string name="general_statistics">Estadísticas Generales</string>
+    <string name="progress_history">Historial de Progreso</string>
+    <string name="no_progress_data">No hay datos de progreso aún. ¡Completa sesiones para rastrear tu progreso!</string>
+    <string name="no_data_recorded">Sin datos registrados</string>
+
+    <!-- Progress Statistics Formats -->
+    <string name="weight_kg_format">%.1f kg</string>
+    <string name="distance_km_format">%.2f km</string>
+    <string name="minutes_format">%d min</string>
+    <string name="sets_reps_format">%1$d series × %2$d reps</string>
+    <string name="sets_format">Series: %1$d</string>
+    <string name="reps_format">Repeticiones: %1$d</string>
+    <string name="weight_format">Peso: %.1f kg</string>
+    <string name="duration_format">Duración: %1$d:%2$02d</string>
+    <string name="distance_format">Distancia: %.2f km</string>
+    <string name="max_weight_format">Peso máximo: %.1f kg</string>
+    <string name="avg_weight_format">Peso promedio: %.1f kg</string>
+    <string name="total_sets_format">Series totales: %1$d</string>
+    <string name="total_reps_format">Repeticiones totales: %1$d</string>
+    <string name="max_distance_format">Distancia máxima: %.2f km</string>
+    <string name="total_distance_format">Distancia total: %.2f km</string>
+    <string name="max_duration_format">Duración máxima: %d min</string>
+    <string name="total_duration_format">Duración total: %d min</string>
+
 </resources>

@@ -32,6 +32,10 @@
             android:name=".SesionEjerciciosActivity"
             android:exported="false"
             android:label="Ejercicios de la Sesión" />
+        <activity
+            android:name=".ProgresoDetalleActivity"
+            android:exported="false"
+            android:label="Detalle de Progreso" />
     </application>
 
 </manifest>
