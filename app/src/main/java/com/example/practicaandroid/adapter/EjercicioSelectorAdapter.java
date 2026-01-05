@@ -72,7 +72,7 @@ public class EjercicioSelectorAdapter extends RecyclerView.Adapter<EjercicioSele
             tvTipo.setText(TextResolver.resolve(context, ejercicio.tipo));
 
             if (ejercicio.descripcion != null && !ejercicio.descripcion.trim().isEmpty()) {
-                tvDescripcion.setText(ejercicio.descripcion);
+                tvDescripcion.setText(TextResolver.resolveTextFromDB(context, ejercicio.descripcion));
                 tvDescripcion.setVisibility(View.VISIBLE);
             } else {
                 tvDescripcion.setVisibility(View.GONE);
