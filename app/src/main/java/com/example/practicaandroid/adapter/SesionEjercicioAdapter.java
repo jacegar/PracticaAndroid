@@ -118,11 +118,11 @@ public class SesionEjercicioAdapter extends RecyclerView.Adapter<SesionEjercicio
                     datos.append(se.distanciaKm).append(" km");
                 }
             } else if ("flexibility_type".equals(ejercicio.tipo)) {
-                datos.append(R.string.flexibility_exercise);
+                datos.append(context.getString(R.string.flexibility_exercise));
             }
 
             if (datos.length() == 0) {
-                datos.append(R.string.no_configured_data);
+                datos.append(context.getString(R.string.no_configured_data));
             }
 
             tvDatos.setText(datos.toString());
