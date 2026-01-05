@@ -8,7 +8,7 @@
     <com.google.android.material.textfield.TextInputLayout
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:hint="Nombre del ejercicio">
+        android:hint="@string/exercise_name">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etNombre"
@@ -21,7 +21,7 @@
     <TextView
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:text="Tipo de ejercicio"
+        android:text="@string/exercise_type"
         android:layout_marginTop="16dp"
         android:textStyle="bold"
         android:textSize="14sp" />
@@ -37,7 +37,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginTop="16dp"
-        android:hint="Descripción (opcional)">
+        android:hint="@string/exercise_desc">
 
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/etDescripcion"

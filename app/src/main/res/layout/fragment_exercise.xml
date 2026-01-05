@@ -32,7 +32,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:iconifiedByDefault="false"
-                android:queryHint="Buscar ejercicios..." />
+                android:queryHint="@string/search_exercises" />
 
         </com.google.android.material.card.MaterialCardView>
 
@@ -55,7 +55,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="72dp"
-        android:contentDescription="Crear nuevo ejercicio"
+        android:contentDescription="@string/create_new_exercise"
         app:srcCompat="@android:drawable/ic_input_add" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

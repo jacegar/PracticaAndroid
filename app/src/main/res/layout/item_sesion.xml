@@ -36,7 +36,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
-            android:text="⏳ Pendiente"
+            android:text="@string/pending"
             android:textSize="14sp"
             android:textStyle="bold"
             android:textColor="@android:color/holo_orange_dark" />
@@ -52,7 +52,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="Completar"
+                android:text="@string/complete"
                 android:textSize="12sp"
                 android:backgroundTint="@android:color/holo_green_light" />
 
@@ -62,7 +62,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_weight="1"
-                android:text="Editar"
+                android:text="@string/edit"
                 android:textSize="12sp" />
 
             <Button
@@ -71,7 +71,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_weight="1"
-                android:text="Eliminar"
+                android:text="@string/delete"
                 android:textSize="12sp"
                 android:backgroundTint="@android:color/holo_red_light" />
         </LinearLayout>

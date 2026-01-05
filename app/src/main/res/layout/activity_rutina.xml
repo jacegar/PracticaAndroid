@@ -12,7 +12,7 @@
         <TextView
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Mis Rutinas"
+            android:text="@string/my_workouts"
             android:textSize="24sp"
             android:textStyle="bold"
             android:padding="16dp"
@@ -33,7 +33,7 @@
         android:layout_height="wrap_content"
         android:layout_gravity="bottom|end"
         android:layout_margin="16dp"
-        android:contentDescription="Crear nueva rutina"
+        android:contentDescription="@string/create_new_workout"
         app:srcCompat="@android:drawable/ic_input_add" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>

@@ -13,7 +13,7 @@
             android:id="@+id/tvTitulo"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Ejercicios de la Sesión"
+            android:text="@string/session_exercises"
             android:textSize="24sp"
             android:textStyle="bold"
             android:padding="16dp"
@@ -37,7 +37,7 @@
         android:layout_marginTop="16dp"
         android:layout_marginEnd="16dp"
         android:layout_marginBottom="16dp"
-        android:contentDescription="Añadir ejercicio a la sesión"
+        android:contentDescription="@string/add_exercises_session"
         app:srcCompat="@android:drawable/ic_input_add" />
 
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
