@@ -383,7 +383,7 @@ public class SesionEjerciciosActivity extends AppCompatActivity implements Sesio
                 String pesoStr = etPeso.getText().toString().trim();
 
                 sesionEjercicio.series = seriesStr.isEmpty() ? 0 : Integer.parseInt(seriesStr);
-                sesionEjercicio.repeticiones = repsStr.isEmpty() ? 0 : Integer.parseInt(repsStr);
+                sesionEjercicio.repeticiones = repsStr.isEmpty() ? 0 : Integer.parseInt(repsStr) ;
                 sesionEjercicio.peso = pesoStr.isEmpty() ? 0 : Float.parseFloat(pesoStr);
             } catch (NumberFormatException e) {
                 runOnUiThread(() ->

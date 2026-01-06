@@ -170,7 +170,7 @@ public class ProgresoDetalleActivity extends AppCompatActivity {
                     countPeso++;
                 }
                 totalSeries += se.series;
-                totalRepeticiones += se.repeticiones;
+                totalRepeticiones += se.repeticiones * se.series;
             }
 
             if (maxPeso > 0) {
