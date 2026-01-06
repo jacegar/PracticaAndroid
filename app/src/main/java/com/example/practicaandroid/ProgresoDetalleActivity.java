@@ -273,14 +273,15 @@ public class ProgresoDetalleActivity extends AppCompatActivity {
                     agregarPunto = true;
                 }
             } else if (ejercicio.tipo.equals("cardio_type")) {
-                // Gráfica de distancia o duración
-                if (se.distanciaKm > 0) {
-                    valor = se.distanciaKm;
-                    agregarPunto = true;
-                } else if (se.duracionSegundos > 0) {
-                    valor = se.duracionSegundos / 60f; // Convertir a minutos
-                    agregarPunto = true;
+                // Gráfica de cardio: mostrar velocidad media en km/min (distancia / duración)
+                if (se.distanciaKm > 0 && se.duracionSegundos > 0) {
+                    float minutos = se.duracionSegundos / 60f;
+                    if (minutos > 0f) {
+                        valor = se.distanciaKm / minutos; // km por minuto
+                        agregarPunto = true;
+                    }
                 }
+                // Si falta distancia o duración, no añadimos punto para evitar valores engañosos
             } else {
                 // Para flexibilidad, mostrar repeticiones
                 if (se.repeticiones > 0) {
