@@ -8,6 +8,9 @@ import android.os.Bundle;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.appcompat.app.AppCompatDelegate;
+
+import com.google.android.material.switchmaterial.SwitchMaterial;
 
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,12 +29,14 @@ public class SettingsFragment extends Fragment {
     private static final String PREFS_NAME = "AppSettings";
     private static final String LANGUAGE_KEY = "language";
     private static final String WEIGHT_UNIT_KEY = "weight_unit";
+    private static final String THEME_KEY = "dark_mode";
 
     private MaterialAutoCompleteTextView languageAutoComplete;
     private MaterialAutoCompleteTextView weightUnitAutoComplete;
     private TextInputEditText notificationHoursEditText;
     private Button saveNotificationHoursButton;
     private SharedPreferences sharedPreferences;
+    private SwitchMaterial switchTheme;
 
     public SettingsFragment() {
         // Required empty public constructor
@@ -61,8 +66,9 @@ public class SettingsFragment extends Fragment {
 
         setupLanguageSelector();
         setupWeightUnitSelector();
+        setupThemeSwitch(view);
 
-        return view;
+        return view; 
     }
 
     @Override
@@ -265,4 +271,38 @@ public class SettingsFragment extends Fragment {
         SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
         return prefs.getString(WEIGHT_UNIT_KEY, "kg");
     }
+
+    // Theme switch handling
+    private void setupThemeSwitch(View view) {
+        switchTheme = view.findViewById(R.id.switchTheme);
+        boolean dark;
+        if (sharedPreferences.contains(THEME_KEY)) {
+            dark = sharedPreferences.getBoolean(THEME_KEY, false);
+        } else {
+            int currentNightMode = getResources().getConfiguration().uiMode & android.content.res.Configuration.UI_MODE_NIGHT_MASK;
+            dark = (currentNightMode == android.content.res.Configuration.UI_MODE_NIGHT_YES);
+        }
+        switchTheme.setChecked(dark);
+
+        switchTheme.setOnCheckedChangeListener((buttonView, isChecked) -> {
+            SharedPreferences.Editor editor = sharedPreferences.edit();
+            editor.putBoolean(THEME_KEY, isChecked);
+            editor.apply();
+
+            // Apply theme immediately
+            AppCompatDelegate.setDefaultNightMode(isChecked ? AppCompatDelegate.MODE_NIGHT_YES : AppCompatDelegate.MODE_NIGHT_NO);
+
+            Toast.makeText(getActivity(), R.string.theme_changed, Toast.LENGTH_SHORT).show();
+
+            // Restart activity to make sure theme is applied everywhere in UI
+            restartActivity();
+        });
+    }
+
+    public static boolean getNightMode(Context context) {
+        SharedPreferences prefs = context.getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        return prefs.getBoolean(THEME_KEY, false);
+    }
+
+
 }

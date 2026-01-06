@@ -61,6 +61,15 @@ public class MainActivity extends AppCompatActivity {
         // Load saved language before setting content view
         loadLocale();
 
+        // Apply saved theme (dark/light) before creating UI. If not set, follow system default.
+        SharedPreferences prefs = getSharedPreferences(PREFS_NAME, Context.MODE_PRIVATE);
+        if (prefs.contains("dark_mode")) {
+            boolean darkMode = prefs.getBoolean("dark_mode", false);
+            androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(darkMode ? androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_YES : androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_NO);
+        } else {
+            androidx.appcompat.app.AppCompatDelegate.setDefaultNightMode(androidx.appcompat.app.AppCompatDelegate.MODE_NIGHT_FOLLOW_SYSTEM);
+        }
+
         EdgeToEdge.enable(this);
         setContentView(R.layout.activity_main);
         ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main), (v, insets) -> insets);

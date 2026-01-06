@@ -64,6 +64,9 @@
     <!-- Settings -->
     <string name="language">Language</string>
     <string name="language_changed">Language changed. Restart the app to apply changes.</string>
+    <string name="theme">Theme</string>
+    <string name="dark_mode">Dark mode</string>
+    <string name="theme_changed">Theme updated</string>
     <string name="language_spanish">Spanish</string>
     <string name="language_english">English</string>
     <string name="weight_unit">Weight Unit</string>
