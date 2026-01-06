@@ -218,7 +218,7 @@ public class SesionEjerciciosActivity extends AppCompatActivity implements Sesio
         searchView.setQueryHint(getString(R.string.search_exercises));
 
         // Configurar color del texto a negro usando findViewById
-        android.widget.EditText searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
+        EditText searchEditText = searchView.findViewById(androidx.appcompat.R.id.search_src_text);
         if (searchEditText != null) {
             searchEditText.setTextColor(getResources().getColor(android.R.color.black, null));
             searchEditText.setHintTextColor(getResources().getColor(android.R.color.darker_gray, null));
@@ -264,7 +264,7 @@ public class SesionEjerciciosActivity extends AppCompatActivity implements Sesio
         TextView tvTipo = dialogView.findViewById(R.id.tvTipoEjercicio);
 
         tvNombre.setText(TextResolver.resolveTextFromDB(this,ejercicio.nombre));
-        tvTipo.setText(getString(R.string.type_colon, ejercicio.tipo));
+        tvTipo.setText(getString(R.string.type_colon, TextResolver.resolve(this, ejercicio.tipo)));
 
         // Campos según el tipo de ejercicio
         View layoutFuerza = dialogView.findViewById(R.id.layoutFuerza);
@@ -507,11 +507,11 @@ public class SesionEjerciciosActivity extends AppCompatActivity implements Sesio
 
                 if (aplicarATodasRecurrentes && sesionActual != null && sesionActual.recurringGroupId != null) {
                     // Obtener todas las sesiones del grupo
-                    List<com.example.practicaandroid.data.sesion.Sesion> sesionesGrupo =
+                    List<Sesion> sesionesGrupo =
                             sesionDao.getSesionesByRecurringGroup(sesionActual.recurringGroupId);
 
                     // Actualizar el ejercicio en cada sesión del grupo
-                    for (com.example.practicaandroid.data.sesion.Sesion s : sesionesGrupo) {
+                    for (Sesion s : sesionesGrupo) {
                         // Buscar si existe este ejercicio en la sesión
                         List<SesionEjercicio> ejerciciosSesion = sesionEjercicioDao.getBySesion(s.id);
                         for (SesionEjercicio se : ejerciciosSesion) {
