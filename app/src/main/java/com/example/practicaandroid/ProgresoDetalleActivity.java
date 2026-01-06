@@ -371,7 +371,7 @@ public class ProgresoDetalleActivity extends AppCompatActivity {
 
     private String getEtiquetaGrafica() {
         if (ejercicio.tipo.equals("strength_type")) {
-            return getString(R.string.weight_format, 0f).replace("0.0", "").trim();
+            return getString(R.string.weight_label);
         } else if (ejercicio.tipo.equals("cardio_type")) {
             // Determinar si es distancia o duración basándose en el historial ya cargado
             return "km/min";
